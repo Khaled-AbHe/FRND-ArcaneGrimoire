@@ -1,0 +1,58 @@
+### Create user | Sign Up
+POST http://localhost:3001/api/auth/signup
+Content-Type: application/json
+
+{
+    "username": "user",
+    "email": "user@outlook.com",
+    "password": "pswrd"
+}
+
+
+### Create admin | Sign up
+POST http://localhost:3001/api/auth/signupadmin
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "email": "admin@outlook.com",
+    "password": "pswrd"
+}
+
+### Sign In User
+POST http://localhost:3001/api/auth/signin
+Content-Type: application/json
+
+{
+    "email": "admin@outlook.com",
+    "password": "pswrd"
+}
+
+### Sign Out User
+Post http://localhost:3001/api/auth/signout
+
+### Who Am I 
+GET http://localhost:3001/api/auth/whoami
+
+### Update User
+PATCH http://localhost:3001/api/users/1
+Content-Type: application/json
+
+{
+    "email": "admin1@outlook.com",
+    "password": "pswrd",
+    "name": "Khaled",
+    "surname": "Abou Hechmeh"
+}
+
+### Change a user's password
+PATCH http://localhost:3001/api/users/2/changePassword/password123
+
+### Get All Users
+GET http://localhost:3001/api/users
+
+### Get User By Id
+GET http://localhost:3001/api/users/1
+
+### Delete User By Id
+DELETE http://localhost:3001/api/users/1

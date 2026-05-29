@@ -1,0 +1,2 @@
+# Get a user's spells
+GET http://localhost:3001/api/spells/admin/1
