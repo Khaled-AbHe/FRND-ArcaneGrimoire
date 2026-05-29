@@ -1,0 +1,404 @@
+// ── Centralized SVG icon library ─────────────────────────────────────────────
+// Replaces all Unicode/emoji character icons with consistent, accessible SVGs.
+
+interface IconProps {
+  size?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export function ArrowLeftIcon({ size = 16, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M10 3L5 8l5 5"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function PencilIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function CloseIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M3 3l10 10M13 3L3 13"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function DuplicateIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H11"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function TrashIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M2 4h12M5 4V2.5A.5.5 0 0 1 5.5 2h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l1 9.5A.5.5 0 0 0 4.5 14h7a.5.5 0 0 0 .5-.5L13 4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function CheckIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M2.5 8.5l4 4 7-7"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function MoonIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M13.5 9A6 6 0 0 1 7 2.5a5.5 5.5 0 1 0 6.5 6.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function SunIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="8" r="3" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M8 1v2M8 13v2M1 8h2M13 8h2M3.22 3.22l1.42 1.42M11.36 11.36l1.42 1.42M3.22 12.78l1.42-1.42M11.36 4.64l1.42-1.42"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function BookIcon({ size = 16, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M3 2.5A1.5 1.5 0 0 1 4.5 1H13v11H4.5A1.5 1.5 0 0 0 3 13.5V2.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path d="M3 13.5A1.5 1.5 0 0 0 4.5 15H13v-3H4.5A1.5 1.5 0 0 0 3 13.5Z" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M6 5h4M6 7.5h3" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function SlotsIcon({ size = 16, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <circle cx="4" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="12" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="8" cy="4" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="8" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+export function SettingsIcon({ size = 16, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M8 1.5v1.3M8 13.2v1.3M1.5 8h1.3M13.2 8h1.3M3.4 3.4l.92.92M11.68 11.68l.92.92M12.6 3.4l-.92.92M4.32 11.68l-.92.92"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function PactIcon({ size = 16, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M8 1l1.8 5.4H15l-4.6 3.4 1.7 5.2L8 12l-4.1 3 1.7-5.2L1 6.4h5.2L8 1Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function StarFilledIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path d="M8 1l1.8 5.4H15l-4.6 3.4 1.7 5.2L8 12l-4.1 3 1.7-5.2L1 6.4h5.2L8 1Z" />
+    </svg>
+  );
+}
+
+export function StarEmptyIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M8 1l1.8 5.4H15l-4.6 3.4 1.7 5.2L8 12l-4.1 3 1.7-5.2L1 6.4h5.2L8 1Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function MoonRestIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M8 3a5 5 0 1 0 5 5 3.5 3.5 0 0 1-5-5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M12 2v1.5M14.5 4H13M12 5.5V4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function SunRestIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="8" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14M4.1 4.1l1.1 1.1M10.8 10.8l1.1 1.1M11.9 4.1l-1.1 1.1M5.2 10.8l-1.1 1.1"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function PlusIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function TemplateIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M1.5 6h13M6 6v8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function UserIcon({ size = 14, className, style }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="5.5" r="3" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M1.5 14c0-3 3-4.5 6.5-4.5S14.5 11 14.5 14"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}

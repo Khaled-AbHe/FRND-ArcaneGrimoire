@@ -1,0 +1,64 @@
+import { useEffect, type ReactNode } from "react";
+import { CloseIcon } from "./Icons";
+
+interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+  width?: string;
+}
+
+export function Modal({ open, onClose, title, children, width = "max-w-lg" }: ModalProps) {
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div
+        className={`card w-full ${width} max-h-[90vh] flex flex-col animate-fade-in`}
+        style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(251,191,36,0.1)" }}
+      >
+        {/* Header */}
+        <div
+          className="flex items-center justify-between px-5 py-4 border-b"
+          style={{ borderColor: "var(--border)" }}
+        >
+          <h2
+            id="modal-title"
+            className="font-display text-base tracking-widest text-accent uppercase"
+          >
+            {title}
+          </h2>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 flex items-center justify-center rounded text-dim hover:text-primary transition-colors"
+            style={{ color: "var(--text-muted)" }}
+            aria-label="Close dialog"
+          >
+            <CloseIcon size={14} />
+          </button>
+        </div>
+        {/* Body */}
+        <div className="overflow-y-auto p-5 flex-1">{children}</div>
+      </div>
+    </div>
+  );
+}
