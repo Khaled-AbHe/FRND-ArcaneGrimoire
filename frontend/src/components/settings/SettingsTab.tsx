@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Character, CharacterGlobals, ComputedStats } from "../../types";
 import { fmtBonus } from "../../utils/dice";
 import { Modal } from "../ui/Modal";
+import { useDeleteCharacter } from "../../hooks/characters/useDeleteCharacter";
 
 interface SettingsTabProps {
   character: Character;
@@ -10,17 +12,40 @@ interface SettingsTabProps {
 }
 
 export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTabProps) {
-  const [clearConfirmOpen, setClearConfirmOpen] = useState(false);
+  const navigate = useNavigate();
+  const deleteChar = useDeleteCharacter();
 
-  const globals = character.globals ?? {
-    mod: 0,
-    prof: 2,
-    charLevel: 1,
-    highMagic: false,
-  };
+  const [clearConfirmOpen, setClearConfirmOpen] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [renaming, setRenaming] = useState(false);
+  const [nameInput, setNameInput] = useState(character.name);
+
+  // Keep name input in sync if character updates externally
+  useEffect(() => {
+    setNameInput(character.name);
+  }, [character.name]);
+
+  const globals = character.globals ?? { mod: 0, prof: 2, charLevel: 1, highMagic: false };
 
   function setGlobal<K extends keyof CharacterGlobals>(key: K, value: CharacterGlobals[K]) {
     onUpdateCharacter({ globals: { ...globals, [key]: value } });
+  }
+
+  function handleRename() {
+    const trimmed = nameInput.trim();
+    if (!trimmed || trimmed === character.name) {
+      setRenaming(false);
+      return;
+    }
+    onUpdateCharacter({ name: trimmed });
+    setRenaming(false);
+  }
+
+  function handleDelete() {
+    deleteChar.mutate(character.id, {
+      onSuccess: () => navigate("/"),
+    });
+    setDeleteConfirmOpen(false);
   }
 
   function clearCharacterData() {
@@ -37,92 +62,128 @@ export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTab
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-6">
-      {/* Spellcasting stats */}
-      <section aria-labelledby="section-spellcasting">
-        <h2
-          id="section-spellcasting"
-          className="font-display text-xs uppercase tracking-widest text-accent mb-3 w-[80%] m-auto"
-        >
-          Spellcasting
-        </h2>
-        <div className="card p-4 space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="spell-mod" className="label">
-                Spellcasting Modifier
-              </label>
-              <input
-                id="spell-mod"
-                type="number"
-                className="input"
-                min={-5}
-                max={10}
-                value={globals.mod}
-                onChange={(e) => setGlobal("mod", +e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="prof-bonus" className="label">
-                Proficiency Bonus
-              </label>
-              <input
-                id="prof-bonus"
-                type="number"
-                className="input"
-                min={2}
-                max={9}
-                value={globals.prof}
-                onChange={(e) => setGlobal("prof", +e.target.value)}
-              />
-            </div>
+    <>
+      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+        {/* Character name */}
+        <section aria-labelledby="section-name">
+          <h2
+            id="section-name"
+            className="font-display text-xs uppercase tracking-widest text-accent mb-3 w-[80%] m-auto"
+          >
+            Character
+          </h2>
+          <div className="card p-4">
+            <div className="label mb-1.5">Name</div>
+            {renaming ? (
+              <div className="flex gap-2">
+                <input
+                  className="input flex-1"
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                  onBlur={handleRename}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleRename();
+                    if (e.key === "Escape") {
+                      setRenaming(false);
+                      setNameInput(character.name);
+                    }
+                  }}
+                  autoFocus
+                  maxLength={64}
+                />
+                <button className="btn-ghost text-sm" onClick={handleRename}>
+                  Save
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between">
+                <span className="font-display text-base text-accent tracking-wide">
+                  {character.name}
+                </span>
+                <button className="btn-ghost text-xs px-3" onClick={() => setRenaming(true)}>
+                  Rename
+                </button>
+              </div>
+            )}
           </div>
+        </section>
 
-          {/* Live computed values */}
-          <div className="grid grid-cols-2 gap-3">
-            <div
-              className="rounded p-3 text-center"
-              style={{ background: "var(--bg-raised)" }}
-              aria-label={`Spell Save DC: ${stats.spellSaveDC}`}
-            >
-              <div className="label">Spell Save DC</div>
-              <div className="text-3xl font-display text-accent">{stats.spellSaveDC}</div>
-              <div className="text-xs text-muted mt-0.5">
-                8 + {globals.prof} + {globals.mod}
+        {/* Spellcasting stats */}
+        <section aria-labelledby="section-spellcasting">
+          <h2
+            id="section-spellcasting"
+            className="font-display text-xs uppercase tracking-widest text-accent mb-3 w-[80%] m-auto"
+          >
+            Spellcasting
+          </h2>
+          <div className="card p-4 space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="spell-mod" className="label">
+                  Spellcasting Modifier
+                </label>
+                <input
+                  id="spell-mod"
+                  type="number"
+                  className="input"
+                  min={-5}
+                  max={10}
+                  value={globals.mod}
+                  onChange={(e) => setGlobal("mod", +e.target.value)}
+                />
+              </div>
+              <div>
+                <label htmlFor="prof-bonus" className="label">
+                  Proficiency Bonus
+                </label>
+                <input
+                  id="prof-bonus"
+                  type="number"
+                  className="input"
+                  min={2}
+                  max={9}
+                  value={globals.prof}
+                  onChange={(e) => setGlobal("prof", +e.target.value)}
+                />
               </div>
             </div>
-            <div
-              className="rounded p-3 text-center"
-              style={{ background: "var(--bg-raised)" }}
-              aria-label={`Spell Attack Bonus: ${fmtBonus(stats.attackBonus)}`}
-            >
-              <div className="label">Spell Attack Bonus</div>
-              <div className="text-3xl font-display text-accent">{fmtBonus(stats.attackBonus)}</div>
-              <div className="text-xs text-muted mt-0.5">
-                {globals.prof} + {globals.mod}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded p-3 text-center" style={{ background: "var(--bg-raised)" }}>
+                <div className="label">Spell Save DC</div>
+                <div className="text-3xl font-display text-accent">{stats.spellSaveDC}</div>
+                <div className="text-xs text-muted mt-0.5">
+                  8 + {globals.prof} + {globals.mod}
+                </div>
+              </div>
+              <div className="rounded p-3 text-center" style={{ background: "var(--bg-raised)" }}>
+                <div className="label">Spell Attack Bonus</div>
+                <div className="text-3xl font-display text-accent">
+                  {fmtBonus(stats.attackBonus)}
+                </div>
+                <div className="text-xs text-muted mt-0.5">
+                  {globals.prof} + {globals.mod}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Character level */}
-      <section aria-labelledby="section-character">
-        <h2
-          id="section-character"
-          className="font-display text-xs uppercase tracking-widest text-accent mb-3 w-[80%] m-auto"
-        >
-          Character
-        </h2>
-        <div className="card p-4 space-y-4">
-          <div>
+        {/* Character level */}
+        <section aria-labelledby="section-character">
+          <h2
+            id="section-character"
+            className="font-display text-xs uppercase tracking-widest text-accent mb-3 w-[80%] m-auto"
+          >
+            Level
+          </h2>
+          <div className="card p-4">
             <label htmlFor="char-level" className="label">
               Character Level (1-20)
             </label>
             <input
               id="char-level"
               type="number"
-              className="input"
+              className="input mt-1"
               min={1}
               max={20}
               value={globals.charLevel}
@@ -133,38 +194,46 @@ export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTab
               {globals.charLevel >= 5 ? ` (from level ${globals.charLevel})` : ""}
             </p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Danger zone */}
-      <section aria-labelledby="section-danger">
-        <h2
-          id="section-danger"
-          className="font-display text-xs uppercase tracking-widest mb-3 w-[80%] m-auto"
-          style={{ color: "#ef4444" }}
-        >
-          Danger Zone
-        </h2>
-        <div className="card p-4 space-y-3" style={{ borderColor: "rgba(239,68,68,0.2)" }}>
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                Clear Character Data
+        {/* Danger zone */}
+        <section aria-labelledby="section-danger">
+          <h2
+            id="section-danger"
+            className="font-display text-xs uppercase tracking-widest mb-3 w-[80%] m-auto"
+            style={{ color: "#ef4444" }}
+          >
+            Danger Zone
+          </h2>
+          <div className="card p-4 space-y-3" style={{ borderColor: "rgba(239,68,68,0.2)" }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+                  Clear Character Data
+                </div>
+                <div className="text-xs text-muted">Reset all slots, pact, and prepared spells</div>
               </div>
-              <div className="text-xs text-muted">Reset all slots, pact, and prepared spells</div>
+              <button className="btn-danger text-xs" onClick={() => setClearConfirmOpen(true)}>
+                Clear
+              </button>
             </div>
-            <button
-              className="btn-danger text-xs"
-              onClick={() => setClearConfirmOpen(true)}
-              aria-label="Clear all character slot and prepared spell data"
-            >
-              Clear
-            </button>
+            <div className="border-t" style={{ borderColor: "rgba(239,68,68,0.15)" }} />
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+                  Delete Character
+                </div>
+                <div className="text-xs text-muted">Permanently removes this character</div>
+              </div>
+              <button className="btn-danger text-xs" onClick={() => setDeleteConfirmOpen(true)}>
+                Delete
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      {/* Accessible confirmation modal — replaces window.confirm() */}
+      {/* Modals */}
       <Modal
         open={clearConfirmOpen}
         onClose={() => setClearConfirmOpen(false)}
@@ -173,25 +242,39 @@ export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTab
       >
         <p className="text-sm mb-5" style={{ color: "var(--text-secondary)" }}>
           Reset all slots, pact, and prepared spells for{" "}
-          <strong style={{ color: "var(--text-primary)" }}>{character.name}</strong>? This cannot
-          be undone.
+          <strong style={{ color: "var(--text-primary)" }}>{character.name}</strong>? This cannot be
+          undone.
         </p>
         <div className="flex gap-2 justify-end">
-          <button
-            className="btn-ghost text-sm px-4"
-            onClick={() => setClearConfirmOpen(false)}
-          >
+          <button className="btn-ghost text-sm px-4" onClick={() => setClearConfirmOpen(false)}>
             Cancel
           </button>
-          <button
-            className="btn-danger text-sm px-4"
-            onClick={clearCharacterData}
-            autoFocus
-          >
+          <button className="btn-danger text-sm px-4" onClick={clearCharacterData} autoFocus>
             Clear Data
           </button>
         </div>
       </Modal>
-    </div>
+
+      <Modal
+        open={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+        title="Delete Character"
+        width="max-w-sm"
+      >
+        <p className="text-sm mb-5" style={{ color: "var(--text-secondary)" }}>
+          Permanently delete{" "}
+          <strong style={{ color: "var(--text-primary)" }}>{character.name}</strong>? This cannot be
+          undone.
+        </p>
+        <div className="flex gap-2 justify-end">
+          <button className="btn-ghost text-sm px-4" onClick={() => setDeleteConfirmOpen(false)}>
+            Cancel
+          </button>
+          <button className="btn-danger text-sm px-4" onClick={handleDelete} autoFocus>
+            Delete
+          </button>
+        </div>
+      </Modal>
+    </>
   );
 }

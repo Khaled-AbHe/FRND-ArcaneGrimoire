@@ -1,18 +1,8 @@
-import { Character, ComputedStats, Spell } from "../../types";
+import { Spell } from "../../types";
 import { levelLabel } from "../../utils/dice";
-import { SchoolBadge } from "../ui/SchoolBadge";
 import { useState } from "react";
 import { useDeleteSpell } from "../../hooks/spells/useDeleteSpell";
-import { PencilIcon, TrashIcon, CheckIcon, CloseIcon, StarFilledIcon, StarEmptyIcon } from "../ui/Icons";
-
-interface SpellCardProps {
-  spell: Spell;
-  character: Character;
-  stats: ComputedStats;
-  onViewDetail: (spell: Spell) => void;
-  onEdit: (spell: Spell) => void;
-  togglePrepare: (spellId: number) => void;
-}
+import { PencilIcon, TrashIcon, CheckIcon, CloseIcon, ClockIcon, RadiusIcon } from "../ui/Icons";
 
 function schoolColor(school: string): string {
   const map: Record<string, string> = {
@@ -28,17 +18,27 @@ function schoolColor(school: string): string {
   return map[school?.toLowerCase()] ?? "rgba(36, 237, 251, 0.9)";
 }
 
-export default function SpellCard({
-  spell,
-  character,
-  onViewDetail,
-  onEdit,
-  togglePrepare,
-}: SpellCardProps) {
+interface SpellCardProps {
+  spell: Spell;
+  onViewDetail: (spell: Spell) => void;
+  onEdit: (spell: Spell) => void;
+}
+
+export default function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
   const deleteSpell = useDeleteSpell();
   const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
-  const isPrepared = character.prepared.includes(spell.id);
   const color = schoolColor(spell.school);
+
+  function spellTags(spell: Spell) {
+    return (
+      <>
+        {spell.level === "cantrip" ? "Cantrip " : `Level ${spell.level} `}•{" "}
+        <span style={{ color }}>{spell.school}</span>
+        {spell.concentration ? " • C" : undefined}
+        {spell.ritual ? " • R" : undefined}
+      </>
+    );
+  }
 
   return (
     <div
@@ -57,32 +57,10 @@ export default function SpellCard({
             >
               {spell.name}
             </div>
-            <div
-              className="text-xs text-muted mt-0.5"
-              style={{ fontFamily: "'Crimson Pro', serif" }}
-            >
-              {levelLabel(spell.level)}
-            </div>
           </div>
 
           {/* Action buttons */}
           <div className="flex items-center gap-0.5 shrink-0">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                togglePrepare(spell.id);
-              }}
-              className={`w-[26px] h-[26px] flex items-center justify-center rounded-md text-sm transition-all ${
-                isPrepared
-                  ? "text-amber-400 hover:bg-amber-400/10"
-                  : "text-muted hover:bg-white/5 hover:text-amber-500"
-              }`}
-              aria-label={isPrepared ? `Unprepare ${spell.name}` : `Prepare ${spell.name}`}
-              title={isPrepared ? "Unprepare" : "Prepare"}
-            >
-              {isPrepared ? <StarFilledIcon size={13} /> : <StarEmptyIcon size={13} />}
-            </button>
-
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -139,96 +117,25 @@ export default function SpellCard({
 
         <div className="divider my-0 mb-2" />
 
-        {/* School + flags */}
-        <div className="flex flex-wrap gap-1 mb-2.5">
-          <SchoolBadge school={spell.school} />
-          {spell.concentration && (
-            <span
-              className="school-badge"
-              style={{
-                background: "rgba(51,65,85,0.6)",
-                border: "1px solid rgba(148,163,184,0.3)",
-                color: "#94a3b8",
-                borderRadius: "6px",
-              }}
-              title="Concentration"
-              aria-label="Concentration spell"
-            >
-              C
-            </span>
-          )}
-          {spell.ritual && (
-            <span
-              className="school-badge"
-              style={{
-                background: "rgba(68,44,20,0.6)",
-                border: "1px solid rgba(180,130,60,0.35)",
-                color: "#d4a95a",
-                borderRadius: "6px",
-              }}
-              title="Ritual"
-              aria-label="Ritual spell"
-            >
-              R
-            </span>
-          )}
+        {/* Type */}
+        <div className="flex flex-wrap items-start gap-2">
+          <div className="text-sm text-muted">{spellTags(spell)}</div>
         </div>
 
+        <div className="my-0 mb-2" />
+
         {/* Cast time + range */}
-        <div className="flex items-center justify-between text-xs text-muted">
+        <div className="flex items-center justify-between text-xs text-muted h-5 ">
           <span className="flex items-center gap-1">
             <ClockIcon />
             {spell.castTime}
           </span>
-          <span className="flex items-center gap-1">
+          <span className="flex justify-end items-center gap-1 w-[50%]">
             <RadiusIcon />
             {spell.range}
           </span>
         </div>
       </div>
     </div>
-  );
-}
-
-function ClockIcon() {
-  return (
-    <svg
-      width="13"
-      height="13"
-      viewBox="0 0 16 16"
-      fill="none"
-      style={{ opacity: 0.5, flexShrink: 0 }}
-      aria-hidden="true"
-    >
-      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M8 5v3l2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function RadiusIcon() {
-  return (
-    <svg
-      width="13"
-      height="13"
-      viewBox="0 0 16 16"
-      fill="none"
-      style={{ opacity: 0.5, flexShrink: 0 }}
-      aria-hidden="true"
-    >
-      <circle cx="8" cy="8" r="1.5" fill="currentColor" />
-      <path
-        d="M8 2v2M8 12v2M2 8h2M12 8h2"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M4.1 4.1l1.4 1.4M10.5 10.5l1.4 1.4M4.1 11.9l1.4-1.4M10.5 5.5l1.4-1.4"
-        stroke="currentColor"
-        strokeWidth="1.25"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }

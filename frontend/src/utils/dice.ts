@@ -19,7 +19,7 @@ export function parseDie(die: string): number {
 /** Resolve cantrip dice count from scaling thresholds and character level */
 export function cantripDiceCount(spell: Spell, charLevel: number): number {
   const out = spell.outputType;
-  if (out.kind !== "cantrip") return 0;
+  if (out.kind !== "cantrip" || !out.scaling) return 0;
   const sorted = [...out.scaling].sort((a, b) => b.characterLevel - a.characterLevel);
   const match = sorted.find((s) => charLevel >= s.characterLevel);
   return match?.diceCount ?? 1;

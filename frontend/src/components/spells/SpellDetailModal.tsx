@@ -1,5 +1,5 @@
 import { Modal } from "../ui/Modal";
-import { SchoolBadge } from "../ui/SchoolBadge";
+import { ConcentrationBadge, RitualBadge, SchoolBadge } from "../ui/SchoolBadge";
 import type { Spell, ComputedStats } from "../../types";
 import { levelLabel, fmtBonus, formatComponents, cantripDiceCount } from "../../utils/dice";
 
@@ -7,9 +7,10 @@ interface SpellDetailModalProps {
   open: boolean;
   onClose: () => void;
   spell: Spell | null;
-  stats: ComputedStats;
-  prepared: number[];
-  onTogglePrepare: (spellId: number) => void;
+  stats?: ComputedStats;
+  prepared?: number[];
+  onTogglePrepare?: (spellId: number) => void;
+  isPreparer?: boolean;
 }
 
 export function SpellDetailModal({
@@ -19,33 +20,35 @@ export function SpellDetailModal({
   stats,
   prepared,
   onTogglePrepare,
+  isPreparer,
 }: SpellDetailModalProps) {
   if (!spell) return null;
 
-  const isPrepared = prepared.includes(spell.id);
+  const preparePage = isPreparer ?? false;
+  const isPrepared = prepared ? prepared.includes(spell.id) : false;
   const isCantrip = spell.level === "cantrip";
   const st = spell.spellType;
   const out = spell.outputType;
+  const spellStats: ComputedStats = stats
+    ? stats
+    : {
+        spellSaveDC: 10,
+        attackBonus: 5,
+        cantripTier: 1,
+        charLevel: 1,
+        spellMod: 5,
+      };
 
   return (
     <Modal open={open} onClose={onClose} title={spell.name} width="max-w-lg">
       <div className="space-y-4">
         {/* School + Level + flags */}
         <div className="flex items-center gap-3 flex-wrap">
-          <SchoolBadge school={spell.school} />
           <span className="text-sm text-dim">{levelLabel(spell.level)}</span>
-          {spell.concentration && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800">
-              Concentration
-            </span>
-          )}
-          {spell.ritual && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800">
-              Ritual
-            </span>
-          )}
+          <SchoolBadge school={spell.school} />
+          {spell.concentration && <ConcentrationBadge />}
+          {spell.ritual && <RitualBadge />}
         </div>
-
         {/* Stats grid */}
         <div className="grid grid-cols-2 gap-2 text-sm">
           {[
@@ -71,7 +74,7 @@ export function SpellDetailModal({
               <div className="flex items-center gap-4">
                 <div>
                   <div className="label">Save DC</div>
-                  <div className="text-2xl font-display text-accent">{stats.spellSaveDC}</div>
+                  <div className="text-2xl font-display text-accent">{spellStats.spellSaveDC}</div>
                 </div>
                 <div>
                   <div className="label">Ability</div>
@@ -84,7 +87,7 @@ export function SpellDetailModal({
                 <div>
                   <div className="label">Attack Bonus</div>
                   <div className="text-2xl font-display text-accent">
-                    {fmtBonus(stats.attackBonus)}
+                    {fmtBonus(spellStats.attackBonus)}
                   </div>
                 </div>
                 <div>
@@ -140,10 +143,11 @@ export function SpellDetailModal({
           </div>
         )}
 
-        {out.kind === "cantrip" && out.dice.length > 0 && (
+        {/* Cantrips */}
+        {out.kind === "cantrip" && out.dice !== undefined && (
           <div>
             <div className="label mb-1">
-              Damage (Cantrip — Tier {cantripDiceCount(spell, stats.cantripTier)})
+              Damage (Cantrip — Tier {cantripDiceCount(spell, spellStats.cantripTier)})
             </div>
             <div className="flex flex-wrap gap-1">
               {out.dice.map((d, i) => (
@@ -152,7 +156,7 @@ export function SpellDetailModal({
                   className="px-2 py-0.5 rounded text-sm font-mono"
                   style={{ background: "var(--bg-raised)", color: "var(--text-secondary)" }}
                 >
-                  {cantripDiceCount(spell, stats.cantripTier)}
+                  {cantripDiceCount(spell, spellStats.cantripTier)}
                   {d.die}
                   {d.addCastingMod ? ` + mod` : ""} {d.type}
                 </span>
@@ -169,14 +173,14 @@ export function SpellDetailModal({
         )}
 
         {/* Prepare toggle */}
-        {!isCantrip && (
+        {preparePage && !isCantrip && (
           <button
             className={
               isPrepared
                 ? "btn-ghost w-full justify-center text-amber-400 border-amber-800"
                 : "btn-ghost w-full justify-center"
             }
-            onClick={() => onTogglePrepare(spell.id)}
+            onClick={() => (onTogglePrepare ? onTogglePrepare(spell.id) : undefined)}
           >
             {isPrepared ? "★ Prepared" : "☆ Prepare Spell"}
           </button>

@@ -71,7 +71,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       "You create up to four torch-size lights within range, making them appear as torches, lanterns, or glowing orbs that hover for the duration. Alternatively, you combine the four lights into one glowing Medium form that is vaguely humanlike. Whichever form you choose, each light sheds Dim Light in a 10-foot radius.\n\nAs a Bonus Action, you can move the lights up to 60 feet to a space within range. A light must be within 20 feet of another light created by this spell, and a light vanishes if it exceeds the spell's range.",
@@ -88,7 +88,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       'Whispering to the spirits of nature, you create one of the following effects within range.\n\nWeather Sensor. You create a Tiny, harmless sensory effect that predicts what the weather will be at your location for the next 24 hours. The effect might manifest as a golden orb for clear skies, a cloud for rain, falling snowflakes for snow, and so on. This effect persists for 1 round.\n\nBloom. You instantly make a flower blossom, a seed pod open, or a leaf bud bloom.\n\nSensory Effect. You create a harmless sensory effect, such as falling leaves, spectral dancing fairies, a gentle breeze, the sound of an animal, or the faint odor of skunk. The effect must fit in a 5-foot Cube.\n\nFire Play. You light or snuff out a candle, a torch, or a campfire.',
@@ -129,7 +129,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       "You exert control over the elements, creating one of the following effects within range.\n\nBeckon Air. You create a breeze strong enough to ripple cloth, stir dust, rustle leaves, and close open doors and shutters, all in a 5-foot Cube. Doors and shutters being held open by someone or something aren't affected.\n\nBeckon Earth. You create a thin shroud of dust or sand that covers surfaces in a 5-foot-square area, or you cause a single word to appear in your handwriting in a patch of dirt or sand.\n\nBeckon Fire. You create a thin cloud of harmless embers and colored, scented smoke in a 5-foot Cube. You choose the color and scent, and the embers can light candles, torches, or lamps in that area. The smoke's scent lingers for 1 minute.\n\nBeckon Water. You create a spray of cool mist that lightly dampens creatures and objects in a 5-foot Cube. Alternatively, you create 1 cup of clean water either in an open container or on a surface, and the water evaporates in 1 minute.\n\nSculpt Element. You cause dirt, sand, fire, smoke, mist, or water that can fit in a 1-foot Cube to assume a crude shape (such as that of a creature) for 1 hour.",
@@ -170,7 +170,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       'You touch a willing creature and choose a skill. Until the spell ends, the creature adds 1d4 to any ability check using the chosen skill.',
@@ -191,7 +191,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       "You touch one Large or smaller object that isn't being worn or carried by someone else. Until the spell ends, the object sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet. The light can be colored as you like.\n\nCovering the object with something opaque blocks the light. The spell ends if you cast it again.",
@@ -208,7 +208,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       "A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration. The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.\n\nWhen you cast the spell, you can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial.\n\nAs a Magic action on your later turns, you can control the hand thus again. As part of that action, you can move the hand up to 30 feet.\n\nThe hand can't attack, activate magic items, or carry more than 10 pounds.",
@@ -225,7 +225,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true, material: 'two lodestones' },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       "This spell repairs a single break or tear in an object you touch, such as a broken chain link, two halves of a broken key, a torn cloak, or a leaking wineskin. As long as the break or tear is no larger than 1 foot in any dimension, you mend it, leaving no trace of the former damage.\n\nThis spell can physically repair a magic item, but it can't restore magic to such an object.",
@@ -242,7 +242,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: false, somatic: true, material: 'a copper wire' },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       'You point toward a creature within range and whisper a message. The target (and only the target) hears the message and can reply in a whisper that only you can hear.\n\nYou can cast this spell through solid objects if you are familiar with the target and know it is beyond the barrier. Magical silence; 1 foot of stone, metal, or wood; or a thin sheet of lead blocks the spell.',
@@ -259,7 +259,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: false, somatic: true, material: 'a bit of fleece' },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       "You create a sound or an image of an object within range that lasts for the duration. See the descriptions below for the effects of each. The illusion ends if you cast this spell again.\n\nIf a creature takes a Study action to examine the sound or image, the creature can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the illusion becomes faint to the creature.\n\nSound. If you create a sound, its volume can range from a whisper to a scream. It can be your voice, someone else's voice, a lion's roar, a beating of drums, or any other sound you choose. The sound continues unabated throughout the duration, or you can make discrete sounds at different times before the spell ends.\n\nImage. If you create an image of an object—such as a chair, muddy footprints, or a small chest—it must be no larger than a 5-foot Cube. The image can't create sound, light, smell, or any other sensory effect. Physical interaction with the image reveals it to be an illusion, since things can pass through it.",
@@ -300,7 +300,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       'You create a magical effect within range. Choose the effect from the options below. If you cast this spell multiple times, you can have up to three of its non-instantaneous effects active at a time.\n\nSensory Effect. You create an instantaneous, harmless sensory effect, such as a shower of sparks, a puff of wind, faint musical notes, or an odd odor.\n\nFire Play. You instantaneously light or snuff out a candle, a torch, or a small campfire.\n\nClean or Soil. You instantaneously clean or soil an object no larger than 1 cubic foot.\n\nMinor Sensation. You chill, warm, or flavor up to 1 cubic foot of nonliving material for 1 hour.\n\nMagic Mark. You make a color, a small mark, or a symbol appear on an object or a surface for 1 hour.\n\nMinor Creation. You create a nonmagical trinket or an illusory image that can fit in your hand. It lasts until the end of your next turn. A trinket can deal no damage and has no monetary worth.',
@@ -365,7 +365,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       'You touch a willing creature and choose a damage type: Acid, Bludgeoning, Cold, Fire, Lightning, Necrotic, Piercing, Poison, Radiant, Slashing, or Thunder. When the creature takes damage of the chosen type before the spell ends, the creature reduces the total damage taken by 1d4. A creature can benefit from this spell only once per turn.',
@@ -447,7 +447,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       "Choose a creature within range that has 0 Hit Points and isn't dead. The creature becomes Stable.",
@@ -512,7 +512,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: false },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'cantrip',
+      kind: 'utility',
     },
     notes:
       'You manifest a minor wonder within range. You create one of the effects below within range. If you cast this spell multiple times, you can have up to three of its 1-minute effects active at a time.\n\nAltered Eyes. You alter the appearance of your eyes for 1 minute.\n\nBooming Voice. Your voice booms up to three times as loud as normal for 1 minute. For the duration, you have Advantage on Charisma (Intimidation) checks.\n\nFire Play. You cause flames to flicker, brighten, dim, or change color for 1 minute.\n\nInvisible Hand. You instantaneously cause an unlocked door or window to fly open or slam shut.\n\nPhantom Sound. You create an instantaneous sound that originates from a point of your choice within range, such as a rumble of thunder, the cry of a raven, or ominous whispers.\n\nTremors. You cause harmless tremors in the ground for 1 minute.',

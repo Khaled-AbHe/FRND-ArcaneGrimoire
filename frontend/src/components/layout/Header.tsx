@@ -1,32 +1,18 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/auth/useCurrentUser";
 import { useSignOut } from "../../hooks/auth/useSignOut";
 import type { Character } from "../../types";
-import { ArrowLeftIcon, PencilIcon, UserIcon } from "../ui/Icons";
+import { ArrowLeftIcon, UserIcon } from "../ui/Icons";
 
 interface HeaderProps {
   character: Character;
   onBack: () => void;
-  onRename: (name: string) => void;
 }
 
-export function Header({ character, onBack, onRename }: HeaderProps) {
-  const [editing, setEditing] = useState(false);
-  const [name, setName] = useState(character.name);
+export function Header({ character, onBack }: HeaderProps) {
   const { data: currentUser } = useCurrentUser();
   const signOut = useSignOut();
   const navigate = useNavigate();
-
-  function saveName() {
-    const trimmed = name.trim();
-    if (!trimmed || trimmed === character.name) {
-      setEditing(false);
-      return;
-    }
-    onRename(trimmed);
-    setEditing(false);
-  }
 
   async function handleSignOut() {
     await signOut.mutateAsync();
@@ -47,44 +33,14 @@ export function Header({ character, onBack, onRename }: HeaderProps) {
         <ArrowLeftIcon size={18} />
       </button>
 
-      <div className="flex-1 flex items-center gap-2">
-        {editing ? (
-          <input
-            className="input text-base font-display"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            onBlur={saveName}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") saveName();
-              if (e.key === "Escape") {
-                setEditing(false);
-                setName(character.name);
-              }
-            }}
-            autoFocus
-            maxLength={64}
-            aria-label="Character name"
-            style={{ maxWidth: 260 }}
-          />
-        ) : (
-          <button
-            onClick={() => setEditing(true)}
-            className="flex items-center gap-2 group"
-            aria-label={`Rename character: ${character.name}`}
-            title="Click to rename"
-          >
-            <h1 className="font-display text-lg text-accent tracking-widest uppercase">
-              {character.name}
-            </h1>
-            <span className="opacity-0 group-hover:opacity-60 transition-opacity text-muted">
-              <PencilIcon size={13} />
-            </span>
-          </button>
-        )}
+      <div className="flex-1 items-center gap-2">
+        <h1 className="font-display text-lg text-accent tracking-widest uppercase">
+          {character.name}
+        </h1>
       </div>
 
       <div className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
-        Lv {character.globals?.charLevel ?? 1}
+        LvL {character.globals?.charLevel ?? 1}
       </div>
 
       <div

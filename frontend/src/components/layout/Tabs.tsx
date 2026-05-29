@@ -1,27 +1,35 @@
 import clsx from "clsx";
 import type { TabId } from "../../types";
-import { SlotsIcon, BookIcon, SettingsIcon } from "../ui/Icons";
+
+interface Tab {
+  id: TabId;
+  label: string;
+  Icon: React.FC<{
+    size?: number;
+  }>;
+}
 
 interface TabsProps {
   active: TabId;
+  tabs: Tab[];
   onChange: (tab: TabId) => void;
 }
 
-const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = [
-  { id: "slots", label: "Spell Slots", Icon: SlotsIcon },
-  { id: "spellbook", label: "Spellbook", Icon: BookIcon },
-  { id: "settings", label: "Settings", Icon: SettingsIcon },
-];
+export function Tabs({ active, tabs, onChange }: TabsProps) {
+  const hasBorder = active !== "spells" && active !== "slots" && active !== "preparer";
 
-export function Tabs({ active, onChange }: TabsProps) {
   return (
     <nav
       className="flex border-b"
       role="tablist"
       aria-label="Character sections"
-      style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}
+      style={{
+        background: "var(--bg-secondary)",
+        borderBottom: `${hasBorder ? "1px solid" : "none"}`,
+        borderColor: `${hasBorder ? "var(--border)" : "none"}`,
+      }}
     >
-      {TABS.map((tab) => (
+      {tabs.map((tab) => (
         <button
           key={tab.id}
           role="tab"

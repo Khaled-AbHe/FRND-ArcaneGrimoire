@@ -4,7 +4,7 @@ import { Header } from "../components/layout/Header";
 import { Tabs } from "../components/layout/Tabs";
 import { SettingsTab } from "../components/settings/SettingsTab";
 import { SlotsTab } from "../components/slots/SlotsTab";
-import { SpellsTab } from "../components/spells/SpellsTab";
+import { SpellPreparerTab } from "../components/spells/SpellPreparerTab";
 import type { DamageRollResult, HitRollResult, RollResult } from "../components/ui/RollOverlay";
 import { RollOverlay } from "../components/ui/RollOverlay";
 import { useAutoSave } from "../hooks/characters/useAutoSave";
@@ -13,8 +13,15 @@ import { computeStats } from "../utils/stats";
 import { useCharacter } from "../hooks/characters/useCharacter";
 import { LoadingSpinner } from "../components/layout/LoadingSpinner";
 import PageShell from "../components/shells/page-shell.component";
+import { SlotsIcon, BookIcon, SettingsIcon } from "../components/ui/Icons";
 
-const VALID_TABS: TabId[] = ["slots", "spellbook", "settings"];
+const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = [
+  { id: "slots", label: "Spell Slots", Icon: SlotsIcon },
+  { id: "preparer", label: "Spell Preparer", Icon: BookIcon },
+  { id: "settings", label: "Settings", Icon: SettingsIcon },
+];
+
+const VALID_TABS: TabId[] = ["slots", "preparer", "settings"];
 
 export function CharacterPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,21 +30,17 @@ export function CharacterPage() {
 
   const activeId = id && !isNaN(Number(id)) ? Number(id) : null;
 
-  // ── Roll overlay state ────────────────────────────────────────────────────
   const [rollResults, setRollResults] = useState<RollResult[]>([]);
   const rollIdCounter = useRef(0);
 
-  // ── Character state ───────────────────────────────────────────────────────
   const [localChar, setLocalChar] = useState<Character | undefined>(undefined);
   const { data: serverChar, isError, isLoading: charLoading } = useCharacter(activeId);
   const save = useAutoSave(activeId);
 
-  // Sync server data into local state whenever it arrives or the character changes
   useEffect(() => {
     if (serverChar) setLocalChar(serverChar);
   }, [serverChar]);
 
-  // ── Derived ───────────────────────────────────────────────────────────────
   const rawTab = searchParams.get("tab") as TabId | null;
   const tab: TabId = rawTab && VALID_TABS.includes(rawTab) ? rawTab : "slots";
   const setTab = (next: TabId) => setSearchParams({ tab: next }, { replace: true });
@@ -48,7 +51,6 @@ export function CharacterPage() {
     ? computeStats(localChar)
     : { spellSaveDC: 13, charLevel: 1, attackBonus: 5, cantripTier: 1, spellMod: 1 };
 
-  // ── Instant local update + debounced save ─────────────────────────────────
   const handleUpdateCharacter = useCallback(
     (patch: Partial<Character>) => {
       if (!activeId) return;
@@ -62,7 +64,6 @@ export function CharacterPage() {
     [activeId, save],
   );
 
-  // ── Early returns — all hooks are above this line ─────────────────────────
   if (!activeId) return <Navigate to="/" replace />;
   if (isError) return <Navigate to="/" replace />;
   if (charLoading || !localChar) return <LoadingSpinner />;
@@ -77,12 +78,8 @@ export function CharacterPage() {
 
   return (
     <PageShell>
-      <Header
-        character={localChar}
-        onBack={() => navigate("/")}
-        onRename={(name) => handleUpdateCharacter({ name })}
-      />
-      <Tabs active={tab} onChange={setTab} />
+      <Header character={localChar} onBack={() => navigate("/")} />
+      <Tabs active={tab} tabs={TABS} onChange={setTab} />
 
       <main className="flex-1 overflow-hidden flex flex-col">
         {tab === "slots" && (
@@ -95,12 +92,11 @@ export function CharacterPage() {
             nextRollId={nextRollId}
           />
         )}
-        {tab === "spellbook" && (
-          <SpellsTab
+        {tab === "preparer" && (
+          <SpellPreparerTab
             character={localChar}
             stats={stats}
             onUpdatePrepared={(prepared) => handleUpdateCharacter({ prepared })}
-            onUpdateCharacter={handleUpdateCharacter}
           />
         )}
         {tab === "settings" && (

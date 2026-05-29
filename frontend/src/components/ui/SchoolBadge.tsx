@@ -14,9 +14,45 @@ const SCHOOL_COLORS: Record<string, string> = {
 interface SchoolBadgeProps {
   school: string;
   className?: string;
+  mini?: boolean;
 }
 
-export function SchoolBadge({ school, className }: SchoolBadgeProps) {
+export function SchoolBadge({ school, className, mini }: SchoolBadgeProps) {
   const colors = SCHOOL_COLORS[school] ?? "bg-slate-800 text-slate-300 border-slate-700";
-  return <span className={clsx("school-badge border", colors, className)}>{school}</span>;
+  const text = mini ? school.slice(0, 3) : school;
+  return <span className={clsx("school-badge border", colors, className)}>{text}</span>;
+}
+
+export function ConcentrationBadge() {
+  return (
+    <span
+      className="school-badge"
+      style={{
+        background: "rgba(51,65,85,0.6)",
+        border: "1px solid rgba(148,163,184,0.3)",
+        color: "#94a3b8",
+      }}
+      title="Concentration"
+      aria-label="Concentration spell"
+    >
+      C
+    </span>
+  );
+}
+
+export function RitualBadge() {
+  return (
+    <span
+      className="school-badge"
+      style={{
+        background: "rgba(68,44,20,0.6)",
+        border: "1px solid rgba(180,130,60,0.35)",
+        color: "#d4a95a",
+      }}
+      title="Ritual"
+      aria-label="Ritual spell"
+    >
+      R
+    </span>
+  );
 }

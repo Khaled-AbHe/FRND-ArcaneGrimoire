@@ -260,7 +260,7 @@ export interface CastResult {
 
 // ── UI helpers ────────────────────────────────────────────────────────────────
 
-export type TabId = "slots" | "spellbook" | "settings";
+export type TabId = "slots" | "preparer" | "settings" | "characters" | "spells";
 
 export const SCHOOLS = [
   "Abjuration",

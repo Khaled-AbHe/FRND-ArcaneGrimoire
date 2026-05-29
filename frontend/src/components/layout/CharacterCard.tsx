@@ -2,16 +2,19 @@ import { useState } from "react";
 import { useDeleteCharacter } from "../../hooks/characters/useDeleteCharacter";
 import { useDuplicateCharacter } from "../../hooks/characters/useDuplicateCharacter";
 import { Character } from "../../types";
-import { DuplicateIcon, TrashIcon, CheckIcon, CloseIcon } from "../ui/Icons";
+import { DuplicateIcon, TrashIcon, CheckIcon } from "../ui/Icons";
+import { useNavigate } from "react-router-dom";
 
 interface CharacterCardProps {
   char: Character;
-  goToCharacter: (id: number) => void | Promise<void>;
 }
 
-export default function CharacterCard({ char, goToCharacter }: CharacterCardProps) {
+export default function CharacterCard({ char }: CharacterCardProps) {
+  const navigate = useNavigate();
+
   const deleteChar = useDeleteCharacter();
   const duplicateChar = useDuplicateCharacter();
+  const goToCharacter = (id: number) => navigate(`/character/${id}`);
 
   const [dupTarget, setDupTarget] = useState<Character | null>(null);
   const [dupName, setDupName] = useState("");

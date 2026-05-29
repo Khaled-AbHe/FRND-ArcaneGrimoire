@@ -198,7 +198,11 @@ export function BookIcon({ size = 16, className, style }: IconProps) {
         stroke="currentColor"
         strokeWidth="1.5"
       />
-      <path d="M3 13.5A1.5 1.5 0 0 0 4.5 15H13v-3H4.5A1.5 1.5 0 0 0 3 13.5Z" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M3 13.5A1.5 1.5 0 0 0 4.5 15H13v-3H4.5A1.5 1.5 0 0 0 3 13.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
       <path d="M6 5h4M6 7.5h3" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
     </svg>
   );
@@ -321,7 +325,12 @@ export function MoonRestIcon({ size = 14, className, style }: IconProps) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M12 2v1.5M14.5 4H13M12 5.5V4" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+      <path
+        d="M12 2v1.5M14.5 4H13M12 5.5V4"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -397,6 +406,49 @@ export function UserIcon({ size = 14, className, style }: IconProps) {
         d="M1.5 14c0-3 3-4.5 6.5-4.5S14.5 11 14.5 14"
         stroke="currentColor"
         strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+export function ClockIcon() {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 16 16"
+      fill="none"
+      style={{ opacity: 0.5, flexShrink: 0 }}
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M8 5v3l2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function RadiusIcon() {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 16 16"
+      fill="none"
+      style={{ opacity: 0.5, flexShrink: 0 }}
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="8" r="1.5" fill="currentColor" />
+      <path
+        d="M8 2v2M8 12v2M2 8h2M12 8h2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M4.1 4.1l1.4 1.4M10.5 10.5l1.4 1.4M4.1 11.9l1.4-1.4M10.5 5.5l1.4-1.4"
+        stroke="currentColor"
+        strokeWidth="1.25"
         strokeLinecap="round"
       />
     </svg>

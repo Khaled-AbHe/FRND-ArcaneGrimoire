@@ -101,3 +101,17 @@ export const spellsApi = {
       .post<TemplateResult>("/spells/template", { casterType, charLevel })
       .then((r) => r.data),
 };
+
+// ── Users ─────────────────────────────────────────────────────────────────────
+
+export interface UpdateUserDto {
+  username?: string;
+  email?: string;
+  password?: string;
+}
+
+export const userApi = {
+  me: () => http.get<User>("/users/me").then((r) => r.data),
+  update: (dto: UpdateUserDto) =>
+    http.put<User>("/users/me", dto).then((r) => r.data),
+};

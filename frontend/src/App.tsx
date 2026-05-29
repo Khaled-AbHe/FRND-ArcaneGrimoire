@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { CharacterSelect } from "./components/layout/CharacterSelect";
+import { UserPage } from "./pages/UserPage";
 import { CharacterPage } from "./pages/CharacterPage";
 import { RequireAuth } from "./components/layout/RequireAuth";
 import { SignInPage } from "./pages/SignInPage";
@@ -8,16 +8,14 @@ import { SignUpPage } from "./pages/SignUpPage";
 export default function App() {
   return (
     <Routes>
-      {/* Public routes */}
       <Route path="/signin" element={<SignInPage />} />
       <Route path="/signup" element={<SignUpPage />} />
 
-      {/* Protected routes */}
       <Route
         path="/"
         element={
           <RequireAuth>
-            <CharacterSelect />
+            <UserPage />
           </RequireAuth>
         }
       />
@@ -30,7 +28,6 @@ export default function App() {
         }
       />
 
-      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

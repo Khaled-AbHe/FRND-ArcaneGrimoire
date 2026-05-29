@@ -5,10 +5,12 @@
 @layer base {
   :root {
     --bg-primary: #0f1117;
-    --bg-secondary: #161820;
+    --bg-secondary: #191b23;
+    /* --bg-secondary: #161820; */
     --bg-card: #1e2130;
     --bg-raised: #252840;
-    --border: #24edfb1f;
+    --border: #24edfb28;
+    /* --border: #24edfb1f; */
     --border-hover: rgba(15, 239, 255, 0.28);
     --text-primary: #f1f0ea;
     --text-secondary: #c3d3e9;
@@ -26,6 +28,7 @@
     --crit-color: #ffd000;
     --miss-color: #ef4444;
     --hit-color: #00f038;
+    cursor: default;
   }
 
   html {
@@ -136,9 +139,8 @@
 
   .card {
     @apply rounded-lg border;
-    background: var(--bg-card);
+    background: var(--bg-secondary);
     border-color: var(--border);
-    width: 80%;
     margin: auto;
   }
   .card:hover {
@@ -211,7 +213,7 @@
   /* ── Input ─────────────────────────────────────────────────────────────── */
   .input {
     @apply w-full px-3 py-2 rounded text-sm transition-all duration-150 outline-none;
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
     color: var(--text-primary);
     font-family: "Crimson Pro", serif;
@@ -412,9 +414,10 @@
 
 .spell-grid-card {
   @apply rounded-lg border overflow-hidden cursor-pointer transition-all duration-200;
-  background: var(--bg-card);
+  background: var(--bg-secondary);
   border-color: var(--border);
   position: relative;
+  min-height: 100px;
 }
 .spell-grid-card::before {
   content: "";

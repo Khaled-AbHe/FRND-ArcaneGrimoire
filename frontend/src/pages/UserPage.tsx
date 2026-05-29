@@ -1,0 +1,58 @@
+import { useSearchParams } from "react-router-dom";
+import { useCurrentUser } from "../hooks/auth/useCurrentUser";
+import { SpellManagerTab } from "../components/user/SpellManagerTab";
+import { UserSettingsTab } from "../components/user/UserSettingsTab";
+import { UserIcon, BookIcon, SettingsIcon, SlotsIcon } from "../components/ui/Icons";
+import PageShell from "../components/shells/page-shell.component";
+import { Tabs } from "../components/layout/Tabs";
+import { TabId } from "../types";
+import CharactersTab from "../components/user/CharactersTab";
+
+const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = [
+  { id: "characters", label: "Characters", Icon: SlotsIcon },
+  { id: "spells", label: "Spell Manager", Icon: BookIcon },
+  { id: "settings", label: "Settings", Icon: SettingsIcon },
+];
+
+export function UserPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { data: currentUser } = useCurrentUser();
+
+  const rawTab = searchParams.get("tab") as TabId | null;
+  const tab: TabId =
+    rawTab && ["characters", "spells", "settings"].includes(rawTab) ? rawTab : "characters";
+  const setTab = (next: TabId) => setSearchParams({ tab: next }, { replace: true });
+
+  return (
+    <PageShell>
+      {/* Header */}
+      <header
+        className="flex items-center gap-4 px-5 py-3 border-b"
+        style={{ background: "var(--bg-secondary)", border: "none" }}
+      >
+        <h1 className="font-display text-lg text-accent tracking-widest uppercase flex-1">
+          Arcane Grimoire
+        </h1>
+        {currentUser && (
+          <span
+            className="flex items-center gap-1.5 text-xs font-display tracking-wider"
+            style={{ color: "var(--text-muted)" }}
+          >
+            <UserIcon size={12} />
+            {currentUser.username}
+          </span>
+        )}
+      </header>
+
+      {/* Tab bar */}
+      <Tabs active={tab} tabs={TABS} onChange={setTab} />
+
+      {/* Tab content */}
+      <div className="flex-1 overflow-hidden flex flex-col">
+        {tab === "characters" && <CharactersTab />}
+        {tab === "spells" && <SpellManagerTab />}
+        {tab === "settings" && <UserSettingsTab />}
+      </div>
+    </PageShell>
+  );
+}
