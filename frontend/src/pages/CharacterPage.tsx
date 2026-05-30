@@ -17,7 +17,7 @@ import { SlotsIcon, BookIcon, SettingsIcon } from "../components/ui/Icons";
 
 const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = [
   { id: "slots", label: "Spell Slots", Icon: SlotsIcon },
-  { id: "preparer", label: "Spell Preparer", Icon: BookIcon },
+  { id: "preparer", label: "Spell List", Icon: BookIcon },
   { id: "settings", label: "Settings", Icon: SettingsIcon },
 ];
 

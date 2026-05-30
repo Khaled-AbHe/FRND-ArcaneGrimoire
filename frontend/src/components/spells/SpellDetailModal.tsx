@@ -57,7 +57,7 @@ export function SpellDetailModal({
             { label: "Duration", value: spell.duration },
             { label: "Components", value: formatComponents(spell.components) },
           ].map(({ label, value }) => (
-            <div key={label} className="rounded p-2" style={{ background: "var(--bg-raised)" }}>
+            <div key={label} className="rounded p-2" style={{ background: "var(--bg-ternary)" }}>
               <div className="label">{label}</div>
               <div style={{ color: "var(--text-primary)" }}>{value || "—"}</div>
             </div>
@@ -68,7 +68,7 @@ export function SpellDetailModal({
         {st.kind !== "utility" && (
           <div
             className="rounded p-3 border"
-            style={{ borderColor: "var(--border)", background: "var(--bg-raised)" }}
+            style={{ borderColor: "var(--border)", background: "var(--bg-ternary)" }}
           >
             {st.kind === "save" && (
               <div className="flex items-center gap-4">
@@ -114,7 +114,7 @@ export function SpellDetailModal({
                 <span
                   key={i}
                   className="px-2 py-0.5 rounded text-sm font-mono"
-                  style={{ background: "var(--bg-raised)", color: "var(--text-secondary)" }}
+                  style={{ background: "var(--bg-ternary)", color: "var(--text-secondary)" }}
                 >
                   {d.count > 0 ? `${d.count}${d.die}` : ""}
                   {d.flatBonus ? ` + ${d.flatBonus}` : ""}
@@ -154,7 +154,7 @@ export function SpellDetailModal({
                 <span
                   key={i}
                   className="px-2 py-0.5 rounded text-sm font-mono"
-                  style={{ background: "var(--bg-raised)", color: "var(--text-secondary)" }}
+                  style={{ background: "var(--bg-ternary)", color: "var(--text-secondary)" }}
                 >
                   {cantripDiceCount(spell, spellStats.cantripTier)}
                   {d.die}
@@ -167,8 +167,19 @@ export function SpellDetailModal({
 
         {/* Notes */}
         {spell.notes && (
-          <div className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
-            {spell.notes}
+          <div className="rounded p-2" style={{ background: "var(--bg-ternary)" }}>
+            <div className="label">Desc</div>
+            <div style={{ color: "var(--text-primary)" }}>
+              <div
+                className="text-sm leading-relaxed"
+                style={{
+                  color: "var(--text-secondary)",
+                  borderRadius: "5px",
+                }}
+              >
+                {spell.notes}
+              </div>
+            </div>
           </div>
         )}
 

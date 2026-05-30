@@ -9,7 +9,7 @@ import { TabId } from "../types";
 import CharactersTab from "../components/user/CharactersTab";
 
 const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = [
-  { id: "characters", label: "Characters", Icon: SlotsIcon },
+  { id: "characters", label: "My Characters", Icon: SlotsIcon },
   { id: "spells", label: "Spell Manager", Icon: BookIcon },
   { id: "settings", label: "Settings", Icon: SettingsIcon },
 ];
