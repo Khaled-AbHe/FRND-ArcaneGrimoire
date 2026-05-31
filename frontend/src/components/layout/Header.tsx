@@ -22,7 +22,7 @@ export function Header({ character, onBack }: HeaderProps) {
   return (
     <header
       className="flex items-center gap-4 px-5 py-3 border-b"
-      style={{ background: "var(--bg-secondary)", borderColor: "var(--border)" }}
+      style={{ background: "var(--bg-secondary)", border: "none" }}
     >
       <button
         onClick={onBack}
