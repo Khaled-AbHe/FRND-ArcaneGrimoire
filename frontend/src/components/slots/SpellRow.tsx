@@ -293,7 +293,7 @@ export function SpellRow({
                 e.preventDefault();
                 setDamageContextMenu({ x: e.clientX, y: e.clientY });
               }}
-              className={`${variant.kind === "arcanum" ? "btn-arcanum" : "btn-primary"} w-[85px] h-full text-[14px] justify-center`}
+              className={`${variant.kind === "arcanum" ? "btn-arcanum" : "btn-primary"} w-[115px] h-full text-[14px] justify-center`}
               aria-label={`Roll damage for ${spell.name} (right-click for critical)`}
               title="Click to roll · Right-click for critical damage"
             >

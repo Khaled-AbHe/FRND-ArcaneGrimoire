@@ -49,13 +49,14 @@ export function buildGrid(spell: Spell, stats: ComputedStats, isPreparer: boolea
 export function buildDamage(spell: Spell, stats: ComputedStats, isPreparer: boolean) {
   const out = spell.outputType;
   let text = "";
+
   if (out.kind == "leveled") {
-    out.dice.map((d) => {
-      text += `${out.projectiles ? `${getTotalProjCount(spell, spell.level)} projectiles of ` : ""}${d.count > 0 ? `${getTotalDiceCount(spell, spell.level)}${d.die}` : ""} ${d.flatBonus ? ` + ${d.flatBonus}` : ""} ${d.addCastingMod ? (isPreparer ? `${fmtBonus(stats.spellMod)}` : ` + (Spell. Mod.)`) : ""} ${d.type} `;
+    out.dice.map((d, i, de) => {
+      text += `${out.projectiles ? `${getTotalProjCount(spell, spell.level)} projectiles of ` : ""}${d.count > 0 ? `${getTotalDiceCount(spell, spell.level, d.type)}${d.die}` : ""} ${d.flatBonus ? ` + ${d.flatBonus}` : ""} ${d.addCastingMod ? (isPreparer ? `${fmtBonus(stats.spellMod)}` : ` + (Spell. Mod.)`) : ""} ${d.type} ${de.length - 1 == i ? "" : "+"} `;
     });
   } else if (out.kind == "cantrip") {
-    out.dice.map((d) => {
-      text += `${out.scaling[0].projCount ? `${getTotalProjCount(spell, spell.level, stats.charLevel)} projectiles of ` : ""}${cantripDiceCount(spell, stats.charLevel)}${d.die} ${d.addCastingMod ? ` + mod` : ""} ${d.type} `;
+    out.dice.map((d, i, de) => {
+      text += `${out.scaling[0].projCount ? `${getTotalProjCount(spell, spell.level, stats.charLevel)} projectiles of ` : ""}${cantripDiceCount(spell, stats.charLevel)}${d.die} ${d.addCastingMod ? ` + mod` : ""} ${d.type} ${de.length - 1 == i ? "" : "+"} `;
     });
   }
 

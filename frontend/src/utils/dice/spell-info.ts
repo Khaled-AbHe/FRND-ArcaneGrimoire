@@ -1,4 +1,4 @@
-import type { ComputedStats, Spell } from "../../types";
+import type { ComputedStats, OutputType, Spell } from "../../types";
 import { cantripDiceCount, cantripProjCount } from "./cantrip";
 import { upcastSteps } from "./core";
 
@@ -123,37 +123,33 @@ export function spellNotes(spell: Spell): string {
  * @param slotLevel - The slot level used (ignored for cantrips)
  * @param charLevel - Character level, used for cantrip scaling (default 1)
  */
-export function getTotalDiceCount(spell: Spell, spellLevel: string, charLevel = 1): number {
+export function getTotalDiceCount(
+  spell: Spell,
+  spellLevel: string,
+  dmgType: OutputType,
+  charLevel = 1,
+): number {
   const out = spell.outputType;
   const slotLevel = spellLevel === "cantrip" ? 0 : Number(spellLevel);
 
   if (out.kind === "utility") return 0;
 
   if (out.kind === "cantrip") {
-    const usesProjScaling = out.scaling.some((s) => s.projCount != null);
-    if (usesProjScaling) return cantripProjCount(spell, charLevel);
     return out.dice.reduce(
       (sum, d) => sum + cantripDiceCount(spell, charLevel) * (d.count > 0 ? 1 : 0),
       0,
     );
   }
 
-  // if (out.kind === "leveled" && out.projectiles) {
-  //   let proj = out.projectiles.baseCount;
-  //   if (out.projectiles.upcast && slotLevel > 0) {
-  //     const { count, everyNLevels, aboveLevel } = out.projectiles.upcast;
-  //     proj += upcastSteps(everyNLevels, aboveLevel, slotLevel) * count;
-  //   }
-  //   return proj;
-  // }
-
   if (out.kind === "leveled") {
-    const baseDice = out.dice.reduce((sum, d) => sum + d.count, 0);
+    const dice = out.dice.filter((d) => d.type == dmgType);
+    const baseDice = dice.reduce((sum, d) => sum + d.count, 0);
+
     let upcastDice = 0;
     if (out.upcast?.dice && slotLevel > 0) {
       for (const u of out.upcast.dice) {
         const steps = upcastSteps(u.everyNLevels, u.aboveLevel, slotLevel);
-        if (steps > 0) upcastDice += u.count * steps;
+        if (steps > 0 && u.type === dmgType) upcastDice += u.count * steps;
       }
     }
     return baseDice + upcastDice;

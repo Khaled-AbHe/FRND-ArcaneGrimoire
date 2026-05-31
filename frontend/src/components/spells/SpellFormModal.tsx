@@ -195,10 +195,6 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
   const upcastDice = out.kind === "leveled" ? (out.upcast?.dice ?? []) : [];
   const projectiles = out.kind === "leveled" ? out.projectiles : undefined;
 
-  if (out.kind === "utility") {
-    console.log(form);
-  }
-
   return (
     <Modal
       open={open}
