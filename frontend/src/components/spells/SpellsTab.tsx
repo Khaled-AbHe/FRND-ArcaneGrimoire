@@ -1,4 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
+import { useSpellFilters } from "../../hooks/spells/useSpellFilters";
+import { usePreparedSpells } from "../../hooks/spells/usePreparedSpells";
 import { SpellFormModal } from "./SpellFormModal";
 import { SpellDetailModal } from "./SpellDetailModal";
 import type { Spell, Character, ComputedStats, SpellLevel } from "../../types";
@@ -10,13 +12,15 @@ import { PlusIcon } from "../ui/Icons";
 
 interface SpellsTabProps {
   character: Character;
-  stats: ComputedStats | {
-    spellSaveDC: number;
-    charLevel: number;
-    attackBonus: number;
-    cantripTier: number;
-    spellMod: number;
-  };
+  stats:
+    | ComputedStats
+    | {
+        spellSaveDC: number;
+        charLevel: number;
+        attackBonus: number;
+        cantripTier: number;
+        spellMod: number;
+      };
   onUpdatePrepared: (prepared: number[]) => void;
   onUpdateCharacter: (patch: Partial<Character>) => void;
 }
@@ -24,33 +28,24 @@ interface SpellsTabProps {
 export function SpellsTab({ character, stats, onUpdatePrepared }: SpellsTabProps) {
   const { data: spells = [], isLoading } = useSpells();
 
-  const [search, setSearch] = useState("");
-  const [filterLevel, setFilterLevel] = useState<SpellLevel | "">("");
-  const [filterSchool, setFilterSchool] = useState("");
-  const [showUnprepared, setShowUnprepared] = useState(true);
-
   const [formOpen, setFormOpen] = useState(false);
   const [editSpell, setEditSpell] = useState<Spell | null>(null);
   const [detailSpell, setDetailSpell] = useState<Spell | null>(null);
 
-  const preparedSet = useMemo(() => new Set(character.prepared), [character.prepared]);
+  const { preparedSet, togglePrepare } = usePreparedSpells(spells, character, onUpdatePrepared);
 
-  const filtered = spells.filter((spell) => {
-    if (search && !spell.name.toLowerCase().includes(search.toLowerCase())) return false;
-    if (filterLevel && spell.level !== filterLevel) return false;
-    if (filterSchool && spell.school !== filterSchool) return false;
-    if (!showUnprepared && !preparedSet.has(spell.id)) return false;
-    return true;
-  });
-
-  function togglePrepare(spellId: number) {
-    const next = preparedSet.has(spellId)
-      ? character.prepared.filter((id) => id !== spellId)
-      : [...character.prepared, spellId];
-    onUpdatePrepared(next);
-  }
-
-  const hasFilters = search || filterLevel || filterSchool || !showUnprepared;
+  const {
+    filtered,
+    hasFilters,
+    search,
+    setSearch,
+    filterLevel,
+    setFilterLevel,
+    filterSchool,
+    setFilterSchool,
+    showUnprepared,
+    setShowUnprepared,
+  } = useSpellFilters(spells, { preparedSet });
 
   return (
     <div className="flex flex-col h-full">
@@ -148,9 +143,27 @@ export function SpellsTab({ character, stats, onUpdatePrepared }: SpellsTabProps
               <>
                 <div style={{ opacity: 0.15 }}>
                   <svg width="56" height="56" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                    <rect x="12" y="8" width="36" height="48" rx="4" stroke="var(--accent)" strokeWidth="2" />
-                    <path d="M20 22h24M20 30h20M20 38h16" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" />
-                    <path d="M40 46l6 6" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" />
+                    <rect
+                      x="12"
+                      y="8"
+                      width="36"
+                      height="48"
+                      rx="4"
+                      stroke="var(--accent)"
+                      strokeWidth="2"
+                    />
+                    <path
+                      d="M20 22h24M20 30h20M20 38h16"
+                      stroke="var(--accent)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M40 46l6 6"
+                      stroke="var(--accent)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
                   </svg>
                 </div>
                 <div>
@@ -163,7 +176,10 @@ export function SpellsTab({ character, stats, onUpdatePrepared }: SpellsTabProps
                 </div>
                 <button
                   className="btn-primary text-xs px-4 py-2 flex items-center gap-1.5"
-                  onClick={() => { setEditSpell(null); setFormOpen(true); }}
+                  onClick={() => {
+                    setEditSpell(null);
+                    setFormOpen(true);
+                  }}
                 >
                   <PlusIcon size={12} />
                   Add First Spell
@@ -199,14 +215,11 @@ export function SpellsTab({ character, stats, onUpdatePrepared }: SpellsTabProps
               <div key={spell.id} role="listitem">
                 <SpellCard
                   spell={spell}
-                  character={character}
-                  stats={stats as ComputedStats}
                   onViewDetail={(spell) => setDetailSpell(spell)}
                   onEdit={(spell) => {
                     setEditSpell(spell);
                     setFormOpen(true);
                   }}
-                  togglePrepare={togglePrepare}
                 />
               </div>
             ))}

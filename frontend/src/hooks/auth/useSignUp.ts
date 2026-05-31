@@ -1,17 +1,12 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { authApi } from "../../api";
 import { CreateUserDto } from "../../types";
-import { AUTH_KEY } from "./useCurrentUser";
+import { useAuthSuccessHandler } from "./useAuthSuccessHandler";
 
 export function useSignUp() {
-  const qc = useQueryClient();
+  const onSuccess = useAuthSuccessHandler();
   return useMutation({
     mutationFn: (dto: CreateUserDto) => authApi.signUp(dto),
-    onSuccess: (user) => {
-      qc.setQueryData(AUTH_KEY, user);
-      qc.removeQueries({
-        predicate: (query) => query.queryKey[0] !== AUTH_KEY[0],
-      });
-    },
+    onSuccess,
   });
 }

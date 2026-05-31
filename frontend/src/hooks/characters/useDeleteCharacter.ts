@@ -1,11 +1,7 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { charactersApi } from "../../api";
-import { CHARACTERS_KEY } from "./useCharacters";
+import { useInvalidatingMutation } from "../utils/mutations";
+import { characterKeys } from "./characterKeys";
 
 export function useDeleteCharacter() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (id: number) => charactersApi.remove(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: CHARACTERS_KEY }),
-  });
+  return useInvalidatingMutation((id: number) => charactersApi.remove(id), characterKeys.all());
 }

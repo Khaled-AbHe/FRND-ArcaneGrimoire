@@ -107,14 +107,12 @@ export function CharacterSelect() {
             ))}
           </div>
         ) : characters.length === 0 ? (
-          <div className="text-center py-8 text-muted">
-            No characters yet — create one above.
-          </div>
+          <div className="text-center py-8 text-muted">No characters yet — create one above.</div>
         ) : (
           <div className="space-y-2">
             <div className="label px-1 w-[81%] m-auto">Characters</div>
             {characters.map((char) => (
-              <CharacterCard key={char.id} char={char} goToCharacter={goToCharacter} />
+              <CharacterCard key={char.id} char={char} />
             ))}
           </div>
         )}

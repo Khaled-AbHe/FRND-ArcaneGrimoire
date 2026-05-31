@@ -1,12 +1,8 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { spellsApi } from "../../api";
 import { CreateSpellDto } from "../../types";
-import { SPELLS_KEY } from "./useSpells";
+import { useInvalidatingMutation } from "../utils/mutations";
+import { spellKeys } from "./spellKeys";
 
 export function useCreateSpell() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (dto: CreateSpellDto) => spellsApi.create(dto),
-    onSuccess: () => qc.invalidateQueries({ queryKey: SPELLS_KEY }),
-  });
+  return useInvalidatingMutation((dto: CreateSpellDto) => spellsApi.create(dto), spellKeys.all());
 }

@@ -29,18 +29,16 @@ export function setupInterceptors(qc: QueryClient) {
         qc.clear();
       }
       return Promise.reject(err);
-    }
+    },
   );
 }
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 
 export const authApi = {
-  signUp: (dto: CreateUserDto) =>
-    http.post<User>("/auth/signup", dto).then((r) => r.data),
+  signUp: (dto: CreateUserDto) => http.post<User>("/auth/signup", dto).then((r) => r.data),
 
-  signIn: (dto: SignInDto) =>
-    http.post<User>("/auth/signin", dto).then((r) => r.data),
+  signIn: (dto: SignInDto) => http.post<User>("/auth/signin", dto).then((r) => r.data),
 
   signOut: () => http.post("/auth/signout"),
 
@@ -52,8 +50,7 @@ export const authApi = {
 export const charactersApi = {
   list: () => http.get<Character[]>("/characters").then((r) => r.data),
 
-  get: (id: number) =>
-    http.get<Character>(`/characters/${id}`).then((r) => r.data),
+  get: (id: number) => http.get<Character>(`/characters/${id}`).then((r) => r.data),
 
   computed: (id: number) =>
     http.get<ComputedStats>(`/characters/${id}/computed`).then((r) => r.data),
@@ -67,15 +64,12 @@ export const charactersApi = {
   remove: (id: number) => http.delete(`/characters/delete/${id}`),
 
   duplicate: (id: number, name: string) =>
-    http
-      .post<Character>(`/characters/${id}/duplicate`, { name })
-      .then((r) => r.data),
+    http.post<Character>(`/characters/${id}/duplicate`, { name }).then((r) => r.data),
 
   shortRest: (id: number) =>
     http.post<Character>(`/characters/${id}/rest/short`).then((r) => r.data),
 
-  longRest: (id: number) =>
-    http.post<Character>(`/characters/${id}/rest/long`).then((r) => r.data),
+  longRest: (id: number) => http.post<Character>(`/characters/${id}/rest/long`).then((r) => r.data),
 };
 
 // ── Spells ────────────────────────────────────────────────────────────────────
@@ -85,8 +79,7 @@ export const spellsApi = {
 
   get: (id: number) => http.get<Spell>(`/spells/${id}`).then((r) => r.data),
 
-  create: (dto: CreateSpellDto) =>
-    http.post<Spell>("/spells/create", dto).then((r) => r.data),
+  create: (dto: CreateSpellDto) => http.post<Spell>("/spells/create", dto).then((r) => r.data),
 
   update: (id: number, dto: UpdateSpellDto) =>
     http.put<Spell>(`/spells/update/${id}`, dto).then((r) => r.data),
@@ -97,9 +90,7 @@ export const spellsApi = {
     http.post<Spell[]>("/spells/replaceAll", { spells }).then((r) => r.data),
 
   template: (casterType: CasterTemplate, charLevel: number) =>
-    http
-      .post<TemplateResult>("/spells/template", { casterType, charLevel })
-      .then((r) => r.data),
+    http.post<TemplateResult>("/spells/template", { casterType, charLevel }).then((r) => r.data),
 };
 
 // ── Users ─────────────────────────────────────────────────────────────────────
@@ -112,6 +103,5 @@ export interface UpdateUserDto {
 
 export const userApi = {
   me: () => http.get<User>("/users/me").then((r) => r.data),
-  update: (dto: UpdateUserDto) =>
-    http.put<User>("/users/me", dto).then((r) => r.data),
+  update: (dto: UpdateUserDto) => http.put<User>("/users/me", dto).then((r) => r.data),
 };

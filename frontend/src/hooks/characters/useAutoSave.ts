@@ -2,6 +2,16 @@ import { useCallback, useEffect, useRef } from "react";
 import { useUpdateCharacter } from "./useUpdateCharacter";
 import type { Character, UpdateCharacterDto } from "../../types";
 
+function toDto(c: Character): UpdateCharacterDto {
+  return {
+    name: c.name,
+    levels: c.levels,
+    prepared: c.prepared,
+    pact: c.pact,
+    globals: c.globals,
+  };
+}
+
 export function useAutoSave(id: number | null, delay = 600) {
   const updateChar = useUpdateCharacter(id ?? 0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -12,7 +22,6 @@ export function useAutoSave(id: number | null, delay = 600) {
     mutateRef.current = updateChar.mutate;
   });
 
-  // Flush immediately — cancels the debounce timer and fires right away
   const flush = useCallback(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -20,25 +29,15 @@ export function useAutoSave(id: number | null, delay = 600) {
     }
     const c = latestRef.current;
     if (!c || !id) return;
-    const dto: UpdateCharacterDto = {
-      name: c.name,
-      levels: c.levels,
-      prepared: c.prepared,
-      pact: c.pact,
-      globals: c.globals,
-    };
-    mutateRef.current(dto);
+    mutateRef.current(toDto(c));
     latestRef.current = null;
   }, [id]);
 
-  // Flush on page unload (refresh, close tab, navigate away)
   useEffect(() => {
-    const handler = () => flush();
-    window.addEventListener("beforeunload", handler);
-    return () => window.removeEventListener("beforeunload", handler);
+    window.addEventListener("beforeunload", flush);
+    return () => window.removeEventListener("beforeunload", flush);
   }, [flush]);
 
-  // Flush on unmount (switching characters, navigating back)
   useEffect(() => {
     return () => flush();
   }, [flush]);
@@ -50,17 +49,10 @@ export function useAutoSave(id: number | null, delay = 600) {
       timerRef.current = setTimeout(() => {
         const c = latestRef.current;
         if (!c || !id) return;
-        const dto: UpdateCharacterDto = {
-          name: c.name,
-          levels: c.levels,
-          prepared: c.prepared,
-          pact: c.pact,
-          globals: c.globals,
-        };
-        mutateRef.current(dto);
+        mutateRef.current(toDto(c));
         latestRef.current = null;
       }, delay);
     },
-    [id, delay]
+    [id, delay],
   );
 }

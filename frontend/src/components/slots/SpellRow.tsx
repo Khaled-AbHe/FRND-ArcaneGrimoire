@@ -3,6 +3,7 @@ import type { Spell, LevelRow, ComputedStats } from "../../types";
 import {
   buildDamageRoll,
   buildHitRoll,
+  parseSpellLevel,
   type RollMode,
   spellEffect,
   spellHitDC,
@@ -102,6 +103,7 @@ export function SpellRow({
   const notes = spellNotes(spell);
   const hasAttack = spell.spellType.kind === "attack";
   const hasDamage = spell.outputType.kind !== "utility" && effect !== "—" && effect !== "";
+  const rowSpell: Spell = parseSpellLevel(spell, levelNum);
 
   function fireHitRoll(mode: RollMode) {
     onRollHit(buildHitRoll(spell, stats, nextRollId(), mode));
@@ -126,7 +128,9 @@ export function SpellRow({
               `${variant.arcUsed ? "btn-arcanum-dis" : "btn-arcanum"}` +
               " w-[50px] h-full text-[15px] justify-center"
             }
-            aria-label={variant.arcUsed ? "Arcanum expended" : `Cast ${spell.name} as Mystic Arcanum`}
+            aria-label={
+              variant.arcUsed ? "Arcanum expended" : `Cast ${spell.name} as Mystic Arcanum`
+            }
             title={variant.arcUsed ? "Arcanum Expended" : "Cast as Mystic Arcanum"}
           >
             Arc
@@ -136,7 +140,18 @@ export function SpellRow({
     }
 
     // Cast variant
-    const { row, isPactLevel, pactSlotsLeft, slotsLeft, isCantrip, canCast, castingSpellId, onCastFromRow, onCastFromPact, setCastingSpellId } = variant;
+    const {
+      row,
+      isPactLevel,
+      pactSlotsLeft,
+      slotsLeft,
+      isCantrip,
+      canCast,
+      castingSpellId,
+      onCastFromRow,
+      onCastFromPact,
+      setCastingSpellId,
+    } = variant;
     const castId = `${spell.id}:${levelNum}`;
     const hasBoth = row && slotsLeft > 0 && isPactLevel && pactSlotsLeft > 0;
 
@@ -221,7 +236,7 @@ export function SpellRow({
           <button
             className="cursor-pointer hover:underline min-w-0 font-medium italic truncate text-left"
             style={{ color: "var(--text-primary)", background: "none", border: "none", padding: 0 }}
-            onClick={() => onViewDetail(spell)}
+            onClick={() => onViewDetail(rowSpell)}
             aria-label={`View details for ${spell.name}`}
           >
             {spell.name}
@@ -305,7 +320,11 @@ export function SpellRow({
 
       {/* Hit roll context menu — viewport-clamped */}
       {hitContextMenu && (
-        <ContextMenuPortal x={hitContextMenu.x} y={hitContextMenu.y} onClose={() => setHitContextMenu(null)}>
+        <ContextMenuPortal
+          x={hitContextMenu.x}
+          y={hitContextMenu.y}
+          onClose={() => setHitContextMenu(null)}
+        >
           <div
             className="px-3 py-2 text-[13px] uppercase tracking-widest font-display"
             style={{ color: "var(--text-muted)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
@@ -334,7 +353,11 @@ export function SpellRow({
 
       {/* Damage context menu — viewport-clamped */}
       {damageContextMenu && (
-        <ContextMenuPortal x={damageContextMenu.x} y={damageContextMenu.y} onClose={() => setDamageContextMenu(null)}>
+        <ContextMenuPortal
+          x={damageContextMenu.x}
+          y={damageContextMenu.y}
+          onClose={() => setDamageContextMenu(null)}
+        >
           <div
             className="px-3 py-2 text-[13px] uppercase tracking-widest font-display"
             style={{ color: "var(--text-muted)", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
