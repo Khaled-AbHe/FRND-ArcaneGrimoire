@@ -51,3 +51,14 @@ export function schoolColor(school: string): string {
   };
   return map[school?.toLowerCase()] ?? "rgba(36,237,251,0.9)";
 }
+
+export function fmtCastTime(spell: Spell) {
+  return (
+    spell.castTime
+      ?.replace("Bonus Action", "1 BA")
+      .replace("Action", "1 A")
+      .replace("Reaction", "1 R")
+      .replace(" or Ritual", "")
+      .replace("1 minute", "1m") ?? "—"
+  );
+}

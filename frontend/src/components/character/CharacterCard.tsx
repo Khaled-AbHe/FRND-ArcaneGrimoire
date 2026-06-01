@@ -89,7 +89,7 @@ export default function CharacterCard({ char }: CharacterCardProps) {
         <div className="flex items-center gap-3">
           <button className="flex-1 text-left" onClick={() => goToCharacter(char.id)}>
             <div className="font-display text-base text-accent tracking-wide">{char.name}</div>
-            <div className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+            <div className="text-xs mt-0.5 w-[110%]" style={{ color: "var(--text-muted)" }}>
               Level {char.globals?.charLevel ?? "—"} · {char.levels?.length ?? 0} spell level
               {char.levels?.length !== 1 ? "s" : ""}
             </div>

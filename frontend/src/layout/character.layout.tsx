@@ -7,7 +7,7 @@ import { useAutoSave } from "../hooks/characters/useAutoSave";
 import type { Character, TabId } from "../types";
 import { computeStats } from "../utils/stats";
 import { useCharacter } from "../hooks/characters/useCharacter";
-import PageShell from "../components/shells/page-shell.component";
+import { PageShell } from "../components/shells/page-shell.component";
 import { SlotsIcon, BookIcon, SettingsIcon } from "../components/ui/Icons";
 import { SpellSlotsPage } from "../pages/character/spell-slots.page";
 import { SpellPreparerPage } from "../pages/character/spell-preparer.page";
@@ -57,6 +57,7 @@ export function CharacterLayout() {
       setLocalChar((prev) => {
         if (!prev) return prev;
         const next = { ...prev, ...patch };
+        if (!save) return;
         save(next);
         return next;
       });

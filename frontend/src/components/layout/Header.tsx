@@ -24,7 +24,7 @@ export function Header({ character, onBack }: HeaderProps) {
         <ArrowLeftIcon size={18} />
       </button>
 
-      <div className="flex-1 items-center gap-2">
+      <div className="flex flex-1 items-center gap-2">
         <h1 className="font-display text-lg text-accent tracking-widest uppercase">
           {character.name}
         </h1>

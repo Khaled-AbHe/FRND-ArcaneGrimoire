@@ -1,4 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { AddLevelModal } from "../../components/slots/modals/AddLevelModal";
+import { TemplateModal } from "../../components/slots/modals/TemplateModal";
+import { PactSettingsModal } from "../../components/slots/pact/PactSettingsModal";
+import { SlotColumnHeaders } from "../../components/slots/rows/SlotColumnHeader";
+import { SpellRow } from "../../components/slots/rows/SpellRow";
+import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
+import {
+  CloseIcon,
+  MoonRestIcon,
+  PactIcon,
+  PlusIcon,
+  SunRestIcon,
+  TemplateIcon,
+} from "../../components/ui/Icons";
+import type { DamageRollResult, HitRollResult } from "../../components/ui/RollOverlay";
+import { usePreparedSpells } from "../../hooks/spells/usePreparedSpells";
 import { useSpells } from "../../hooks/spells/useSpells";
 import { useSpellTemplate } from "../../hooks/spells/useSpellTemplate";
 import type {
@@ -9,21 +25,7 @@ import type {
   Spell,
   TemplateResult,
 } from "../../types";
-import type { DamageRollResult, HitRollResult } from "../../components/ui/RollOverlay";
-import { PactSettingsModal } from "../../components/slots/pact/PactSettingsModal";
-import {
-  PlusIcon,
-  TemplateIcon,
-  PactIcon,
-  MoonRestIcon,
-  SunRestIcon,
-  CloseIcon,
-} from "../../components/ui/Icons";
-import { SlotColumnHeaders } from "../../components/slots/rows/SlotColumnHeader";
-import { SpellRow } from "../../components/slots/rows/SpellRow";
-import { AddLevelModal } from "../../components/slots/modals/AddLevelModal";
-import { TemplateModal } from "../../components/slots/modals/TemplateModal";
-import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
+import { PageShell } from "../../components/shells/page-shell.component";
 
 interface SpellSlotsPageProps {
   character: Character;
@@ -119,7 +121,7 @@ export function SpellSlotsPage({
 
   // ── Prepared spells ────────────────────────────────────────────────────────
 
-  const preparedSet = useMemo(() => new Set(character.prepared), [character.prepared]);
+  const { preparedSet } = usePreparedSpells(spells, character, () => onUpdateCharacter);
 
   function getPreparedSpells(row: LevelRow) {
     const rowLevel = parseInt(row.label.replace(/\D/g, ""), 10) || 0;
@@ -171,7 +173,7 @@ export function SpellSlotsPage({
   const isEmpty = character.levels.length === 0 && !showPact;
 
   return (
-    <div className="flex flex-col h-full">
+    <PageShell>
       {/* ── Toolbar ── */}
       <div
         className="flex items-center gap-2 px-4 py-2 border-b overflow-x-auto"
@@ -292,7 +294,7 @@ export function SpellSlotsPage({
 
               const hasSlots = row !== null || pactSlotsLeft > 0;
               const preparedHere =
-                pact.slotLevel == levelNum || hasSlots ? getPreparedSpells(syntheticRow) : [];
+                pact.slotLevel === levelNum || hasSlots ? getPreparedSpells(syntheticRow) : [];
               const arcanumHere = pact?.arcana?.filter((a) => a.level === levelNum) ?? [];
               const canCast = isCantrip || slotsLeft > 0 || pactSlotsLeft > 0;
 
@@ -507,6 +509,6 @@ export function SpellSlotsPage({
           onUpdateCharacter({ prepared: next });
         }}
       />
-    </div>
+    </PageShell>
   );
 }

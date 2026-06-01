@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Character, CharacterGlobals, ComputedStats } from "../../types";
-import { fmtBonus } from "../../utils/dice";
+import { PageShell } from "../../components/shells/page-shell.component";
 import { Modal } from "../../components/ui/Modal";
 import { useDeleteCharacter } from "../../hooks/characters/useDeleteCharacter";
+import type { Character, CharacterGlobals, ComputedStats } from "../../types";
+import { fmtBonus } from "../../utils/dice";
 
 interface CharacterSettingsPageProps {
   character: Character;
@@ -11,7 +12,11 @@ interface CharacterSettingsPageProps {
   onUpdateCharacter: (patch: Partial<Character>) => void;
 }
 
-export function CharacterSettingsPage({ character, stats, onUpdateCharacter }: CharacterSettingsPageProps) {
+export function CharacterSettingsPage({
+  character,
+  stats,
+  onUpdateCharacter,
+}: CharacterSettingsPageProps) {
   const navigate = useNavigate();
   const deleteChar = useDeleteCharacter();
 
@@ -62,8 +67,8 @@ export function CharacterSettingsPage({ character, stats, onUpdateCharacter }: C
   }
 
   return (
-    <>
-      <div className="flex-1 overflow-y-auto p-4 space-y-6  px-[30%]">
+    <PageShell>
+      <div className="m-auto space-y-6 min-w-[40%] max-w-[80%]">
         {/* Character name */}
         <section aria-labelledby="section-name">
           <h2
@@ -162,8 +167,8 @@ export function CharacterSettingsPage({ character, stats, onUpdateCharacter }: C
                 </div>
               </div>
 
-              <div className="flex flex-col h-fit gap-5">
-                <div className="flex flex-col items-center w-full">
+              <div className="flex flex-col h-[100%] gap-5 justify-end">
+                <div className="flex flex-col items-center w-full justify-center">
                   <div className="label">Spell Save DC</div>
                   <div className="text-2xl flex justify-center font-display card w-full text-accent rounded">
                     {stats.spellSaveDC}
@@ -271,6 +276,6 @@ export function CharacterSettingsPage({ character, stats, onUpdateCharacter }: C
           </button>
         </div>
       </Modal>
-    </>
+    </PageShell>
   );
 }

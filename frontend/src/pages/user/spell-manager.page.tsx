@@ -1,11 +1,13 @@
-import { useMemo, useState } from "react";
-import type { Spell, SpellLevel } from "../../types";
+import { useState } from "react";
+import type { Spell } from "../../types";
 import { useSpells } from "../../hooks/spells/useSpells";
 import { SpellToolbar } from "../../components/spells/SpellToolbar";
 import { SpellCard } from "../../components/spells/SpellCard";
 import { SpellPresenter } from "../../components/spells/SpellPresenter";
 import { SpellFormModal } from "../../components/spells/modals/SpellFormModal";
 import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
+import { useSpellFilters } from "../../hooks/spells/useSpellFilters";
+import { PageShell } from "../../components/shells/page-shell.component";
 
 /**
  * Full spell CRUD — create, edit, delete.
@@ -14,46 +16,38 @@ import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModa
 export function SpellManagerPage() {
   const { data: spells = [], isLoading } = useSpells();
 
-  const [search, setSearch] = useState("");
-  const [filterLevel, setFilterLevel] = useState<SpellLevel | "">("");
-  const [filterSchool, setFilterSchool] = useState("");
   const [formOpen, setFormOpen] = useState(false);
   const [editSpell, setEditSpell] = useState<Spell | null>(null);
+
+  const filters = useSpellFilters(spells);
   const [detailSpell, setDetailSpell] = useState<Spell | null>(null);
 
-  const filtered = useMemo(
-    () =>
-      spells.filter((spell) => {
-        if (search && !spell.name.toLowerCase().includes(search.toLowerCase())) return false;
-        if (filterLevel && spell.level !== filterLevel) return false;
-        if (filterSchool && spell.school !== filterSchool) return false;
-        return true;
-      }),
-    [spells, search, filterLevel, filterSchool],
-  );
-
   return (
-    <div className="flex flex-col h-full">
+    <PageShell>
       {/* Toolbar */}
       <SpellToolbar
-        search={search}
-        setSearch={setSearch}
-        filterLevel={filterLevel}
-        setFilterLevel={setFilterLevel}
-        filterSchool={filterSchool}
-        setFilterSchool={setFilterSchool}
+        search={filters.search}
+        setSearch={filters.setSearch}
+        filterLevel={filters.filterLevel}
+        setFilterLevel={filters.setFilterLevel}
+        filterSchool={filters.filterSchool}
+        setFilterSchool={filters.setFilterSchool}
         setEditSpell={setEditSpell}
         setFormOpen={setFormOpen}
       />
 
       {/* Spell grid */}
-      <SpellPresenter isLoading={isLoading} spells={spells} filtered={filtered}>
+      <SpellPresenter
+        isLoading={isLoading}
+        spellCount={spells.length}
+        filteredCount={filters.filtered.length}
+      >
         <div
           className="grid gap-2"
           style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
           role="list"
         >
-          {filtered.map((spell) => (
+          {filters.filtered.map((spell) => (
             <div key={spell.id} role="listitem">
               <SpellCard
                 spell={spell}
@@ -74,6 +68,6 @@ export function SpellManagerPage() {
         onClose={() => setDetailSpell(null)}
         spell={detailSpell}
       />
-    </div>
+    </PageShell>
   );
 }

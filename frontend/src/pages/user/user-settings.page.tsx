@@ -4,6 +4,7 @@ import { useCurrentUser } from "../../hooks/auth/useCurrentUser";
 import { useSignOut } from "../../hooks/auth/useSignOut";
 import { useUpdateUser } from "../../hooks/user/useUpdateUser";
 import { Modal } from "../../components/ui/Modal";
+import { PageShell } from "../../components/shells/page-shell.component";
 
 export function UserSettingsPage() {
   const { data: user } = useCurrentUser();
@@ -46,126 +47,128 @@ export function UserSettingsPage() {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-6 px-[30%]">
-      {/* Account info */}
-      <section aria-labelledby="section-account">
-        <h2
-          id="section-account"
-          className="font-display text-xs uppercase tracking-widest text-accent mb-3"
-        >
-          Account
-        </h2>
-        <form onSubmit={handleAccountSubmit} className="card p-4 space-y-4">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="username" className="label">
-              Username
-            </label>
-            <input
-              id="username"
-              className="input"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              maxLength={64}
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="email" className="label">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          {updateUser.isSuccess && (
-            <p className="text-xs text-green-400" role="status">
-              Saved.
-            </p>
-          )}
-          {updateUser.isError && (
-            <p className="text-xs text-red-400" role="alert">
-              Failed to save.
-            </p>
-          )}
-          <button type="submit" className="btn-primary text-sm" disabled={updateUser.isPending}>
-            {updateUser.isPending ? "Saving…" : "Save Changes"}
-          </button>
-        </form>
-      </section>
-
-      {/* Password */}
-      <section aria-labelledby="section-password">
-        <h2
-          id="section-password"
-          className="font-display text-xs uppercase tracking-widest text-accent mb-3"
-        >
-          Password
-        </h2>
-        <form onSubmit={handlePasswordSubmit} className="card p-4 space-y-4">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="new-password" className="label">
-              New Password
-            </label>
-            <input
-              id="new-password"
-              type="password"
-              className="input"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              autoComplete="new-password"
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="confirm-password" className="label">
-              Confirm Password
-            </label>
-            <input
-              id="confirm-password"
-              type="password"
-              className="input"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              autoComplete="new-password"
-              required
-            />
-          </div>
-          {passwordError && (
-            <p className="text-xs text-red-400" role="alert">
-              {passwordError}
-            </p>
-          )}
-          <button type="submit" className="btn-primary text-sm" disabled={updateUser.isPending}>
-            Change Password
-          </button>
-        </form>
-      </section>
-
-      {/* Sign out */}
-      <section aria-labelledby="section-signout">
-        <h2
-          id="section-signout"
-          className="font-display text-xs uppercase tracking-widest mb-3"
-          style={{ color: "#ef4444" }}
-        >
-          Session
-        </h2>
-        <div className="card p-4" style={{ borderColor: "rgba(239,68,68,0.2)" }}>
-          <div className="flex items-center justify-between">
-            <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
-              Signed in as {user?.username}
+    <PageShell>
+      <div className="m-auto space-y-6 min-w-[40%] max-w-[80%] overflow-y-auto">
+        {/* Account info */}
+        <section aria-labelledby="section-account">
+          <h2
+            id="section-account"
+            className="font-display text-xs uppercase tracking-widest text-accent mb-3"
+          >
+            Account
+          </h2>
+          <form onSubmit={handleAccountSubmit} className="card p-4 space-y-4">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="username" className="label">
+                Username
+              </label>
+              <input
+                id="username"
+                className="input"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                maxLength={64}
+                required
+              />
             </div>
-            <button className="btn-danger text-xs" onClick={() => setSignOutConfirmOpen(true)}>
-              Sign Out
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="email" className="label">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                className="input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            {updateUser.isSuccess && (
+              <p className="text-xs text-green-400" role="status">
+                Saved.
+              </p>
+            )}
+            {updateUser.isError && (
+              <p className="text-xs text-red-400" role="alert">
+                Failed to save.
+              </p>
+            )}
+            <button type="submit" className="btn-primary text-sm" disabled={updateUser.isPending}>
+              {updateUser.isPending ? "Saving…" : "Save Changes"}
             </button>
+          </form>
+        </section>
+
+        {/* Password */}
+        <section aria-labelledby="section-password">
+          <h2
+            id="section-password"
+            className="font-display text-xs uppercase tracking-widest text-accent mb-3"
+          >
+            Password
+          </h2>
+          <form onSubmit={handlePasswordSubmit} className="card p-4 space-y-4">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="new-password" className="label">
+                New Password
+              </label>
+              <input
+                id="new-password"
+                type="password"
+                className="input"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                autoComplete="new-password"
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="confirm-password" className="label">
+                Confirm Password
+              </label>
+              <input
+                id="confirm-password"
+                type="password"
+                className="input"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                autoComplete="new-password"
+                required
+              />
+            </div>
+            {passwordError && (
+              <p className="text-xs text-red-400" role="alert">
+                {passwordError}
+              </p>
+            )}
+            <button type="submit" className="btn-primary text-sm" disabled={updateUser.isPending}>
+              Change Password
+            </button>
+          </form>
+        </section>
+
+        {/* Sign out */}
+        <section aria-labelledby="section-signout">
+          <h2
+            id="section-signout"
+            className="font-display text-xs uppercase tracking-widest mb-3"
+            style={{ color: "#ef4444" }}
+          >
+            Session
+          </h2>
+          <div className="card p-4" style={{ borderColor: "rgba(239,68,68,0.2)" }}>
+            <div className="flex items-center justify-between">
+              <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+                Signed in as {user?.username}
+              </div>
+              <button className="btn-danger text-xs" onClick={() => setSignOutConfirmOpen(true)}>
+                Sign Out
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       <Modal
         open={signOutConfirmOpen}
@@ -190,6 +193,6 @@ export function UserSettingsPage() {
           </button>
         </div>
       </Modal>
-    </div>
+    </PageShell>
   );
 }

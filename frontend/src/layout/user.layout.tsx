@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useCurrentUser } from "../hooks/auth/useCurrentUser";
 import { UserIcon, BookIcon, SettingsIcon, SlotsIcon } from "../components/ui/Icons";
-import PageShell from "../components/shells/page-shell.component";
+import { PageShell } from "../components/shells/page-shell.component";
 import { TabId } from "../types";
 import { CharactersPage } from "../pages/user/characters.page";
 import { SpellManagerPage } from "../pages/user/spell-manager.page";

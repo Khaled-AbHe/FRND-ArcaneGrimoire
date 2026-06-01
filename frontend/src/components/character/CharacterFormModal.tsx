@@ -48,18 +48,22 @@ export function CharacterFormModal({ open, onClose }: CharacterFormModalProps) {
     const name = form["name"].trim();
 
     if (!name) return;
-    const char = await createChar.mutateAsync({
-      name: name,
-      globals: {
-        mod: form["mod"],
-        prof: form["prof"],
-        charLevel: form["charLevel"],
-        highMagic: false,
-      },
-      pact: DEFAULT_PACT,
-    });
-    setForm(EMPTY);
-    goToCharacter(char.id);
+    try {
+      const char = await createChar.mutateAsync({
+        name: name,
+        globals: {
+          mod: form["mod"],
+          prof: form["prof"],
+          charLevel: form["charLevel"],
+          highMagic: false,
+        },
+        pact: DEFAULT_PACT,
+      });
+      setForm(EMPTY);
+      goToCharacter(char.id);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (

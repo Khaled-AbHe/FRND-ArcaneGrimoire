@@ -1,12 +1,13 @@
 import { useState } from "react";
-import type { Character, ComputedStats, Spell } from "../../types";
-import { useSpells } from "../../hooks/spells/useSpells";
-import { useSpellFilters } from "../../hooks/spells/useSpellFilters";
-import { usePreparedSpells } from "../../hooks/spells/usePreparedSpells";
-import { levelLabel, schoolColor } from "../../utils/dice";
-import { StarFilledIcon, StarEmptyIcon } from "../../components/ui/Icons";
 import { SpellToolbar } from "../../components/spells/SpellToolbar";
 import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
+import { StarEmptyIcon, StarFilledIcon } from "../../components/ui/Icons";
+import { usePreparedSpells } from "../../hooks/spells/usePreparedSpells";
+import { useSpellFilters } from "../../hooks/spells/useSpellFilters";
+import { useSpells } from "../../hooks/spells/useSpells";
+import type { Character, ComputedStats, Spell } from "../../types";
+import { levelLabel, schoolColor } from "../../utils/dice";
+import { PageShell } from "../../components/shells/page-shell.component";
 
 interface SpellPreparerPageProps {
   character: Character;
@@ -73,7 +74,7 @@ export function SpellPreparerPage({ character, stats, onUpdatePrepared }: SpellP
   const [detailSpell, setDetailSpell] = useState<Spell | null>(null);
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <PageShell>
       <SpellToolbar
         search={filters.search}
         setSearch={filters.setSearch}
@@ -149,7 +150,7 @@ export function SpellPreparerPage({ character, stats, onUpdatePrepared }: SpellP
         onTogglePrepare={togglePrepare}
         isPreparer={true}
       />
-    </div>
+    </PageShell>
   );
 }
 

@@ -13,7 +13,8 @@ function toDto(c: Character): UpdateCharacterDto {
 }
 
 export function useAutoSave(id: number | null, delay = 600) {
-  const updateChar = useUpdateCharacter(id ?? 0);
+  if (!id) return;
+  const updateChar = useUpdateCharacter(id);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestRef = useRef<Character | null>(null);
   const mutateRef = useRef(updateChar.mutate);
