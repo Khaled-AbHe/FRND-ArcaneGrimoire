@@ -68,7 +68,7 @@ export function CharacterSettingsPage({
 
   return (
     <PageShell>
-      <div className="mx-auto my-10 space-y-6 min-w-[40%] max-w-[80%]">
+      <div className="mx-auto my-10 space-y-6 min-w-[40%] max-w-[90%] overflow-y-auto">
         {/* Character name */}
         <section aria-labelledby="section-name">
           <h2

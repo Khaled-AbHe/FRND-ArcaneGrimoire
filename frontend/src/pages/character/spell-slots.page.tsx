@@ -154,10 +154,7 @@ export function SpellSlotsPage({
   return (
     <PageShell>
       {/* ── Toolbar ── */}
-      <div
-        className="flex items-center gap-2 px-15 pt-5 pb-3 border-b"
-        style={{ borderColor: "var(--border)", background: "var(--bg-secondary)" }}
-      >
+      <div className="slots-toolbar">
         <button
           className="btn-ghost text-xs px-3 py-1.5 shrink-0 flex items-center gap-1.5"
           onClick={() => setSlotSettingsOpen(true)}
@@ -202,11 +199,11 @@ export function SpellSlotsPage({
       </div>
 
       {/* ── Content ── */}
-      <div className="flex-1">
+      <div className="slots-content overflow-y-auto">
         {/* Empty state — improved with CTAs */}
         {isEmpty && (
-          <div className="flex flex-col items-center justify-center h-full gap-5 px-8 py-16 text-center">
-            <div style={{ opacity: 0.15 }}>
+          <div className="slots-empty-state">
+            <div className="slots-empty-icon">
               <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
                 <circle
                   cx="32"
@@ -279,21 +276,22 @@ export function SpellSlotsPage({
               const canCast = isCantrip || slotsLeft > 0 || pactSlotsLeft > 0;
 
               return (
-                <div key={`level-${levelNum}`} className="my-10 max-w-[1000px] m-auto">
+                <div key={`level-${levelNum}`} className="level-section overflow-y-hidden">
                   {/* Section heading */}
-                  <div className="flex items-center gap-4 px-4 py-2.5 border-b-[1px] border-b-[var(--border)]">
-                    <span className="font-display text-base tracking-widest uppercase text-[var(--accent)]">
+                  <div className="level-heading">
+                    <span className="level-heading__title">
                       {isCantrip ? "Cantrip" : `Level ${levelNum}`}
                     </span>
+
                     <div className="flex-1" />
 
                     {!isCantrip && (
-                      <div className="flex items-center gap-4">
+                      <div className="level-heading__slots">
                         {/* PACT slots */}
                         {isPactLevel && (
-                          <div className="flex items-center gap-2">
+                          <div className="slot-pip-group">
                             <div
-                              className="flex gap-1.5"
+                              className="slot-pip-row"
                               role="group"
                               aria-label={`Pact slots: ${pact.slots - pact.used} of ${pact.slots} remaining`}
                             >
@@ -303,32 +301,23 @@ export function SpellSlotsPage({
                                   onClick={() => togglePactSlot(i)}
                                   aria-label={
                                     i < pact.used
-                                      ? `Pact slot ${i + 1} expended — click to restore`
-                                      : `Pact slot ${i + 1} available — click to expend`
+                                      ? `Pact slot ${i + 1} expended`
+                                      : `Pact slot ${i + 1} available`
                                   }
                                   aria-pressed={i >= pact.used}
-                                  className="transition-all focus:outline-none focus:ring-2 focus:ring-purple-400"
-                                  style={{
-                                    width: 18,
-                                    height: 18,
-                                    borderRadius: 3,
-                                    border: "2px solid var(--pact-full)",
-                                    background: i < pact.used ? "transparent" : "var(--pact-full)",
-                                    opacity: i < pact.used ? 0.35 : 1,
-                                    cursor: "pointer",
-                                  }}
+                                  className={`pact-pip${i < pact.used ? " pact-pip--used" : ""}`}
                                 />
                               ))}
                             </div>
-                            <span className="text-sm text-[var(--text-primary)]">PACT</span>
+                            <span className="slots-label">PACT</span>
                           </div>
                         )}
 
                         {/* SLOTS */}
                         {row && (
-                          <div className="flex items-center gap-2">
+                          <div className="slot-pip-group">
                             <div
-                              className="flex gap-1.5"
+                              className="slot-pip-row"
                               role="group"
                               aria-label={`Spell slots level ${levelNum}: ${row.total - row.used} of ${row.total} remaining`}
                             >
@@ -342,25 +331,11 @@ export function SpellSlotsPage({
                                       : `Slot ${i + 1} available — click to expend`
                                   }
                                   aria-pressed={i >= row.used}
-                                  className="transition-all focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                                  style={{
-                                    width: 18,
-                                    height: 18,
-                                    border: `2px solid ${isHigh ? "#fbbf24" : "var(--accent)"}`,
-                                    borderRadius: 3,
-                                    background:
-                                      i < row.used
-                                        ? "transparent"
-                                        : isHigh
-                                          ? "#fbbf24"
-                                          : "var(--accent)",
-                                    opacity: i < row.used ? 0.35 : 1,
-                                    cursor: "pointer",
-                                  }}
+                                  className={`slot-pip${i < row.used ? " slot-pip--used" : ""}${isHigh ? " slot-pip--high" : ""}`}
                                 />
                               ))}
                             </div>
-                            <span className="text-sm text-[var(--text-primary)]">SLOTS</span>
+                            <span className="slots-label">SLOTS</span>
                           </div>
                         )}
                       </div>
@@ -400,7 +375,7 @@ export function SpellSlotsPage({
 
                   {preparedHere.length === 0 &&
                     arcanumHere.filter((a) => a.spellId).length === 0 && (
-                      <div className="px-4 py-3 text-xs" style={{ color: "var(--text-muted)" }}>
+                      <div className="slots-empty-row">
                         No prepared {isCantrip ? "cantrips" : "spells or mystic arcanum"} at this
                         level.
                       </div>

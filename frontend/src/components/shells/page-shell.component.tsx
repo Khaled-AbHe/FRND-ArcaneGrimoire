@@ -5,5 +5,9 @@ interface PageShellProps {
 }
 
 export function PageShell({ children }: PageShellProps) {
-  return <div className="flex flex-col h-[100dvh] bg-[var(--bg-primary)]">{children}</div>;
+  return (
+    <div className="flex flex-col h-[100dvh] bg-[var(--bg-primary)] overflow-y-hidden">
+      {children}
+    </div>
+  );
 }

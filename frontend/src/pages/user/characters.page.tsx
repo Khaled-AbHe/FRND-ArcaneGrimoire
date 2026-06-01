@@ -11,7 +11,7 @@ export function CharactersPage() {
 
   return (
     <PageShell>
-      <div className="mx-auto my-12 space-y-6 min-w-[40%] max-w-[80%]">
+      <div className="mx-auto my-12 space-y-6 min-w-[40%] max-w-[80%] overflow-y-auto">
         {/* Title */}
         <div className="flex flex-row justify-between">
           <p className="font-display text-2xl text-accent tracking-widest uppercase mb-1">

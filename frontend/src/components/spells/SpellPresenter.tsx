@@ -15,7 +15,7 @@ export function SpellPresenter({
 }: SpellPresenterProps) {
   return (
     <div
-      className="flex-1 p-4 m-auto overflow-y-auto"
+      className="flex-1 p-4 m-auto w-screen overflow-y-auto"
       style={{ scrollbarGutter: "stable" }}
       aria-label="Spell list"
     >
