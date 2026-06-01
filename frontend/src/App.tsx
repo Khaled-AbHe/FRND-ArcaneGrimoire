@@ -1,9 +1,9 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import { UserPage } from "./pages/UserPage";
-import { CharacterPage } from "./pages/CharacterPage";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { RequireAuth } from "./components/layout/RequireAuth";
-import { SignInPage } from "./pages/SignInPage";
-import { SignUpPage } from "./pages/SignUpPage";
+import { CharacterLayout } from "./layout/character.layout";
+import { UserLayout } from "./layout/user.layout";
+import { SignInPage } from "./pages/auth/sign-in.page";
+import { SignUpPage } from "./pages/auth/sign-up.page";
 
 export default function App() {
   return (
@@ -15,7 +15,7 @@ export default function App() {
         path="/"
         element={
           <RequireAuth>
-            <UserPage />
+            <UserLayout />
           </RequireAuth>
         }
       />
@@ -23,7 +23,7 @@ export default function App() {
         path="/character/:id"
         element={
           <RequireAuth>
-            <CharacterPage />
+            <CharacterLayout />
           </RequireAuth>
         }
       />

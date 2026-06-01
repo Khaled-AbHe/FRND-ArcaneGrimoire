@@ -9,13 +9,8 @@ import type {
   Spell,
   TemplateResult,
 } from "../../types";
-import { SpellDetailModal } from "../spells/SpellDetailModal";
-import type { DamageRollResult, HitRollResult } from "../ui/RollOverlay";
-import { AddLevelModal } from "./AddLevelModal";
-import { PactSettingsModal } from "./pact/PactSettingsModal";
-import { SlotColumnHeaders } from "./SlotColumnHeader";
-import { TemplateModal } from "./TemplateModal";
-import { SpellRow } from "./SpellRow";
+import type { DamageRollResult, HitRollResult } from "../../components/ui/RollOverlay";
+import { PactSettingsModal } from "../../components/slots/pact/PactSettingsModal";
 import {
   PlusIcon,
   TemplateIcon,
@@ -23,9 +18,14 @@ import {
   MoonRestIcon,
   SunRestIcon,
   CloseIcon,
-} from "../ui/Icons";
+} from "../../components/ui/Icons";
+import { SlotColumnHeaders } from "../../components/slots/rows/SlotColumnHeader";
+import { SpellRow } from "../../components/slots/rows/SpellRow";
+import { AddLevelModal } from "../../components/slots/modals/AddLevelModal";
+import { TemplateModal } from "../../components/slots/modals/TemplateModal";
+import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
 
-interface SlotsTabProps {
+interface SpellSlotsPageProps {
   character: Character;
   stats: ComputedStats;
   onUpdateCharacter: (patch: Partial<Character>) => void;
@@ -34,14 +34,14 @@ interface SlotsTabProps {
   nextRollId: () => number;
 }
 
-export function SlotsTab({
+export function SpellSlotsPage({
   character,
   stats,
   onUpdateCharacter,
   onRollHit,
   onRollDamage,
   nextRollId,
-}: SlotsTabProps) {
+}: SpellSlotsPageProps) {
   const { data: spells = [] } = useSpells();
   const templateMut = useSpellTemplate();
 

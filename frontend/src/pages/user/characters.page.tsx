@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useCharacters } from "../../hooks/characters/useCharacters";
-import { PlusIcon } from "../ui/Icons";
-import CharacterCard from "../layout/CharacterCard";
-import { CharacterFormModal } from "../character/CharacterFormModal";
+import { PlusIcon } from "../../components/ui/Icons";
+import { CharacterFormModal } from "../../components/character/CharacterFormModal";
+import CharacterCard from "../../components/character/CharacterCard";
 
-export default function CharactersTab() {
+export function CharactersPage() {
   const { data: characters = [], isLoading } = useCharacters();
   const [formOpen, setFormOpen] = useState(false);
 

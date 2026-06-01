@@ -8,12 +8,7 @@ interface SpellPresenterProps {
   children: ReactNode;
 }
 
-export default function SpellPresenter({
-  isLoading,
-  spells,
-  filtered,
-  children,
-}: SpellPresenterProps) {
+export function SpellPresenter({ isLoading, spells, filtered, children }: SpellPresenterProps) {
   return (
     <div className="flex-1 overflow-y-auto p-4" aria-label="Spell list">
       {isLoading ? (

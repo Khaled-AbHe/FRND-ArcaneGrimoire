@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import { useSignIn } from "../hooks/auth/useSignIn";
-import { AuthShell } from "./AuthShell";
+import { useSignIn } from "../../hooks/auth/useSignIn";
+import { AuthLayout } from "../../layout/auth.layout";
 import axios from "axios";
 
 export function SignInPage() {
@@ -27,7 +27,7 @@ export function SignInPage() {
   }
 
   return (
-    <AuthShell>
+    <AuthLayout>
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="auth-field">
           <label className="label">Email</label>
@@ -72,6 +72,6 @@ export function SignInPage() {
           </Link>
         </p>
       </form>
-    </AuthShell>
+    </AuthLayout>
   );
 }

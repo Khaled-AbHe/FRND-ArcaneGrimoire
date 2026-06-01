@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal } from "../ui/Modal";
+import { Modal } from "../../ui/Modal";
 
 interface AddLevelModalProps {
   open: boolean;

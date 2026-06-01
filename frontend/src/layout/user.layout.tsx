@@ -1,12 +1,12 @@
 import { useSearchParams } from "react-router-dom";
 import { useCurrentUser } from "../hooks/auth/useCurrentUser";
-import { SpellManagerTab } from "../components/user/SpellManagerTab";
-import { UserSettingsTab } from "../components/user/UserSettingsTab";
 import { UserIcon, BookIcon, SettingsIcon, SlotsIcon } from "../components/ui/Icons";
 import PageShell from "../components/shells/page-shell.component";
-import { Tabs } from "../components/layout/Tabs";
 import { TabId } from "../types";
-import CharactersTab from "../components/user/CharactersTab";
+import { CharactersPage } from "../pages/user/characters.page";
+import { SpellManagerPage } from "../pages/user/spell-manager.page";
+import { UserSettingsPage } from "../pages/user/user-settings.page";
+import { Tabs } from "../components/ui/Tabs";
 
 const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = [
   { id: "characters", label: "My Characters", Icon: SlotsIcon },
@@ -14,7 +14,7 @@ const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = 
   { id: "settings", label: "Settings", Icon: SettingsIcon },
 ];
 
-export function UserPage() {
+export function UserLayout() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: currentUser } = useCurrentUser();
 
@@ -49,9 +49,9 @@ export function UserPage() {
 
       {/* Tab content */}
       <div className="flex-1 overflow-hidden flex flex-col">
-        {tab === "characters" && <CharactersTab />}
-        {tab === "spells" && <SpellManagerTab />}
-        {tab === "settings" && <UserSettingsTab />}
+        {tab === "characters" && <CharactersPage />}
+        {tab === "spells" && <SpellManagerPage />}
+        {tab === "settings" && <UserSettingsPage />}
       </div>
     </PageShell>
   );

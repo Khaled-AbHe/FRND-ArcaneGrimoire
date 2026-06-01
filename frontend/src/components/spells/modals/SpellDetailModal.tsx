@@ -1,8 +1,8 @@
-import { Modal } from "../ui/Modal";
-import { ConcentrationBadge, RitualBadge, SchoolBadge } from "../ui/SchoolBadge";
-import type { Spell, ComputedStats } from "../../types";
-import { levelLabel } from "../../utils/dice";
-import { buildGrid } from "../../utils/stats";
+import { Modal } from "../../ui/Modal";
+import { ConcentrationBadge, RitualBadge, SchoolBadge } from "../../ui/SchoolBadge";
+import type { Spell, ComputedStats } from "../../../types";
+import { levelLabel } from "../../../utils/dice";
+import { buildGrid } from "../../../utils/stats";
 
 interface SpellDetailModalProps {
   open: boolean;

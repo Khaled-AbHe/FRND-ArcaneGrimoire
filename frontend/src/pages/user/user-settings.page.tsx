@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/auth/useCurrentUser";
 import { useSignOut } from "../../hooks/auth/useSignOut";
 import { useUpdateUser } from "../../hooks/user/useUpdateUser";
-import { Modal } from "../ui/Modal";
+import { Modal } from "../../components/ui/Modal";
 
-export function UserSettingsTab() {
+export function UserSettingsPage() {
   const { data: user } = useCurrentUser();
   const signOut = useSignOut();
   const updateUser = useUpdateUser();

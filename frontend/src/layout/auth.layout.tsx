@@ -1,6 +1,6 @@
 import myLogo from "../images/ButterzIcon.png";
 
-export function AuthShell({ children }: { children: React.ReactNode }) {
+export function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="auth-bg">
       <div className="auth-panel animate-fade-in">

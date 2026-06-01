@@ -1,34 +1,20 @@
 import { useState } from "react";
-import { SpellDetailModal } from "./SpellDetailModal";
 import type { Character, ComputedStats, Spell } from "../../types";
 import { useSpells } from "../../hooks/spells/useSpells";
 import { useSpellFilters } from "../../hooks/spells/useSpellFilters";
 import { usePreparedSpells } from "../../hooks/spells/usePreparedSpells";
-import SpellToolbar from "./SpellToolbar";
-import { levelLabel } from "../../utils/dice";
-import { StarFilledIcon, StarEmptyIcon } from "../ui/Icons";
+import { levelLabel, schoolColor } from "../../utils/dice";
+import { StarFilledIcon, StarEmptyIcon } from "../../components/ui/Icons";
+import { SpellToolbar } from "../../components/spells/SpellToolbar";
+import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
 
-interface SpellPreparerTabProps {
+interface SpellPreparerPageProps {
   character: Character;
   stats: ComputedStats;
   onUpdatePrepared: (prepared: number[]) => void;
 }
 
 // ── Compact spell row ─────────────────────────────────────────────────────────
-
-function schoolColor(school: string): string {
-  const map: Record<string, string> = {
-    illusion: "rgba(168,85,247)",
-    evocation: "rgba(255,80,80)",
-    conjuration: "rgba(14,165,233)",
-    abjuration: "rgba(97,102,241)",
-    divination: "rgba(234,179,8)",
-    enchantment: "rgba(217,70,239)",
-    necromancy: "rgba(16,185,129)",
-    transmutation: "rgba(249,115,22)",
-  };
-  return map[school?.toLowerCase()] ?? "rgba(36,237,251,0.9)";
-}
 
 interface CompactSpellRowProps {
   spell: Spell;
@@ -76,7 +62,7 @@ function CompactSpellRow({ spell, isPrepared, onToggle, onViewDetail }: CompactS
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function SpellPreparerTab({ character, stats, onUpdatePrepared }: SpellPreparerTabProps) {
+export function SpellPreparerPage({ character, stats, onUpdatePrepared }: SpellPreparerPageProps) {
   const { data: spells = [], isLoading } = useSpells();
   const { preparedSet, preparedSpells, unpreparedSpells, togglePrepare } = usePreparedSpells(
     spells,

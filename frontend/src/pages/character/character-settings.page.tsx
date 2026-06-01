@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Character, CharacterGlobals, ComputedStats } from "../../types";
 import { fmtBonus } from "../../utils/dice";
-import { Modal } from "../ui/Modal";
+import { Modal } from "../../components/ui/Modal";
 import { useDeleteCharacter } from "../../hooks/characters/useDeleteCharacter";
 
-interface SettingsTabProps {
+interface CharacterSettingsPageProps {
   character: Character;
   stats: ComputedStats;
   onUpdateCharacter: (patch: Partial<Character>) => void;
 }
 
-export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTabProps) {
+export function CharacterSettingsPage({ character, stats, onUpdateCharacter }: CharacterSettingsPageProps) {
   const navigate = useNavigate();
   const deleteChar = useDeleteCharacter();
 

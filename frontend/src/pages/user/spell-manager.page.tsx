@@ -1,17 +1,17 @@
 import { useMemo, useState } from "react";
-import { SpellFormModal } from "../spells/SpellFormModal";
-import { SpellDetailModal } from "../spells/SpellDetailModal";
 import type { Spell, SpellLevel } from "../../types";
 import { useSpells } from "../../hooks/spells/useSpells";
-import SpellCard from "../spells/SpellCard";
-import SpellPresenter from "../spells/SpellPresenter";
-import SpellToolbar from "../spells/SpellToolbar";
+import { SpellToolbar } from "../../components/spells/SpellToolbar";
+import { SpellCard } from "../../components/spells/SpellCard";
+import { SpellPresenter } from "../../components/spells/SpellPresenter";
+import { SpellFormModal } from "../../components/spells/modals/SpellFormModal";
+import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
 
 /**
  * Full spell CRUD — create, edit, delete.
  * Lives on the User Page, no character context needed.
  */
-export function SpellManagerTab() {
+export function SpellManagerPage() {
   const { data: spells = [], isLoading } = useSpells();
 
   const [search, setSearch] = useState("");

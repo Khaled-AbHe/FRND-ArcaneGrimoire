@@ -156,13 +156,18 @@ function DamageCard({ result, onDismiss }: { result: DamageRollResult; onDismiss
     <div
       onClick={onDismiss}
       className="roll-overlay-card min-h-[200px] mr-2"
-      style={{ border: result.isCrit ? "1px solid rgba(255, 208, 0, 0.7)" : "1px solid rgba(0, 229, 255, 0.4)" }}
+      style={{
+        border: result.isCrit
+          ? "1px solid rgba(255, 208, 0, 0.7)"
+          : "1px solid rgba(0, 229, 255, 0.4)",
+      }}
     >
       {result.isCrit && (
         <div
           className="absolute inset-0 rounded-2xl pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(255,208,0,0.08) 0%, transparent 70%)",
+            background:
+              "radial-gradient(ellipse at center, rgba(255,208,0,0.08) 0%, transparent 70%)",
             animation: "critPulse 1.5s ease-in-out infinite",
           }}
         />

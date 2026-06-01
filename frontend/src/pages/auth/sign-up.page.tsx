@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useSignUp } from "../hooks/auth/useSignUp";
-import { AuthShell } from "./AuthShell";
+import { useSignUp } from "../../hooks/auth/useSignUp";
+import { AuthLayout } from "../../layout/auth.layout";
 import axios from "axios";
 
 export function SignUpPage() {
@@ -31,15 +31,13 @@ export function SignUpPage() {
       await signUp.mutateAsync({ username, email, password });
       navigate("/");
     } catch (err: unknown) {
-      const msg = axios.isAxiosError(err)
-        ? err.response?.data?.message
-        : undefined;
-      setError(Array.isArray(msg) ? msg.join(" · ") : msg ?? "Sign up failed.");
+      const msg = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
+      setError(Array.isArray(msg) ? msg.join(" · ") : (msg ?? "Sign up failed."));
     }
   }
 
   return (
-    <AuthShell>
+    <AuthLayout>
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="auth-field">
           <label className="label">Username</label>
@@ -111,6 +109,6 @@ export function SignUpPage() {
           </Link>
         </p>
       </form>
-    </AuthShell>
+    </AuthLayout>
   );
 }

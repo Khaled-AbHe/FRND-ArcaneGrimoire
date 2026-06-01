@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Spell, LevelRow, ComputedStats } from "../../types";
+import type { Spell, LevelRow, ComputedStats } from "../../../types";
 import {
   buildDamageRoll,
   buildHitRoll,
@@ -8,8 +8,8 @@ import {
   spellEffect,
   spellHitDC,
   spellNotes,
-} from "../../utils/dice";
-import type { DamageRollResult, HitRollResult } from "../ui/RollOverlay";
+} from "../../../utils/dice";
+import type { DamageRollResult, HitRollResult } from "../../ui/RollOverlay";
 
 // ── Context menu sub-components ────────────────────────────────────────────
 

@@ -1,6 +1,4 @@
-import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/auth/useCurrentUser";
-import { useSignOut } from "../../hooks/auth/useSignOut";
 import type { Character } from "../../types";
 import { ArrowLeftIcon, UserIcon } from "../ui/Icons";
 
@@ -11,13 +9,6 @@ interface HeaderProps {
 
 export function Header({ character, onBack }: HeaderProps) {
   const { data: currentUser } = useCurrentUser();
-  const signOut = useSignOut();
-  const navigate = useNavigate();
-
-  async function handleSignOut() {
-    await signOut.mutateAsync();
-    navigate("/signin");
-  }
 
   return (
     <header
@@ -56,14 +47,6 @@ export function Header({ character, onBack }: HeaderProps) {
             {currentUser.username}
           </span>
         )}
-        <button
-          onClick={handleSignOut}
-          disabled={signOut.isPending}
-          className="btn-ghost text-xs px-3 py-1"
-          aria-label="Sign out of your account"
-        >
-          {signOut.isPending ? "…" : "Sign Out"}
-        </button>
       </div>
     </header>
   );

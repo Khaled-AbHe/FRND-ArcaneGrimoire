@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Modal } from "../ui/Modal";
+import { Modal } from "../../ui/Modal";
 import type {
   Spell,
   CreateSpellDto,
@@ -10,7 +10,7 @@ import type {
   SpellComponents,
   SpellType,
   OutputTypeShape,
-} from "../../types";
+} from "../../../types";
 import {
   SCHOOLS,
   ABILITIES,
@@ -18,10 +18,10 @@ import {
   DIE_TYPES,
   OUTPUT_TYPES,
   ATTACK_TYPES,
-} from "../../types";
-import { useCreateSpell } from "../../hooks/spells/useCreateSpell";
-import { useUpdateSpell } from "../../hooks/spells/useUpdateSpell";
-import { CheckboxInput } from "./SpellForm/CheckboxInput";
+} from "../../../types";
+import { useCreateSpell } from "../../../hooks/spells/useCreateSpell";
+import { useUpdateSpell } from "../../../hooks/spells/useUpdateSpell";
+import { CheckboxInput } from "../form-elements/CheckboxInput";
 
 interface SpellFormModalProps {
   open: boolean;

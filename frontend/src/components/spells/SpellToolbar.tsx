@@ -13,7 +13,7 @@ interface SpellToolbarProps {
   setFormOpen?: (value: React.SetStateAction<boolean>) => void;
 }
 
-export default function SpellToolbar({
+export function SpellToolbar({
   search,
   setSearch,
   filterLevel,

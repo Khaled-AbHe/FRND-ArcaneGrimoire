@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Header } from "../components/layout/Header";
-import { Tabs } from "../components/layout/Tabs";
-import { SettingsTab } from "../components/settings/SettingsTab";
-import { SlotsTab } from "../components/slots/SlotsTab";
-import { SpellPreparerTab } from "../components/spells/SpellPreparerTab";
 import type { DamageRollResult, HitRollResult, RollResult } from "../components/ui/RollOverlay";
 import { RollOverlay } from "../components/ui/RollOverlay";
 import { useAutoSave } from "../hooks/characters/useAutoSave";
 import type { Character, TabId } from "../types";
 import { computeStats } from "../utils/stats";
 import { useCharacter } from "../hooks/characters/useCharacter";
-import { LoadingSpinner } from "../components/layout/LoadingSpinner";
 import PageShell from "../components/shells/page-shell.component";
 import { SlotsIcon, BookIcon, SettingsIcon } from "../components/ui/Icons";
+import { SpellSlotsPage } from "../pages/character/spell-slots.page";
+import { SpellPreparerPage } from "../pages/character/spell-preparer.page";
+import { CharacterSettingsPage } from "../pages/character/character-settings.page";
+import { LoadingSpinner } from "../components/ui/LoadingSpinner";
+import { Tabs } from "../components/ui/Tabs";
 
 const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = [
   { id: "slots", label: "Spell Slots", Icon: SlotsIcon },
@@ -23,7 +23,7 @@ const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = 
 
 const VALID_TABS: TabId[] = ["slots", "preparer", "settings"];
 
-export function CharacterPage() {
+export function CharacterLayout() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -83,7 +83,7 @@ export function CharacterPage() {
 
       <main className="flex-1 overflow-hidden flex flex-col">
         {tab === "slots" && (
-          <SlotsTab
+          <SpellSlotsPage
             character={localChar}
             stats={stats}
             onUpdateCharacter={handleUpdateCharacter}
@@ -93,14 +93,14 @@ export function CharacterPage() {
           />
         )}
         {tab === "preparer" && (
-          <SpellPreparerTab
+          <SpellPreparerPage
             character={localChar}
             stats={stats}
             onUpdatePrepared={(prepared) => handleUpdateCharacter({ prepared })}
           />
         )}
         {tab === "settings" && (
-          <SettingsTab
+          <CharacterSettingsPage
             character={localChar}
             stats={stats}
             onUpdateCharacter={handleUpdateCharacter}

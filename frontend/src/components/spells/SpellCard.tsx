@@ -1,22 +1,8 @@
 import { Spell } from "../../types";
-import { levelLabel } from "../../utils/dice";
+import { levelLabel, schoolColor } from "../../utils/dice";
 import { useState } from "react";
 import { useDeleteSpell } from "../../hooks/spells/useDeleteSpell";
 import { PencilIcon, TrashIcon, CheckIcon, CloseIcon, ClockIcon, RadiusIcon } from "../ui/Icons";
-
-function schoolColor(school: string): string {
-  const map: Record<string, string> = {
-    illusion: "rgba(168, 85, 247)",
-    evocation: "rgba(255, 0, 0)",
-    conjuration: "rgba(14, 165, 233)",
-    abjuration: "rgba(97, 102, 241)",
-    divination: "rgba(234, 179, 8)",
-    enchantment: "rgba(217, 70, 239)",
-    necromancy: "rgba(16, 185, 129)",
-    transmutation: "rgba(249, 115, 22)",
-  };
-  return map[school?.toLowerCase()] ?? "rgba(36, 237, 251, 0.9)";
-}
 
 interface SpellCardProps {
   spell: Spell;
@@ -24,7 +10,7 @@ interface SpellCardProps {
   onEdit: (spell: Spell) => void;
 }
 
-export default function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
+export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
   const deleteSpell = useDeleteSpell();
   const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
   const color = schoolColor(spell.school);
