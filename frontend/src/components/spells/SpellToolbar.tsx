@@ -25,7 +25,8 @@ export function SpellToolbar({
 }: SpellToolbarProps) {
   return (
     <div
-      className="p-4 border-b space-y-2"
+      className="w-full p-4 border-b space-y-2 z-10"
+      // className="absolute top-[108px] w-full p-4 border-b space-y-2 z-10"
       style={{ borderColor: "var(--border)", background: "var(--bg-secondary)" }}
     >
       <div className="flex justify-center gap-2">

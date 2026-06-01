@@ -15,17 +15,17 @@ export function Header({ character, onBack }: HeaderProps) {
       className="flex items-center gap-4 px-5 py-3 border-b"
       style={{ background: "var(--bg-secondary)", border: "none" }}
     >
-      <button
-        onClick={onBack}
-        className="w-8 h-8 flex items-center justify-center rounded transition-colors text-muted hover:text-accent"
-        aria-label="Back to character select"
-        title="Back to character select"
-      >
-        <ArrowLeftIcon size={18} />
-      </button>
+      <div className="flex flex-1">
+        <button
+          onClick={onBack}
+          className="w-8 flex items-center justify-center rounded transition-colors text-muted hover:text-accent"
+          aria-label="Back to character select"
+          title="Back to character select"
+        >
+          <ArrowLeftIcon size={18} />
+        </button>
 
-      <div className="flex flex-1 items-center gap-2">
-        <h1 className="font-display text-lg text-accent tracking-widest uppercase">
+        <h1 className="font-display text-lg text-accent tracking-widest uppercase flex-1">
           {character.name}
         </h1>
       </div>

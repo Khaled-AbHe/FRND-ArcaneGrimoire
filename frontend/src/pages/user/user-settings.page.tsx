@@ -48,7 +48,7 @@ export function UserSettingsPage() {
 
   return (
     <PageShell>
-      <div className="m-auto space-y-6 min-w-[40%] max-w-[80%] overflow-y-auto">
+      <div className="mx-auto my-10 space-y-6 min-w-[40%] max-w-[80%]">
         {/* Account info */}
         <section aria-labelledby="section-account">
           <h2

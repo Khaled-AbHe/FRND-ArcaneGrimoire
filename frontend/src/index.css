@@ -60,22 +60,18 @@
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 10px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--bg-primary);
+    background: var(--bg-raised);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--bg-raised);
+    background: rgba(15, 239, 255, 0.181);
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--border-hover);
-  }
-
-  ::selection {
-    background: rgba(36, 194, 251, 0.25);
+    background: rgba(15, 239, 255, 0.28);
   }
 }
 
@@ -409,7 +405,7 @@
 }
 
 .spell-grid-card {
-  @apply rounded-lg border overflow-hidden cursor-pointer transition-all duration-200;
+  @apply rounded-lg border overflow-hidden cursor-pointer transition-all duration-200 h-full flex flex-col;
   background: var(--bg-secondary);
   border-color: var(--border);
   position: relative;

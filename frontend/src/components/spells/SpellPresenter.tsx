@@ -14,12 +14,13 @@ export function SpellPresenter({
   children,
 }: SpellPresenterProps) {
   return (
-    <div className="flex-1 overflow-y-auto p-4" aria-label="Spell list">
+    <div
+      className="flex-1 p-4 m-auto overflow-y-auto"
+      style={{ scrollbarGutter: "stable" }}
+      aria-label="Spell list"
+    >
       {isLoading ? (
-        <div
-          className="grid gap-2"
-          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
-        >
+        <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}

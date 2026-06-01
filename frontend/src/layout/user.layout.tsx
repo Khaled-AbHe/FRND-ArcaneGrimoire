@@ -33,22 +33,25 @@ export function UserLayout() {
         <h1 className="font-display text-lg text-accent tracking-widest uppercase flex-1">
           Arcane Grimoire
         </h1>
-        {currentUser && (
-          <span
-            className="flex items-center gap-1.5 text-xs font-display tracking-wider"
-            style={{ color: "var(--text-muted)" }}
-          >
-            <UserIcon size={12} />
-            {currentUser.username}
-          </span>
-        )}
+
+        <div className="flex items-center gap-3 pl-3">
+          {currentUser && (
+            <span
+              className="flex items-center gap-1.5 text-xs font-display tracking-wider"
+              style={{ color: "var(--text-muted)" }}
+            >
+              <UserIcon size={12} />
+              {currentUser.username}
+            </span>
+          )}
+        </div>
       </header>
 
       {/* Tab bar */}
       <Tabs active={tab} tabs={TABS} onChange={setTab} />
 
       {/* Tab content */}
-      <div className="flex-1 overflow-hidden flex flex-col">
+      <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
         {tab === "characters" && <CharactersPage />}
         {tab === "spells" && <SpellManagerPage />}
         {tab === "settings" && <UserSettingsPage />}

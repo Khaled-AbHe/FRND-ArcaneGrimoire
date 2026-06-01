@@ -7,7 +7,6 @@ import { SpellPresenter } from "../../components/spells/SpellPresenter";
 import { SpellFormModal } from "../../components/spells/modals/SpellFormModal";
 import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
 import { useSpellFilters } from "../../hooks/spells/useSpellFilters";
-import { PageShell } from "../../components/shells/page-shell.component";
 
 /**
  * Full spell CRUD — create, edit, delete.
@@ -23,7 +22,7 @@ export function SpellManagerPage() {
   const [detailSpell, setDetailSpell] = useState<Spell | null>(null);
 
   return (
-    <PageShell>
+    <div className="flex flex-col flex-1 min-h-0 overflow-y-hidden">
       {/* Toolbar */}
       <SpellToolbar
         search={filters.search}
@@ -43,8 +42,7 @@ export function SpellManagerPage() {
         filteredCount={filters.filtered.length}
       >
         <div
-          className="grid gap-2"
-          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))" }}
+          className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-[85%] justify-self-center"
           role="list"
         >
           {filters.filtered.map((spell) => (
@@ -68,6 +66,6 @@ export function SpellManagerPage() {
         onClose={() => setDetailSpell(null)}
         spell={detailSpell}
       />
-    </PageShell>
+    </div>
   );
 }

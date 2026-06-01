@@ -14,6 +14,7 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
   const deleteSpell = useDeleteSpell();
   const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
   const color = schoolColor(spell.school);
+  const iconSize = 14;
 
   function spellTags(spell: Spell) {
     return (
@@ -56,7 +57,7 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
               aria-label={`Edit ${spell.name}`}
               title="Edit spell"
             >
-              <PencilIcon size={12} />
+              <PencilIcon size={iconSize} />
             </button>
 
             {confirmDelete === spell.id ? (
@@ -71,7 +72,7 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
                   aria-label={`Confirm delete ${spell.name}`}
                   title="Confirm delete"
                 >
-                  <CheckIcon size={12} />
+                  <CheckIcon size={iconSize} />
                 </button>
                 <button
                   onClick={(e) => {
@@ -82,7 +83,7 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
                   aria-label="Cancel delete"
                   title="Cancel"
                 >
-                  <CloseIcon size={12} />
+                  <CloseIcon size={iconSize} />
                 </button>
               </>
             ) : (
@@ -95,7 +96,7 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
                 aria-label={`Delete ${spell.name}`}
                 title="Delete spell"
               >
-                <TrashIcon size={13} />
+                <TrashIcon size={iconSize} />
               </button>
             )}
           </div>

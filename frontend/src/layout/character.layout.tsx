@@ -82,7 +82,7 @@ export function CharacterLayout() {
       <Header character={localChar} onBack={() => navigate("/")} />
       <Tabs active={tab} tabs={TABS} onChange={setTab} />
 
-      <main className="flex-1 overflow-hidden flex flex-col">
+      <main className="flex flex-col flex-1 min-h-0 overflow-y-auto">
         {tab === "slots" && (
           <SpellSlotsPage
             character={localChar}

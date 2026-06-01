@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { AddLevelModal } from "../../components/slots/modals/AddLevelModal";
+import { SlotSettingsModal } from "../../components/slots/modals/SlotSettingsModal";
 import { TemplateModal } from "../../components/slots/modals/TemplateModal";
 import { PactSettingsModal } from "../../components/slots/pact/PactSettingsModal";
 import { SlotColumnHeaders } from "../../components/slots/rows/SlotColumnHeader";
 import { SpellRow } from "../../components/slots/rows/SpellRow";
 import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
 import {
-  CloseIcon,
   MoonRestIcon,
   PactIcon,
   PlusIcon,
@@ -48,7 +47,7 @@ export function SpellSlotsPage({
   const templateMut = useSpellTemplate();
 
   const [detailSpell, setDetailSpell] = useState<Spell | null>(null);
-  const [addLevelOpen, setAddLevelOpen] = useState(false);
+  const [slotSettingsOpen, setSlotSettingsOpen] = useState(false);
   const [templateOpen, setTemplateOpen] = useState(false);
   const [pactOpen, setPactOpen] = useState(false);
   const [castingSpellId, setCastingSpellId] = useState<string | null>(null);
@@ -72,26 +71,6 @@ export function SpellSlotsPage({
       return { ...row, used: Math.min(Math.max(nowUsed, 0), row.total) };
     });
     onUpdateCharacter({ levels });
-  }
-
-  function removeLevel(rowId: string) {
-    onUpdateCharacter({ levels: character.levels.filter((r) => r.id !== rowId) });
-  }
-
-  function addLevel(levelNum: number, total: number) {
-    const label = levelNum === 0 ? "Cantrip" : `Level ${levelNum}`;
-    if (character.levels.some((r) => r.label === label)) {
-      setAddLevelOpen(false);
-      return;
-    }
-    const id = `level_${levelNum}`;
-    const levels = [...character.levels, { id, label, total, used: 0 }].sort(
-      (a, b) =>
-        (parseInt(a.label.replace(/\D/g, ""), 10) || 0) -
-        (parseInt(b.label.replace(/\D/g, ""), 10) || 0),
-    );
-    onUpdateCharacter({ levels });
-    setAddLevelOpen(false);
   }
 
   // ── Template ───────────────────────────────────────────────────────────────
@@ -176,16 +155,16 @@ export function SpellSlotsPage({
     <PageShell>
       {/* ── Toolbar ── */}
       <div
-        className="flex items-center gap-2 px-4 py-2 border-b overflow-x-auto"
+        className="flex items-center gap-2 px-15 pt-5 pb-3 border-b"
         style={{ borderColor: "var(--border)", background: "var(--bg-secondary)" }}
       >
         <button
           className="btn-ghost text-xs px-3 py-1.5 shrink-0 flex items-center gap-1.5"
-          onClick={() => setAddLevelOpen(true)}
-          aria-label="Add spell level row"
+          onClick={() => setSlotSettingsOpen(true)}
+          aria-label="Edit spell slot levels"
         >
           <PlusIcon size={12} />
-          Level
+          Edit Slots
         </button>
         <button
           className="btn-ghost text-xs px-3 py-1.5 shrink-0 flex items-center gap-1.5"
@@ -223,7 +202,7 @@ export function SpellSlotsPage({
       </div>
 
       {/* ── Content ── */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1">
         {/* Empty state — improved with CTAs */}
         {isEmpty && (
           <div className="flex flex-col items-center justify-center h-full gap-5 px-8 py-16 text-center">
@@ -246,16 +225,17 @@ export function SpellSlotsPage({
                 No Spell Slots Yet
               </p>
               <p className="text-xs text-muted max-w-xs">
-                Add individual levels with <strong className="text-dim">+ Level</strong>, or quickly
-                load a full caster layout with <strong className="text-dim">Load Template</strong>.
+                Add individual levels with <strong className="text-dim">Edit Slots</strong>, or
+                quickly load a full caster layout with{" "}
+                <strong className="text-dim">Load Template</strong>.
               </p>
             </div>
             <div className="flex gap-2">
               <button
                 className="btn-primary text-xs px-4 py-2"
-                onClick={() => setAddLevelOpen(true)}
+                onClick={() => setSlotSettingsOpen(true)}
               >
-                + Add Level
+                Edit Slots
               </button>
               <button className="btn-ghost text-xs px-4 py-2" onClick={() => setTemplateOpen(true)}>
                 Load Template
@@ -340,9 +320,7 @@ export function SpellSlotsPage({
                                 />
                               ))}
                             </div>
-                            <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-                              PACT
-                            </span>
+                            <span className="text-sm text-[var(--text-primary)]">PACT</span>
                           </div>
                         )}
 
@@ -382,24 +360,10 @@ export function SpellSlotsPage({
                                 />
                               ))}
                             </div>
-                            <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-                              SLOTS
-                            </span>
+                            <span className="text-sm text-[var(--text-primary)]">SLOTS</span>
                           </div>
                         )}
                       </div>
-                    )}
-
-                    {/* Remove button */}
-                    {row && (
-                      <button
-                        onClick={() => removeLevel(row.id)}
-                        className="flex items-center text-xs text-muted hover:text-red-400 ml-2 transition-colors"
-                        aria-label={`Remove ${isCantrip ? "cantrip" : `level ${levelNum}`} row`}
-                        title="Remove row"
-                      >
-                        <CloseIcon size={12} />
-                      </button>
                     )}
                   </div>
 
@@ -476,11 +440,12 @@ export function SpellSlotsPage({
       </div>
 
       {/* ── Modals ── */}
-      <AddLevelModal
-        open={addLevelOpen}
-        onClose={() => setAddLevelOpen(false)}
-        existingLabels={character.levels.map((r) => r.label)}
-        onAdd={(levelNum, total) => addLevel(levelNum, total)}
+      <SlotSettingsModal
+        open={slotSettingsOpen}
+        onClose={() => setSlotSettingsOpen(false)}
+        levels={character.levels}
+        highMagic={character.globals?.highMagic ?? false}
+        onUpdate={(levels) => onUpdateCharacter({ levels })}
       />
 
       <TemplateModal
