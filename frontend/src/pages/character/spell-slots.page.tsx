@@ -482,6 +482,7 @@ export function SpellSlotsPage({
         existingLabels={character.levels.map((r) => r.label)}
         onAdd={(levelNum, total) => addLevel(levelNum, total)}
       />
+
       <TemplateModal
         open={templateOpen}
         onClose={() => setTemplateOpen(false)}
@@ -489,6 +490,7 @@ export function SpellSlotsPage({
         onApply={applyTemplate}
         isPending={templateMut.isPending}
       />
+
       <PactSettingsModal
         open={pactOpen}
         onClose={() => setPactOpen(false)}
@@ -496,6 +498,7 @@ export function SpellSlotsPage({
         spells={spells}
         onUpdate={(pact: PactMagic) => onUpdateCharacter({ pact })}
       />
+
       <SpellDetailModal
         open={detailSpell !== null}
         onClose={() => setDetailSpell(null)}

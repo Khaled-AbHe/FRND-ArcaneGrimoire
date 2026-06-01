@@ -40,16 +40,16 @@ export function capitalizeFirstLetter(str: string): string {
 
 export function schoolColor(school: string): string {
   const map: Record<string, string> = {
-    illusion: "rgba(168,85,247)",
-    evocation: "rgba(255,80,80)",
-    conjuration: "rgba(14,165,233)",
-    abjuration: "rgba(97,102,241)",
-    divination: "rgba(234,179,8)",
-    enchantment: "rgba(217,70,239)",
-    necromancy: "rgba(16,185,129)",
-    transmutation: "rgba(249,115,22)",
+    illusion: "rgba(168, 85, 247)",
+    evocation: "rgba(255, 50, 50)",
+    conjuration: "rgba(14, 165, 233)",
+    abjuration: "rgba(97, 102, 241)",
+    divination: "rgba(234, 179, 8)",
+    enchantment: "rgba(217, 70, 239)",
+    necromancy: "rgba(16, 185, 129)",
+    transmutation: "rgba(249, 115, 22)",
   };
-  return map[school?.toLowerCase()] ?? "rgba(36,237,251,0.9)";
+  return map[school?.toLowerCase()] ?? "rgba(36, 237, 251, 0.9)";
 }
 
 export function fmtCastTime(spell: Spell) {
