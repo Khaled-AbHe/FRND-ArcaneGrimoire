@@ -221,7 +221,7 @@ export function SpellRow({
   return (
     <>
       <div
-        className="flex justify-evenly items-center p-1 text-sm"
+        className="flex justify-between items-center py-1 text-sm"
         style={{
           borderBottom: isLast ? "none" : "1px dotted var(--border)",
           background: "transparent",
@@ -234,8 +234,12 @@ export function SpellRow({
         {/* Name */}
         <div className="flex justify-start items-center h-[35px] min-w-[290px] p-1">
           <button
-            className="cursor-pointer hover:underline min-w-0 font-medium italic truncate text-left"
-            style={{ color: "var(--text-primary)", background: "none", border: "none", padding: 0 }}
+            className="cursor-pointer hover:underline min-w-0 font-medium truncate text-left"
+            style={{
+              color: "var(--text-secondary)",
+              background: "none",
+              border: "none",
+            }}
             onClick={() => onViewDetail(rowSpell)}
             aria-label={`View details for ${spell.name}`}
           >
@@ -258,14 +262,12 @@ export function SpellRow({
           {spell.range === "Self" || spell.range === "Touch" ? (
             spell.range
           ) : (
-            <span className="font-bold">
-              {spell.range?.replace(" feet", "").replace(" foot", "")} ft.
-            </span>
+            <span>{spell.range?.replace(" feet", "").replace(" foot", "")} ft.</span>
           )}
         </div>
 
         {/* Hit / DC */}
-        <div className="flex justify-center items-center h-[35px] min-w-[70px] p-1 text-center text-xs">
+        <div className="flex justify-center items-center h-[35px] min-w-[90px] p-1 text-center text-xs">
           {hasAttack ? (
             <button
               onClick={() => fireHitRoll("normal")}
@@ -280,7 +282,7 @@ export function SpellRow({
               {hitDC}
             </button>
           ) : (
-            <span className="text-[16px] text-[var(--text-secondary)]">{hitDC}</span>
+            <span className="text-[14px] text-[var(--text-secondary)]">{hitDC}</span>
           )}
         </div>
 
@@ -293,7 +295,7 @@ export function SpellRow({
                 e.preventDefault();
                 setDamageContextMenu({ x: e.clientX, y: e.clientY });
               }}
-              className={`${variant.kind === "arcanum" ? "btn-arcanum" : "btn-primary"} w-[115px] h-full text-[14px] justify-center`}
+              className={`${variant.kind === "arcanum" ? "btn-arcanum" : "btn-primary"} w-[120px] h-full text-[14px] justify-center`}
               aria-label={`Roll damage for ${spell.name} (right-click for critical)`}
               title="Click to roll · Right-click for critical damage"
             >

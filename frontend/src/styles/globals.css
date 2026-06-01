@@ -12,7 +12,8 @@
     --border: #24edfb28;
     /* --border: #24edfb1f; */
     --border-hover: rgba(15, 239, 255, 0.28);
-    --text-primary: #f1f0ea;
+    --text-primary: #d1e4f6;
+    --text-bold: #e4f0ff;
     --text-secondary: #c3d3e9;
     --text-muted: #7b899e;
     --accent: #00e5ff;
@@ -34,10 +35,14 @@
   html {
     background: var(--bg-primary);
     color: var(--text-primary);
-    font-family: "Crimson Pro", Georgia, serif;
-    font-size: 20px;
-    font-weight: 600;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 18px;
+    font-weight: 500;
     -webkit-font-smoothing: antialiased;
+  }
+
+  .bold-text {
+    font-weight: 800;
   }
 
   body {
@@ -212,11 +217,10 @@
 
   /* ── Input ─────────────────────────────────────────────────────────────── */
   .input {
-    @apply w-full px-3 py-2 rounded text-sm transition-all duration-150 outline-none;
+    @apply w-full px-3 py-2 rounded text-xs transition-all duration-150 outline-none;
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     color: var(--text-primary);
-    font-family: "Crimson Pro", serif;
   }
   .input:focus {
     border-color: var(--accent);
@@ -239,7 +243,6 @@
     @apply block text-xs uppercase tracking-widest mb-1;
     color: var(--text-muted);
     vertical-align: middle;
-    font-family: "Cinzel", serif;
   }
 
   /* ── Section divider ──────────────────────────────────────────────────── */
@@ -251,7 +254,7 @@
   /* ── School badge ─────────────────────────────────────────────────────── */
   .school-badge {
     @apply inline-block px-2 py-0.5 rounded-full text-xs;
-    font-family: "Cinzel", serif;
+
     letter-spacing: 0.06em;
   }
 
@@ -293,7 +296,7 @@
   /* ── Tab bar ──────────────────────────────────────────────────────────── */
   .tab-btn {
     @apply flex-1 py-3 text-sm transition-all duration-150 relative;
-    font-family: "Cinzel", serif;
+
     letter-spacing: 0.06em;
     color: var(--text-muted);
   }
@@ -331,13 +334,10 @@
     border-color: var(--border);
   }
   .font-display {
-    font-family: "Cinzel", serif;
   }
   .font-body {
-    font-family: "Crimson Pro", serif;
   }
   .font-mono {
-    font-family: "JetBrains Mono", monospace;
   }
 
   /* High-magic gold slot glow */
@@ -500,7 +500,6 @@
 }
 
 .auth-title {
-  font-family: "Cinzel", serif;
   font-size: 1.3rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -511,7 +510,6 @@
 }
 
 .auth-subtitle {
-  font-family: "Crimson Pro", serif;
   font-size: 0.9rem;
   color: var(--text-muted);
   text-align: center;
@@ -541,7 +539,6 @@
 }
 
 .auth-error {
-  font-family: "Crimson Pro", serif;
   font-size: 0.85rem;
   color: #ef4444;
   background: rgba(239, 68, 68, 0.08);
@@ -552,7 +549,6 @@
 }
 
 .auth-switch {
-  font-family: "Crimson Pro", serif;
   font-size: 0.85rem;
   color: var(--text-muted);
   text-align: center;

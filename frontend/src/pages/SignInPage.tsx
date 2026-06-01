@@ -8,8 +8,7 @@ export function SignInPage() {
   const signIn = useSignIn();
   const navigate = useNavigate();
   const location = useLocation();
-  const from =
-    (location.state as { from?: { pathname: string } })?.from?.pathname ?? "/";
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? "/";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,10 +21,8 @@ export function SignInPage() {
       await signIn.mutateAsync({ email, password });
       navigate(from, { replace: true });
     } catch (err: unknown) {
-      const msg = axios.isAxiosError(err)
-        ? err.response?.data?.message
-        : undefined;
-      setError(Array.isArray(msg) ? msg.join(" · ") : msg ?? "Sign in failed.");
+      const msg = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
+      setError(Array.isArray(msg) ? msg.join(" · ") : (msg ?? "Sign in failed."));
     }
   }
 

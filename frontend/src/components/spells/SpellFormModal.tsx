@@ -21,6 +21,7 @@ import {
 } from "../../types";
 import { useCreateSpell } from "../../hooks/spells/useCreateSpell";
 import { useUpdateSpell } from "../../hooks/spells/useUpdateSpell";
+import { CheckboxInput } from "./SpellForm/CheckboxInput";
 
 interface SpellFormModalProps {
   open: boolean;
@@ -37,7 +38,7 @@ const EMPTY: CreateSpellDto = {
   duration: "Instantaneous",
   concentration: false,
   ritual: false,
-  components: { verbal: true, somatic: true },
+  components: { verbal: false, somatic: false },
   spellType: { kind: "utility" },
   outputType: { kind: "leveled", dice: [] },
   notes: null,
@@ -199,24 +200,23 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
     <Modal
       open={open}
       onClose={onClose}
-      title={editing ? `Edit ${form.name}` : "Add Spell"}
+      title={editing ? `Edit ${form.name}` : "Create Spell"}
       width="max-w-2xl"
     >
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Name */}
-        <div>
-          <label className="label">Spell Name *</label>
-          <input
-            className="input"
-            value={form.name}
-            onChange={(e) => set("name", e.target.value)}
-            maxLength={128}
-            required
-          />
-        </div>
-
-        {/* Level + School */}
         <div className="grid grid-cols-2 gap-3">
+          {/* Name */}
+          <div>
+            <label className="label">Spell Name *</label>
+            <input
+              className="input"
+              value={form.name}
+              onChange={(e) => set("name", e.target.value)}
+              maxLength={128}
+              required
+            />
+          </div>
+          {/* Level */}
           <div>
             <label className="label">Level</label>
             <select
@@ -231,8 +231,9 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
               ))}
             </select>
           </div>
+          {/* School */}
           <div>
-            <label className="label">School</label>
+            <label className="label">School of Magic</label>
             <select
               className="select"
               value={form.school ?? ""}
@@ -243,18 +244,7 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
               ))}
             </select>
           </div>
-        </div>
-
-        {/* Cast Time + Range */}
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="label">Casting Time</label>
-            <input
-              className="input"
-              value={form.castTime ?? ""}
-              onChange={(e) => set("castTime", e.target.value)}
-            />
-          </div>
+          {/* Range */}
           <div>
             <label className="label">Range</label>
             <input
@@ -263,84 +253,72 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
               onChange={(e) => set("range", e.target.value)}
             />
           </div>
+          {/* Casting Time + Ritual */}
+          <div>
+            <label className="label">Casting Time</label>
+            <div className="flex gap-3 mb-2">
+              <input
+                className="input"
+                value={form.castTime ?? ""}
+                onChange={(e) => set("castTime", e.target.value)}
+              />
+              {/* flags (c/r) */}
+              <CheckboxInput element={"ritual"} isChecked={!form["ritual"]} set={set}>
+                <span title="Ritual Spell?">R</span>
+              </CheckboxInput>
+            </div>
+          </div>
+          {/* Duration + Concentration*/}
+          <div>
+            <label className="label">Duration</label>
+            <div className="flex gap-3 mb-2">
+              <input
+                className="input"
+                value={form.duration ?? ""}
+                onChange={(e) => set("duration", e.target.value)}
+              />
+              <CheckboxInput element={"concentration"} isChecked={!form["concentration"]} set={set}>
+                <span title="Concentration Spell?">C</span>
+              </CheckboxInput>
+            </div>
+          </div>
         </div>
 
-        {/* Duration */}
-        <div>
-          <label className="label">Duration</label>
-          <input
-            className="input"
-            value={form.duration ?? ""}
-            onChange={(e) => set("duration", e.target.value)}
-          />
-        </div>
+        <div className="divider" />
 
         {/* Components */}
         <div>
           <label className="label">Components</label>
-          <div className="flex gap-4 mb-2">
+          <div className="grid grid-cols-3 gap-4 mb-2">
             {(["verbal", "somatic"] as const).map((k) => (
-              <label key={k} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={!!form.components[k]}
-                  onChange={(e) => setComp(k, e.target.checked)}
-                  className="w-4 h-4 rounded"
-                />
-                <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                  {k === "verbal" ? "V — Verbal" : "S — Somatic"}
-                </span>
-              </label>
+              <CheckboxInput key={k} element={k} isChecked={!form.components[k]} setComp={setComp}>
+                {k === "verbal" ? "Verbal" : "Somatic"}
+              </CheckboxInput>
             ))}
-          </div>
-          <div>
-            <label className="label">Material (leave blank if none)</label>
             <input
               className="input"
-              placeholder="e.g. a ball of bat guano and sulfur"
+              placeholder="Material (leave blank if none)"
               value={form.components.material ?? ""}
               onChange={(e) => setComp("material", e.target.value || undefined)}
             />
           </div>
         </div>
 
-        {/* Flags */}
-        <div className="flex gap-6">
-          {[
-            { key: "concentration" as const, label: "Concentration" },
-            { key: "ritual" as const, label: "Ritual" },
-          ].map(({ key, label }) => (
-            <label key={key} className="flex items-center gap-2 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={!!form[key]}
-                onChange={(e) => set(key, e.target.checked)}
-                className="w-4 h-4 rounded"
-              />
-              <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                {label}
-              </span>
-            </label>
-          ))}
-        </div>
+        <div className="divider" />
 
         {/* Spell Type */}
         <div>
           <label className="label">Spell Type</label>
-          <div className="flex gap-2">
-            {(["utility", "attack", "save"] as SpellType["kind"][]).map((k) => (
-              <button
+          <div className="grid grid-cols-3 gap-4 mb-5">
+            {(["attack", "save", "utility"] as SpellType["kind"][]).map((k) => (
+              <CheckboxInput
                 key={k}
-                type="button"
-                className={
-                  st.kind === k
-                    ? "btn-primary text-xs px-3 py-1.5"
-                    : "btn-ghost text-xs px-3 py-1.5"
-                }
-                onClick={() => setSpellTypeKind(k)}
+                element={k}
+                isChecked={st.kind !== k}
+                setSpellTypeKind={setSpellTypeKind}
               >
                 {k === "utility" ? "Utility" : k === "attack" ? "Attack Roll" : "Saving Throw"}
-              </button>
+              </CheckboxInput>
             ))}
           </div>
 
@@ -395,23 +373,21 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
           )}
         </div>
 
+        <div className="divider" />
+
         {/* Output Type */}
         <div>
           <label className="label">Output Type</label>
-          <div className="flex gap-2 mb-3">
-            {(["leveled", "cantrip", "utility"] as OutputTypeShape["kind"][]).map((k) => (
-              <button
+          <div className="grid grid-cols-3 gap-4 mb-5">
+            {(["cantrip", "leveled", "utility"] as OutputTypeShape["kind"][]).map((k) => (
+              <CheckboxInput
                 key={k}
-                type="button"
-                className={
-                  out.kind === k
-                    ? "btn-primary text-xs px-3 py-1.5"
-                    : "btn-ghost text-xs px-3 py-1.5"
-                }
-                onClick={() => setOutputKind(k)}
+                element={k}
+                isChecked={out.kind !== k}
+                setOutputKind={setOutputKind}
               >
-                {k === "leveled" ? "Leveled" : k === "cantrip" ? "Cantrip" : "Utility (no dice)"}
-              </button>
+                {k === "leveled" ? "Leveled" : k === "cantrip" ? "Cantrip" : "Effect"}
+              </CheckboxInput>
             ))}
           </div>
 
@@ -818,12 +794,14 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
           )}
         </div>
 
+        <div className="divider" />
+
         {/* Notes */}
         <div>
           <label className="label">Notes / Description</label>
           <textarea
-            className="input resize-none"
-            rows={3}
+            className="input"
+            rows={8}
             value={form.notes ?? ""}
             onChange={(e) => set("notes", e.target.value || null)}
             maxLength={4000}

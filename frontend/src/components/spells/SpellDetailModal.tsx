@@ -41,7 +41,7 @@ export function SpellDetailModal({
   const spellGrid = buildGrid(spell, spellStats, preparePage);
 
   return (
-    <Modal open={open} onClose={onClose} title={spell.name} width="max-w-lg">
+    <Modal open={open} onClose={onClose} title={spell.name} width="max-w-2xl">
       <div className="space-y-4">
         {/* School + Level + flags */}
         <div className="flex items-center gap-3 flex-wrap">
@@ -77,10 +77,15 @@ export function SpellDetailModal({
                 style={{
                   color: "var(--text-secondary)",
                   borderRadius: "5px",
+                  whiteSpace: "pre-wrap",
                 }}
-              >
-                {spell.notes}
-              </div>
+                dangerouslySetInnerHTML={{
+                  __html: spell.notes.replace(
+                    /\*\*(.+?)\*\*/g,
+                    `<span class="bold-text">$1</span>`,
+                  ),
+                }}
+              />
             </div>
           </div>
         )}

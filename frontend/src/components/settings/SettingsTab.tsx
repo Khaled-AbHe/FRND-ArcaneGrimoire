@@ -63,17 +63,16 @@ export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTab
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+      <div className="flex-1 overflow-y-auto p-4 space-y-6  px-[30%]">
         {/* Character name */}
         <section aria-labelledby="section-name">
           <h2
             id="section-name"
-            className="font-display text-xs uppercase tracking-widest text-accent mb-3 w-[80%] m-auto"
+            className="font-display text-xs uppercase tracking-widest text-accent mb-3 m-auto"
           >
             Character
           </h2>
           <div className="card p-4">
-            <div className="label mb-1.5">Name</div>
             {renaming ? (
               <div className="flex gap-2">
                 <input
@@ -96,7 +95,7 @@ export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTab
                 </button>
               </div>
             ) : (
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-5 ">
                 <span className="font-display text-base text-accent tracking-wide">
                   {character.name}
                 </span>
@@ -108,91 +107,82 @@ export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTab
           </div>
         </section>
 
-        {/* Spellcasting stats */}
+        {/* Statistics */}
         <section aria-labelledby="section-spellcasting">
           <h2
             id="section-spellcasting"
-            className="font-display text-xs uppercase tracking-widest text-accent mb-3 w-[80%] m-auto"
+            className="font-display text-xs uppercase tracking-widest text-accent mb-3 m-auto"
           >
-            Spellcasting
+            Statistics
           </h2>
           <div className="card p-4 space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="spell-mod" className="label">
-                  Spellcasting Modifier
-                </label>
-                <input
-                  id="spell-mod"
-                  type="number"
-                  className="input"
-                  min={-5}
-                  max={10}
-                  value={globals.mod}
-                  onChange={(e) => setGlobal("mod", +e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="prof-bonus" className="label">
-                  Proficiency Bonus
-                </label>
-                <input
-                  id="prof-bonus"
-                  type="number"
-                  className="input"
-                  min={2}
-                  max={9}
-                  value={globals.prof}
-                  onChange={(e) => setGlobal("prof", +e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded p-3 text-center" style={{ background: "var(--bg-raised)" }}>
-                <div className="label">Spell Save DC</div>
-                <div className="text-3xl font-display text-accent">{stats.spellSaveDC}</div>
-                <div className="text-xs text-muted mt-0.5">
-                  8 + {globals.prof} + {globals.mod}
+            <div className="grid grid-cols-2 gap-5">
+              <div className="flex flex-col h-fit gap-5">
+                <div className="flex flex-col items-center w-full">
+                  <label htmlFor="spell-mod" className="label">
+                    Spellcasting Modifier
+                  </label>
+                  <input
+                    id="spell-mod"
+                    type="number"
+                    className="text-2xl text-center font-display card w-full text-accent rounded"
+                    min={-5}
+                    max={10}
+                    value={globals.mod}
+                    onChange={(e) => setGlobal("mod", +e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col items-center w-full">
+                  <label htmlFor="prof-bonus" className="label">
+                    Proficiency Bonus
+                  </label>
+                  <input
+                    id="prof-bonus"
+                    type="number"
+                    className="text-2xl text-center font-display card w-full text-accent rounded"
+                    min={2}
+                    max={9}
+                    value={globals.prof}
+                    onChange={(e) => setGlobal("prof", +e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col items-center w-full">
+                  <label htmlFor="char-level" className="label">
+                    Character Level (1-20)
+                  </label>
+                  <input
+                    id="char-level"
+                    type="number"
+                    className="text-2xl text-center font-display card w-full text-accent rounded"
+                    min={1}
+                    max={20}
+                    value={globals.charLevel}
+                    onChange={(e) => setGlobal("charLevel", +e.target.value)}
+                  />
                 </div>
               </div>
-              <div className="rounded p-3 text-center" style={{ background: "var(--bg-raised)" }}>
-                <div className="label">Spell Attack Bonus</div>
-                <div className="text-3xl font-display text-accent">
-                  {fmtBonus(stats.attackBonus)}
-                </div>
-                <div className="text-xs text-muted mt-0.5">
-                  {globals.prof} + {globals.mod}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* Character level */}
-        <section aria-labelledby="section-character">
-          <h2
-            id="section-character"
-            className="font-display text-xs uppercase tracking-widest text-accent mb-3 w-[80%] m-auto"
-          >
-            Level
-          </h2>
-          <div className="card p-4">
-            <label htmlFor="char-level" className="label">
-              Character Level (1-20)
-            </label>
-            <input
-              id="char-level"
-              type="number"
-              className="input mt-1"
-              min={1}
-              max={20}
-              value={globals.charLevel}
-              onChange={(e) => setGlobal("charLevel", +e.target.value)}
-            />
-            <p className="text-xs text-muted mt-1">
-              Cantrip damage tier: <span className="text-accent">{stats.cantripTier}</span> dice
-              {globals.charLevel >= 5 ? ` (from level ${globals.charLevel})` : ""}
-            </p>
+              <div className="flex flex-col h-fit gap-5">
+                <div className="flex flex-col items-center w-full">
+                  <div className="label">Spell Save DC</div>
+                  <div className="text-2xl flex justify-center font-display card w-full text-accent rounded">
+                    {stats.spellSaveDC}
+                  </div>
+                </div>
+                <div className="flex flex-col items-center w-full">
+                  <div className="label">Spell Attack Bonus</div>
+                  <div className="text-2xl flex justify-center font-display card w-full text-accent rounded">
+                    {fmtBonus(stats.attackBonus).replace(" ", "")}
+                  </div>
+                </div>
+                <div className="flex flex-col items-center w-full">
+                  <div className="label">Cantrip Tier (Dice/Projectiles)</div>
+                  <div className="text-2xl flex justify-center font-display card w-full text-accent rounded">
+                    {stats.cantripTier}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -200,7 +190,7 @@ export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTab
         <section aria-labelledby="section-danger">
           <h2
             id="section-danger"
-            className="font-display text-xs uppercase tracking-widest mb-3 w-[80%] m-auto"
+            className="font-display text-xs uppercase tracking-widest mb-3 m-auto"
             style={{ color: "#ef4444" }}
           >
             Danger Zone
@@ -213,7 +203,10 @@ export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTab
                 </div>
                 <div className="text-xs text-muted">Reset all slots, pact, and prepared spells</div>
               </div>
-              <button className="btn-danger text-xs" onClick={() => setClearConfirmOpen(true)}>
+              <button
+                className="flex btn-danger text-xs w-[20%] justify-center"
+                onClick={() => setClearConfirmOpen(true)}
+              >
                 Clear
               </button>
             </div>
@@ -225,7 +218,10 @@ export function SettingsTab({ character, stats, onUpdateCharacter }: SettingsTab
                 </div>
                 <div className="text-xs text-muted">Permanently removes this character</div>
               </div>
-              <button className="btn-danger text-xs" onClick={() => setDeleteConfirmOpen(true)}>
+              <button
+                className="flex btn-danger text-xs w-[20%] justify-center"
+                onClick={() => setDeleteConfirmOpen(true)}
+              >
                 Delete
               </button>
             </div>

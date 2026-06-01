@@ -103,7 +103,7 @@ export function SpellPreparerTab({ character, stats, onUpdatePrepared }: SpellPr
           className="flex flex-col border-r overflow-hidden"
           style={{ borderColor: "var(--border)", width: "50%" }}
         >
-          <ColumnHeader label="Prepared" count={preparedSpells.length} accent />
+          <ColumnHeader label="Prepared" count={preparedSpells.length} />
           <div className="flex-1 overflow-y-auto">
             {isLoading ? (
               <RowSkeleton count={3} />
@@ -169,15 +169,7 @@ export function SpellPreparerTab({ character, stats, onUpdatePrepared }: SpellPr
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function ColumnHeader({
-  label,
-  count,
-  accent,
-}: {
-  label: string;
-  count: number;
-  accent?: boolean;
-}) {
+function ColumnHeader({ label, count }: { label: string; count: number }) {
   return (
     <div
       className="px-3 py-2 text-xs font-display uppercase tracking-widest shrink-0"
@@ -189,7 +181,7 @@ function ColumnHeader({
     >
       {label}
       {count > 0 && (
-        <span className="ml-2" style={{ color: accent ? "var(--accent)" : "var(--text-muted)" }}>
+        <span className="ml-2" style={{ color: "var(--accent)" }}>
           {count}
         </span>
       )}

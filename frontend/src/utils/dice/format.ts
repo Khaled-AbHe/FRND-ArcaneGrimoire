@@ -32,3 +32,8 @@ export function formatComponents(c: Spell["components"]): string {
   if (c.material) parts.push(`M (${c.material})`);
   return parts.join(", ") || "—";
 }
+
+export function capitalizeFirstLetter(str: string): string {
+  if (!str) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
