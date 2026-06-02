@@ -1,17 +1,3 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { UsersService } from '../../users/services/users/users.service';
-
-@Injectable()
-export class CurrentUserMiddleware implements NestMiddleware {
-  constructor(private usersService: UsersService) {}
-
-  async use(req: any, res: any, next: () => void) {
-    const { userId } = req.session;
-    if (!userId) {
-      console.log("User doesn't exist - Middleware");
-    } else {
-      req.currUser = await this.usersService.findOneUser(userId);
-    }
-    next();
-  }
-}
+// This middleware is no longer needed — Passport's JWT strategy
+// populates req.user automatically via the JwtStrategy.validate() method.
+// Kept as an empty placeholder; it is no longer registered in AppModule.

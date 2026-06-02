@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { PresetSpellsService } from '../../../spells/service/preset-spells.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
@@ -18,9 +19,10 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private presetSpellsService: PresetSpellsService,
+    private jwtService: JwtService,
   ) {}
 
-  async signUp(dto: CreateUserDto): Promise<User> {
+  async signUp(dto: CreateUserDto): Promise<{ access_token: string }> {
     const existing = await this.usersService.findUserByEmail(dto.email);
     if (existing) throw new BadRequestException('Email already taken');
 
@@ -33,10 +35,10 @@ export class AuthService {
     });
 
     await this.presetSpellsService.seedForNewUser(user);
-    return user;
+    return this.createToken(user);
   }
 
-  async signUpAdmin(dto: CreateUserDto): Promise<User> {
+  async signUpAdmin(dto: CreateUserDto): Promise<{ access_token: string }> {
     const existing = await this.usersService.findUserByEmail(dto.email);
     if (existing) throw new BadRequestException('Email already taken');
 
@@ -49,10 +51,10 @@ export class AuthService {
     });
 
     await this.presetSpellsService.seedForNewUser(user);
-    return user;
+    return this.createToken(user);
   }
 
-  async signIn(email: string, password: string): Promise<User> {
+  async signIn(email: string, password: string): Promise<{ access_token: string }> {
     const user = await this.usersService.findUserByEmail(email);
     if (!user) throw new NotFoundException('User not found');
 
@@ -62,7 +64,7 @@ export class AuthService {
       throw new BadRequestException('Incorrect Password');
     }
 
-    return user;
+    return this.createToken(user);
   }
 
   async changePassword(
@@ -80,5 +82,10 @@ export class AuthService {
     const salt = randomBytes(8).toString('hex');
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     return salt + '.' + hash.toString('hex');
+  }
+
+  private createToken(user: User): { access_token: string } {
+    const payload = { sub: user.userId, email: user.email, userType: user.userType };
+    return { access_token: this.jwtService.sign(payload) };
   }
 }

@@ -6,11 +6,10 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Session,
   UseGuards,
 } from '@nestjs/common';
 import { CurrentUser } from '../../../currentUser/decorators/current-user.decorator';
-import { AuthGuard } from '../../../currentUser/guards/auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 import { ChangePasswordDto } from '../../dtos/change-password.dto';
 import { CreateUserDto } from '../../dtos/create-user.dto';
 import { SignInUserDto } from '../../dtos/signin-user.dto';
@@ -22,10 +21,8 @@ export class AuthentificationController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  async signUp(@Body() body: CreateUserDto, @Session() session: any) {
-    const user = await this.authService.signUp(body);
-    session.userId = user.userId;
-    return user;
+  signUp(@Body() body: CreateUserDto) {
+    return this.authService.signUp(body);
   }
 
   @Post('/signupadmin')
@@ -34,26 +31,24 @@ export class AuthentificationController {
   }
 
   @Post('/signin')
-  async signIn(@Body() body: SignInUserDto, @Session() session: any) {
-    const user = await this.authService.signIn(body.email, body.password);
-    session.userId = user.userId;
-    return user;
+  signIn(@Body() body: SignInUserDto) {
+    return this.authService.signIn(body.email, body.password);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Post('/signout')
-  signOut(@Session() session: any) {
-    session.userId = null;
+  signOut() {
+    // JWT is stateless — client discards the token
+    return { message: 'Signed out' };
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get('/whoami')
   whoAmI(@CurrentUser() user: User) {
     return user;
   }
 
-  // Password travels in the request body, never in the URL
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Patch('/:id/changePassword')
   changePassword(
     @CurrentUser() user: User,

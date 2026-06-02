@@ -1,7 +1,6 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CharactersModule } from './characters/characters.module';
-import { CurrentUserMiddleware } from './currentUser/middlewares/current-user.middleware';
 import { DbModule } from './db/db.module';
 import { SpellsModule } from './spells/spells.module';
 import { UsersModule } from './users/users.module';
@@ -15,8 +14,4 @@ import { UsersModule } from './users/users.module';
     CharactersModule,
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CurrentUserMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}
