@@ -77,7 +77,7 @@ export type OutputType =
   | "Mystical"
   | "Temporary HP"
   | "Healing"
-  | "Additional Beast";
+  | "Miscellaneous";
 
 // components
 export interface SpellComponents {
@@ -317,5 +317,5 @@ export const OUTPUT_TYPES: OutputType[] = [
   "Mystical",
   "Temporary HP",
   "Healing",
-  "Additional Beast",
+  "Miscellaneous",
 ];

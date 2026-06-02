@@ -12,16 +12,19 @@ import {
 import type { Response } from 'express';
 import { CurrentUser } from '../../../currentUser/decorators/current-user.decorator';
 import { AuthGuard } from '../../../currentUser/guards/auth.guard';
+import { SoftAuthGuard } from '../../../currentUser/guards/solf-auth.guard';
+import type { User } from '../../../db/schema';
 import { ChangePasswordDto } from '../../dtos/change-password.dto';
 import { CreateUserDto } from '../../dtos/create-user.dto';
 import { SignInUserDto } from '../../dtos/signin-user.dto';
-import type { User } from '../../../db/schema';
 import { AuthService } from '../../services/auth/auth.service';
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
-  sameSite: (process.env.NODE_ENV === 'production' ? 'none' : 'lax') as 'none' | 'lax',
+  sameSite: (process.env.NODE_ENV === 'production' ? 'none' : 'lax') as
+    | 'none'
+    | 'lax',
   maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
 };
 
@@ -66,7 +69,7 @@ export class AuthentificationController {
     return { message: 'Signed out' };
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(SoftAuthGuard)
   @Get('/whoami')
   whoAmI(@CurrentUser() user: User) {
     return user;

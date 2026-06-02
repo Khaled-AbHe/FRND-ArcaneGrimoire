@@ -29,7 +29,7 @@ export function SignUpPage() {
 
     try {
       await signUp.mutateAsync({ username, email, password });
-      navigate("/grimoire");
+      navigate("/grimoire", { replace: true });
     } catch (err: unknown) {
       const msg = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
       setError(Array.isArray(msg) ? msg.join(" · ") : (msg ?? "Sign up failed."));

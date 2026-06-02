@@ -46,7 +46,7 @@ export function UserSettingsPage() {
 
   async function handleSignOut() {
     await signOut.mutateAsync();
-    navigate("/signin");
+    navigate("/signin", { replace: true });
   }
 
   return (

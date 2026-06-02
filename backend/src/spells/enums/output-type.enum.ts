@@ -23,5 +23,5 @@ export enum OutputType {
   Mystical = 'Mystical', // For Spirit Guardians
   TemporaryHP = 'Temporary HP',
   Healing = 'Healing',
-  AdditionalBeast = 'Additional Beast',
+  Misc = 'Miscellaneous',
 }

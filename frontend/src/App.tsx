@@ -28,7 +28,7 @@ export default function App() {
         }
       />
 
-      <Route path="*" element={<Navigate to="/signin" replace />} />
+      <Route path="*" element={<Navigate to="/grimoire" replace />} />
     </Routes>
   );
 }

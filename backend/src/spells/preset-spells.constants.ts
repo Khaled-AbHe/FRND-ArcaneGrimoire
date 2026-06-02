@@ -170,7 +170,20 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true },
     spellType: { kind: 'utility' },
     outputType: {
-      kind: 'utility',
+      kind: 'cantrip',
+      dice: [
+        {
+          count: 1,
+          die: DiceType.D4,
+          type: OutputType.Misc,
+        },
+      ],
+      scaling: [
+        {
+          characterLevel: 1,
+          diceCount: 1,
+        },
+      ],
     },
     notes:
       'You touch a willing creature and choose a skill. Until the spell ends, the creature adds 1d4 to any ability check using the chosen skill.',
@@ -607,19 +620,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     components: { verbal: true, somatic: true, material: 'a morsel of food' },
     spellType: { kind: 'save', saveAbility: SaveAbility.Wisdom },
     outputType: {
-      kind: 'leveled',
-
-      upcast: {
-        dice: [
-          {
-            count: 1,
-            die: DiceType.Target,
-            type: OutputType.AdditionalBeast,
-            everyNLevels: 1,
-            aboveLevel: 1,
-          },
-        ],
-      },
+      kind: 'utility',
     },
     notes:
       'Target a Beast that you can see within range. The target must succeed on a Wisdom saving throw or have the Charmed condition for the duration. If you or one of your allies deals damage to the target, the spell ends.\n\nUsing a Higher-Level Spell Slot. You can target one additional Beast for each spell slot level above 1.',
@@ -733,7 +734,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
       },
     },
     notes:
-      "You hurl an orb of energy at a target within range. Choose Acid, Cold, Fire, Lightning, Poison, or Thunder for the type of orb you create, and then make a ranged spell attack against the target. On a hit, the target takes 3d8 damage of the chosen type.\n\nIf you roll the same number on two or more of the d8s, the orb leaps to a different target of your choice within 30 feet of the target. Make an attack roll against the new target, and make a new damage roll. The orb can't leap again unless you cast the spell with a level 2+ spell slot.\n\nUsing a Higher-Level Spell Slot. The damage increases by 1d8 for each spell slot level above 1. The orb can leap a maximum number of times equal to the level of the slot expended, and a creature can be targeted only once by each casting of this spell.",
+      "You hurl an orb of energy at a target within range. Choose Acid, Cold, Fire, Lightning, Poison, or Thunder for the type of orb you create, and then make a ranged spell attack against the target. On a hit, the target takes 3d8 damage of the chosen type.\n\nIf you roll the same number on two or more of the d8s, the orb leaps to a different target of your choice within 30 feet of the target. Make an attack roll against the new target, and make a new damage roll. The orb can't leap again unless you cast the spell with a level 2+ spell slot.\n\nUsing a **Higher-Level Spell Slot.** The damage increases by 1d8 for each spell slot level above 1. The orb can leap a maximum number of times equal to the level of the slot expended, and a creature can be targeted only once by each casting of this spell.",
   },
   {
     name: 'Color Spray',
@@ -767,7 +768,7 @@ export const PRESET_SPELLS: CreateSpellDto[] = [
     spellType: { kind: 'save', saveAbility: SaveAbility.Wisdom },
     outputType: { kind: 'utility' },
     notes:
-      "You speak a one-word command to a creature you can see within range. The target must succeed on a Wisdom saving throw or follow the command on its next turn. Choose the command from these options:\n\nApproach. The target moves toward you by the shortest and most direct route, ending its turn if it moves within 5 feet of you.\n\nDrop. The target drops whatever it is holding and then ends its turn.\n\nFlee. The target spends its turn moving away from you by the fastest available means.\n\nGrovel. The target has the Prone condition and then ends its turn.\n\nHalt. On its turn, the target doesn't move and takes no action or Bonus Action.\n\nUsing a Higher-Level Spell Slot. You can affect one additional creature for each spell slot level above 1.",
+      "You speak a one-word command to a creature you can see within range. The target must succeed on a Wisdom saving throw or follow the command on its next turn. Choose the command from these options:\n\n**Approach.** The target moves toward you by the shortest and most direct route, ending its turn if it moves within 5 feet of you.\n\n**Drop.** The target drops whatever it is holding and then ends its turn.\n\n**Flee.** The target spends its turn moving away from you by the fastest available means.\n\n**Grovel.** The target has the Prone condition and then ends its turn.\n\n**Halt.** On its turn, the target doesn't move and takes no action or Bonus Action.\n\nUsing a Higher-Level Spell Slot. You can affect one additional creature for each spell slot level above 1.",
   },
   {
     name: 'Comprehend Languages',
