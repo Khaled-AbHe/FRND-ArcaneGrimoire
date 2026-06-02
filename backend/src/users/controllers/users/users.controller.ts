@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Patch,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { CurrentUser } from '../../../currentUser/decorators/current-user.decorator';
@@ -14,13 +15,25 @@ import { AuthGuard } from '../../../currentUser/guards/auth.guard';
 import { Serialize } from '../../../interceptors/serialize.interceptor';
 import { UpdateUserDto } from '../../dtos/update-user.dto';
 import { UserDto } from '../../dtos/user.dto';
-import { User } from '../../entities/user.entity';
 import { UsersService } from '../../services/users/users.service';
+import type { User } from '../../../db/schema';
 
 @Controller('users')
 @UseGuards(AuthGuard)
 export class UsersController {
   constructor(private usersService: UsersService) {}
+
+  // Get own profile
+  @Get('/me')
+  getMe(@CurrentUser() currentUser: User) {
+    return currentUser;
+  }
+
+  // Update own profile — no ID needed, uses session user
+  @Put('/me')
+  updateMe(@CurrentUser() currentUser: User, @Body() body: UpdateUserDto) {
+    return this.usersService.updateUser(currentUser, currentUser.userId, body);
+  }
 
   // Only the owner or an admin may update a user
   @Patch('/:id')

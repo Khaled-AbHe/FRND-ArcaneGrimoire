@@ -16,7 +16,10 @@ import type {
 import { QueryClient } from "@tanstack/react-query";
 import { AUTH_KEY } from "../hooks/auth/useCurrentUser";
 
-const http = axios.create({ baseURL: "/api", withCredentials: true });
+const http = axios.create({
+  baseURL: import.meta.env.VITE_API_URL ?? "/api",
+  withCredentials: true,
+});
 
 // ---
 
@@ -43,6 +46,9 @@ export const authApi = {
   signOut: () => http.post("/auth/signout"),
 
   whoAmI: () => http.get<User>("/auth/whoami").then((r) => r.data),
+
+  changePassword: (userId: number, password: string) =>
+    http.patch(`/auth/${userId}/changePassword`, { password }).then((r) => r.data),
 };
 
 // ── Characters ────────────────────────────────────────────────────────────────

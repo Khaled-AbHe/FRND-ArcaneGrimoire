@@ -52,7 +52,7 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
 
   useEffect(() => {
     if (editing) {
-      const { id: _id, createdAt: _c, updatedAt: _u, ...dto } = editing;
+      const { id: _id, createdAt: _c, updatedAt: _u, userId: _uid, ...dto } = editing;
       setForm(dto);
     } else {
       setForm(EMPTY);
@@ -297,7 +297,7 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
             ))}
             <input
               className="input"
-              placeholder="Material (Blank if none)"
+              placeholder="Material (leave blank if none)"
               value={form.components.material ?? ""}
               onChange={(e) => setComp("material", e.target.value || undefined)}
             />

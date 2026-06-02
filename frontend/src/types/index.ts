@@ -20,6 +20,10 @@ export interface SignInDto {
   password: string;
 }
 
+export interface ChangePasswordDto {
+  password: string;
+}
+
 // ── Spell sub-types ───────────────────────────────────────────────────────────
 
 export type SpellLevel =
@@ -133,6 +137,7 @@ export type OutputTypeShape =
 // ── Spell ─────────────────────────────────────────────────────────────────────
 
 export interface Spell {
+  userId?: number;
   id: number;
   name: string;
   level: SpellLevel;

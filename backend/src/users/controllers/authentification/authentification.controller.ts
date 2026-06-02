@@ -14,7 +14,7 @@ import { AuthGuard } from '../../../currentUser/guards/auth.guard';
 import { ChangePasswordDto } from '../../dtos/change-password.dto';
 import { CreateUserDto } from '../../dtos/create-user.dto';
 import { SignInUserDto } from '../../dtos/signin-user.dto';
-import { User } from '../../entities/user.entity';
+import type { User } from '../../../db/schema';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Controller('auth')

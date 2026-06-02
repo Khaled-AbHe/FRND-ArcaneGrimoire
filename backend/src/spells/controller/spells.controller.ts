@@ -19,7 +19,7 @@ import { SpellsService } from '../service/spells.service';
 import { AuthGuard } from '../../currentUser/guards/auth.guard';
 import { AdminGuard } from '../../currentUser/guards/admin.guard';
 import { CurrentUser } from '../../currentUser/decorators/current-user.decorator';
-import { User } from '../../users/entities/user.entity';
+import type { User } from '../../db/schema';
 import { UsersService } from '../../users/services/users/users.service';
 
 @Controller('spells')

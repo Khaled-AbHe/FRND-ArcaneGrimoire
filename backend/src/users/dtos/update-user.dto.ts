@@ -1,29 +1,23 @@
-import { Type } from 'class-transformer';
-import {
-  IsEmail,
-  IsString,
-  IsOptional,
-  IsArray,
-  ValidateNested,
-} from 'class-validator';
-import { Character } from '../../characters/entity/character.entity';
+import { IsEmail, IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class UpdateUserDto {
   @IsOptional()
   @IsString()
-  username: string;
+  username?: string;
 
   @IsOptional()
   @IsEmail()
-  email: string;
+  email?: string;
 
   @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 
   @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => Character)
-  characters?: Character[];
+  @IsBoolean()
+  enableHighMagic?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  darkMode?: boolean;
 }

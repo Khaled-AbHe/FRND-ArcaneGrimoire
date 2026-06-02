@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { CurrentUser } from '../../currentUser/decorators/current-user.decorator';
 import { AuthGuard } from '../../currentUser/guards/auth.guard';
-import { User } from '../../users/entities/user.entity';
+import type { User } from '../../db/schema';
 import { CreateCharacterDto } from '../dtos/create-character.dto';
 import { DuplicateCharacterDto } from '../dtos/duplicate-character.dto';
 import { UpdateCharacterDto } from '../dtos/update-character.dto';

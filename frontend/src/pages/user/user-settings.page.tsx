@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../hooks/auth/useCurrentUser";
 import { useSignOut } from "../../hooks/auth/useSignOut";
 import { useUpdateUser } from "../../hooks/user/useUpdateUser";
+import { useChangePassword } from "../../hooks/auth/useChangePassword";
 import { Modal } from "../../components/ui/Modal";
 import { PageShell } from "../../components/shells/page-shell.component";
 
@@ -10,6 +11,7 @@ export function UserSettingsPage() {
   const { data: user } = useCurrentUser();
   const signOut = useSignOut();
   const updateUser = useUpdateUser();
+  const changePassword = useChangePassword();
   const navigate = useNavigate();
 
   const [username, setUsername] = useState(user?.username ?? "");
@@ -36,7 +38,8 @@ export function UserSettingsPage() {
       setPasswordError("Password must be at least 6 characters.");
       return;
     }
-    await updateUser.mutateAsync({ password: newPassword });
+    if (!user) return;
+    await changePassword.mutateAsync({ userId: user.userId, password: newPassword });
     setNewPassword("");
     setConfirmPassword("");
   }
@@ -48,7 +51,7 @@ export function UserSettingsPage() {
 
   return (
     <PageShell>
-      <div className="mx-auto my-10 space-y-6 min-w-[40%] max-w-[80%] overflow-y-auto">
+      <div className="mx-auto my-10 space-y-6 min-w-[40%] max-w-[80%]">
         {/* Account info */}
         <section aria-labelledby="section-account">
           <h2
@@ -142,8 +145,22 @@ export function UserSettingsPage() {
                 {passwordError}
               </p>
             )}
-            <button type="submit" className="btn-primary text-sm" disabled={updateUser.isPending}>
-              Change Password
+            {changePassword.isSuccess && (
+              <p className="text-xs text-green-400" role="status">
+                Password changed.
+              </p>
+            )}
+            {changePassword.isError && (
+              <p className="text-xs text-red-400" role="alert">
+                Failed to change password.
+              </p>
+            )}
+            <button
+              type="submit"
+              className="btn-primary text-sm"
+              disabled={changePassword.isPending}
+            >
+              {changePassword.isPending ? "Saving…" : "Change Password"}
             </button>
           </form>
         </section>

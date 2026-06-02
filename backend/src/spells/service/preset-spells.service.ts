@@ -1,25 +1,23 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
-import { Spell } from '../entity/spell.entity';
+import { Inject, Injectable } from '@nestjs/common';
+import { DRIZZLE } from '../../db/db.module';
+import type { DrizzleClient } from '../../db/index';
+import { spells, User } from '../../db/schema';
 import { PRESET_SPELLS } from '../preset-spells.constants';
 
 @Injectable()
 export class PresetSpellsService {
-  constructor(
-    @InjectRepository(Spell) private spellsRepo: Repository<Spell>,
-  ) {}
+  constructor(@Inject(DRIZZLE) private db: DrizzleClient) {}
 
-  /**
-   * Seeds all preset spells into a newly created user's collection.
-   * Called once during signup — any presets added or changed after
-   * signup only affect future signups (or are pushed via admin routes).
-   */
   async seedForNewUser(user: User): Promise<void> {
-    const spells = PRESET_SPELLS.map((dto) =>
-      this.spellsRepo.create({ ...dto, user }),
-    );
-    await this.spellsRepo.save(spells);
+    const rows = PRESET_SPELLS.map((dto) => ({
+      ...dto,
+      components: JSON.stringify(
+        dto.components ?? { verbal: false, somatic: false },
+      ),
+      spellType: JSON.stringify(dto.spellType ?? { kind: 'utility' }),
+      outputType: JSON.stringify(dto.outputType ?? { kind: 'utility' }),
+      userId: user.userId,
+    }));
+    await this.db.insert(spells).values(rows as any);
   }
 }

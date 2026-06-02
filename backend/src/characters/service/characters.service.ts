@@ -1,87 +1,109 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { asc, eq } from 'drizzle-orm';
+import { DRIZZLE } from '../../db/db.module';
+import type { DrizzleClient } from '../../db/index';
+import { characters, Character, User } from '../../db/schema';
 import {
   attackBonus,
   cantripTierForLevel,
   spellSaveDC,
 } from '../../constants/game.constants';
-import { User } from '../../users/entities/user.entity';
 import { CreateCharacterDto } from '../dtos/create-character.dto';
 import { UpdateCharacterDto } from '../dtos/update-character.dto';
-import { Character } from '../entity/character.entity';
+
+function parseCharacter(row: Character) {
+  const parse = (v: unknown) => {
+    if (typeof v === 'string') {
+      try { return JSON.parse(v); } catch { return v; }
+    }
+    return v;
+  };
+  return {
+    ...row,
+    levels: parse(row.levels),
+    prepared: parse(row.prepared),
+    pact: parse(row.pact),
+    globals: parse(row.globals),
+  };
+}
 
 @Injectable()
 export class CharactersService {
-  constructor(
-    @InjectRepository(Character) private repo: Repository<Character>,
-  ) {}
+  constructor(@Inject(DRIZZLE) private db: DrizzleClient) {}
 
-  async findAll(userId: number): Promise<Character[]> {
-    return await this.repo.find({
-      where: { user: { userId } },
-      order: { createdAt: 'ASC' },
-    });
+  async findAll(userId: number) {
+    const rows = await this.db
+      .select()
+      .from(characters)
+      .where(eq(characters.userId, userId))
+      .orderBy(asc(characters.createdAt));
+    return rows.map(parseCharacter);
   }
 
-  async findCharacterById(id: number, userId: number): Promise<Character> {
-    const char = await this.repo.findOne({
-      where: { id, user: { userId } },
-    });
-    if (!char) {
+  async findCharacterById(id: number, userId: number) {
+    const result = await this.db
+      .select()
+      .from(characters)
+      .where(eq(characters.id, id));
+    const char = result[0];
+    if (!char || char.userId !== userId) {
       throw new NotFoundException(`Character ${id} not found`);
     }
-    return char;
+    return parseCharacter(char);
   }
 
-  async create(dto: CreateCharacterDto, user: User): Promise<Character> {
-    return await this.repo.save(this.repo.create({ ...dto, user }));
+  async create(dto: CreateCharacterDto, user: User) {
+    const result = await this.db
+      .insert(characters)
+      .values({
+        name: dto.name,
+        levels: JSON.stringify((dto as any).levels ?? []),
+        prepared: JSON.stringify((dto as any).prepared ?? []),
+        pact: JSON.stringify((dto as any).pact ?? {}),
+        globals: JSON.stringify((dto as any).globals ?? {}),
+        userId: user.userId,
+      })
+      .returning();
+    return parseCharacter(result[0]);
   }
 
-  async update(
-    id: number,
-    dto: UpdateCharacterDto,
-    userId: number,
-  ): Promise<Character> {
-    const char = await this.findCharacterById(id, userId);
-    Object.assign(char, dto);
-    return await this.repo.save(char);
+  async update(id: number, dto: UpdateCharacterDto, userId: number) {
+    await this.findCharacterById(id, userId);
+    const patch: Record<string, unknown> = { updatedAt: new Date().toISOString() };
+    for (const [k, v] of Object.entries(dto)) {
+      patch[k] =
+        typeof v === 'object' && v !== null ? JSON.stringify(v) : v;
+    }
+    const result = await this.db
+      .update(characters)
+      .set(patch as any)
+      .where(eq(characters.id, id))
+      .returning();
+    return parseCharacter(result[0]);
   }
 
   async remove(id: number, userId: number): Promise<void> {
-    const char = await this.findCharacterById(id, userId);
-    await this.repo.remove(char);
+    await this.findCharacterById(id, userId);
+    await this.db.delete(characters).where(eq(characters.id, id));
   }
 
-  async duplicate(
-    srcId: number,
-    destName: string,
-    userId: number,
-    user: User,
-  ): Promise<Character> {
+  async duplicate(srcId: number, destName: string, userId: number, user: User) {
     const src = await this.findCharacterById(srcId, userId);
-    const copy = this.repo.create({
-      name: destName,
-      levels: src.levels,
-      prepared: src.prepared,
-      pact: src.pact,
-      globals: src.globals,
-      user,
-    });
-    return await this.repo.save(copy);
+    const result = await this.db
+      .insert(characters)
+      .values({
+        name: destName,
+        levels: JSON.stringify(src.levels),
+        prepared: JSON.stringify(src.prepared),
+        pact: JSON.stringify(src.pact),
+        globals: JSON.stringify(src.globals),
+        userId: user.userId,
+      })
+      .returning();
+    return parseCharacter(result[0]);
   }
 
-  // ── Computed stats ──────────────────────────────────────────────────────────
-
-  async getComputedStats(
-    id: number,
-    userId: number,
-  ): Promise<{
-    spellSaveDC: number;
-    attackBonus: number;
-    cantripTier: number;
-    spellMod: number;
-  }> {
+  async getComputedStats(id: number, userId: number) {
     const char = await this.findCharacterById(id, userId);
     const globals = char.globals as {
       mod?: number;
@@ -101,59 +123,45 @@ export class CharactersService {
     };
   }
 
-  // ── Rest endpoints ──────────────────────────────────────────────────────────
-
-  /**
-   * Short Rest — restores pact slots only.
-   * Resets pact.used to 0; all regular spell level slots are untouched.
-   */
-  async shortRest(id: number, userId: number): Promise<Character> {
+  async shortRest(id: number, userId: number) {
     const char = await this.findCharacterById(id, userId);
-
-    const pact = char.pact as {
-      enabled?: boolean;
-      slots?: number;
-      slotLevel?: number;
-      used?: number;
-      arcana?: unknown[];
-    };
-
-    char.pact = { ...pact, used: 0 };
-
-    return await this.repo.save(char);
+    const pact = char.pact as { used?: number; [k: string]: unknown };
+    const result = await this.db
+      .update(characters)
+      .set({ pact: JSON.stringify({ ...pact, used: 0 }), updatedAt: new Date().toISOString() })
+      .where(eq(characters.id, id))
+      .returning();
+    return parseCharacter(result[0]);
   }
 
-  /**
-   * Long Rest — restores all spell slot levels and resets all Mystic Arcanum uses.
-   * Sets used = 0 on every level row, resets pact.used = 0,
-   * and sets used = false on every arcana entry.
-   */
-  async longRest(id: number, userId: number): Promise<Character> {
+  async longRest(id: number, userId: number) {
     const char = await this.findCharacterById(id, userId);
 
-    const levels =
-      (char.levels as Array<{
-        id: string;
-        label: string;
-        total: number;
-        used: number;
-      }>) ?? [];
-    char.levels = levels.map((row) => ({ ...row, used: 0 }));
+    const levels = (
+      char.levels as Array<{ id: string; label: string; total: number; used: number }>
+    ).map((row) => ({ ...row, used: 0 }));
 
     const pact = char.pact as {
-      enabled?: boolean;
-      slots?: number;
-      slotLevel?: number;
       used?: number;
       arcana?: Array<{ level: number; spellId: string | null; used: boolean }>;
+      [k: string]: unknown;
     };
 
-    char.pact = {
+    const updatedPact = {
       ...pact,
       used: 0,
       arcana: (pact?.arcana ?? []).map((a) => ({ ...a, used: false })),
     };
 
-    return await this.repo.save(char);
+    const result = await this.db
+      .update(characters)
+      .set({
+        levels: JSON.stringify(levels),
+        pact: JSON.stringify(updatedPact),
+        updatedAt: new Date().toISOString(),
+      })
+      .where(eq(characters.id, id))
+      .returning();
+    return parseCharacter(result[0]);
   }
 }
