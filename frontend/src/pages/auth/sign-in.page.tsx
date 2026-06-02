@@ -8,7 +8,7 @@ export function SignInPage() {
   const signIn = useSignIn();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? "/";
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? "/grimoire";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

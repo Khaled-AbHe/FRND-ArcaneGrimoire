@@ -17,7 +17,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { AUTH_KEY } from "../hooks/auth/useCurrentUser";
 
 const http = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? "/api",
+  baseURL: import.meta.env.VITE_API_URL ?? "http://localhost:3000/api",
   withCredentials: true, // sends the httpOnly JWT cookie automatically
 });
 

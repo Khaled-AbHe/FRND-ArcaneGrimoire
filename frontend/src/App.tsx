@@ -12,7 +12,7 @@ export default function App() {
       <Route path="/signup" element={<SignUpPage />} />
 
       <Route
-        path="/"
+        path="/grimoire"
         element={
           <RequireAuth>
             <UserLayout />
@@ -28,7 +28,7 @@ export default function App() {
         }
       />
 
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/signin" replace />} />
     </Routes>
   );
 }

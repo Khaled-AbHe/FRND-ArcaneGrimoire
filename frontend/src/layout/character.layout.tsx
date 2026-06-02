@@ -79,7 +79,7 @@ export function CharacterLayout() {
 
   return (
     <PageShell>
-      <Header character={localChar} onBack={() => navigate("/")} />
+      <Header character={localChar} onBack={() => navigate("/grimoire")} />
       <Tabs active={tab} tabs={TABS} onChange={setTab} />
 
       <main className="flex flex-col flex-1 min-h-0 overflow-y-auto">
