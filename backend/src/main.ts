@@ -14,6 +14,10 @@ async function bootstrap() {
   app.use(
     cookieSession({
       keys: [process.env.SESSION_SECRET ?? 'mySecretKey'],
+      // Secure must be true on Vercel (HTTPS), but false for local development
+      secure: process.env.NODE_ENV === 'production',
+      // 'none' allows cross-site cookies between your frontend and backend domains
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     }),
   );
 
