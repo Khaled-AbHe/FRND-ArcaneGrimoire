@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { CurrentUser } from '../../../currentUser/decorators/current-user.decorator';
-import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from '../../../currentUser/guards/auth.guard';
 import { ChangePasswordDto } from '../../dtos/change-password.dto';
 import { CreateUserDto } from '../../dtos/create-user.dto';
 import { SignInUserDto } from '../../dtos/signin-user.dto';
@@ -59,20 +59,20 @@ export class AuthentificationController {
     return user;
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   @Post('/signout')
   signOut(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('token', COOKIE_OPTIONS);
     return { message: 'Signed out' };
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   @Get('/whoami')
   whoAmI(@CurrentUser() user: User) {
     return user;
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard)
   @Patch('/:id/changePassword')
   changePassword(
     @CurrentUser() user: User,
