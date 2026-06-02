@@ -18,7 +18,7 @@ import { AUTH_KEY } from "../hooks/auth/useCurrentUser";
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? "/api",
-  withCredentials: true,
+  withCredentials: true, // sends the httpOnly JWT cookie automatically
 });
 
 // ---

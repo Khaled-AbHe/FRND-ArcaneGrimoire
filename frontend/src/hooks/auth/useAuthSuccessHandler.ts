@@ -4,7 +4,7 @@ import type { User } from "../../types";
 
 /**
  * Returns an onSuccess handler shared by useSignIn and useSignUp.
- * Sets the auth cache and clears all stale session data.
+ * The server sets the httpOnly cookie — we just seed the React Query cache.
  */
 export function useAuthSuccessHandler() {
   const qc = useQueryClient();

@@ -6,8 +6,10 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { CurrentUser } from '../../../currentUser/decorators/current-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { ChangePasswordDto } from '../../dtos/change-password.dto';
@@ -16,29 +18,51 @@ import { SignInUserDto } from '../../dtos/signin-user.dto';
 import type { User } from '../../../db/schema';
 import { AuthService } from '../../services/auth/auth.service';
 
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: (process.env.NODE_ENV === 'production' ? 'none' : 'lax') as 'none' | 'lax',
+  maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+};
+
 @Controller('auth')
 export class AuthentificationController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  signUp(@Body() body: CreateUserDto) {
-    return this.authService.signUp(body);
+  async signUp(
+    @Body() body: CreateUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const user = await this.authService.signUp(body);
+    res.cookie('token', this.authService.createToken(user), COOKIE_OPTIONS);
+    return user;
   }
 
   @Post('/signupadmin')
-  signUpAdmin(@Body() body: CreateUserDto) {
-    return this.authService.signUpAdmin(body);
+  async signUpAdmin(
+    @Body() body: CreateUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const user = await this.authService.signUpAdmin(body);
+    res.cookie('token', this.authService.createToken(user), COOKIE_OPTIONS);
+    return user;
   }
 
   @Post('/signin')
-  signIn(@Body() body: SignInUserDto) {
-    return this.authService.signIn(body.email, body.password);
+  async signIn(
+    @Body() body: SignInUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const user = await this.authService.signIn(body.email, body.password);
+    res.cookie('token', this.authService.createToken(user), COOKIE_OPTIONS);
+    return user;
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post('/signout')
-  signOut() {
-    // JWT is stateless — client discards the token
+  signOut(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('token', COOKIE_OPTIONS);
     return { message: 'Signed out' };
   }
 

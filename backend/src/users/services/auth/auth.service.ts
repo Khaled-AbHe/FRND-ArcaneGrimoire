@@ -22,7 +22,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(dto: CreateUserDto): Promise<{ access_token: string }> {
+  async signUp(dto: CreateUserDto): Promise<User> {
     const existing = await this.usersService.findUserByEmail(dto.email);
     if (existing) throw new BadRequestException('Email already taken');
 
@@ -35,10 +35,10 @@ export class AuthService {
     });
 
     await this.presetSpellsService.seedForNewUser(user);
-    return this.createToken(user);
+    return user;
   }
 
-  async signUpAdmin(dto: CreateUserDto): Promise<{ access_token: string }> {
+  async signUpAdmin(dto: CreateUserDto): Promise<User> {
     const existing = await this.usersService.findUserByEmail(dto.email);
     if (existing) throw new BadRequestException('Email already taken');
 
@@ -51,10 +51,10 @@ export class AuthService {
     });
 
     await this.presetSpellsService.seedForNewUser(user);
-    return this.createToken(user);
+    return user;
   }
 
-  async signIn(email: string, password: string): Promise<{ access_token: string }> {
+  async signIn(email: string, password: string): Promise<User> {
     const user = await this.usersService.findUserByEmail(email);
     if (!user) throw new NotFoundException('User not found');
 
@@ -64,7 +64,7 @@ export class AuthService {
       throw new BadRequestException('Incorrect Password');
     }
 
-    return this.createToken(user);
+    return user;
   }
 
   async changePassword(
@@ -84,8 +84,12 @@ export class AuthService {
     return salt + '.' + hash.toString('hex');
   }
 
-  private createToken(user: User): { access_token: string } {
-    const payload = { sub: user.userId, email: user.email, userType: user.userType };
-    return { access_token: this.jwtService.sign(payload) };
+  createToken(user: User): string {
+    const payload = {
+      sub: user.userId,
+      email: user.email,
+      userType: user.userType,
+    };
+    return this.jwtService.sign(payload);
   }
 }

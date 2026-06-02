@@ -7,6 +7,7 @@ export function useSignOut() {
   return useMutation({
     mutationFn: () => authApi.signOut(),
     onSuccess: () => {
+      // Server clears the httpOnly cookie — we just clear the React Query cache
       qc.setQueryData(AUTH_KEY, null);
       qc.clear();
     },
