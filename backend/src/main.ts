@@ -32,27 +32,10 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   await app.init();
-
-  return server;
 }
 
-// Serverless handler for Vercel
-let appPromise: Promise<express.Express>;
+// Bootstrap immediately for Vercel's runtime environment
+bootstrap();
 
-export default async function handler(req: any, res: any) {
-  if (!appPromise) appPromise = bootstrap();
-  const app = await appPromise;
-  app(req, res);
-}
-
-// Local dev — only runs when executed directly (not imported by Vercel)
-if (require.main === module) {
-  bootstrap().then((app) => {
-    const port = process.env.PORT ?? 3001;
-    app.listen(port, () => {
-      console.log(
-        `Spell Slot Manager API running on http://localhost:${port}/api`,
-      );
-    });
-  });
-}
+// Export the Express server directly as the default export
+export default server;
