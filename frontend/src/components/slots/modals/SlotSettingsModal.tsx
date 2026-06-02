@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal } from "../../ui/Modal";
 import type { LevelRow } from "../../../types";
 
@@ -42,6 +42,16 @@ export function SlotSettingsModal({
     return map;
   });
 
+  useEffect(() => {
+    setTotals((prev) => {
+      const next = { ...prev };
+      levels.forEach((r) => {
+        next[levelNumFromRow(r)] = r.total;
+      });
+      return next;
+    });
+  }, [levels]);
+
   const enabledSet = new Set(levels.map(levelNumFromRow));
 
   const allLevels = highMagic
@@ -49,7 +59,7 @@ export function SlotSettingsModal({
     : ([...NORMAL_LEVELS] as number[]);
 
   function getTotal(levelNum: number): number {
-    return totals[levelNum] ?? 2;
+    return totals[levelNum] ?? 1;
   }
 
   function setTotal(levelNum: number, value: number) {

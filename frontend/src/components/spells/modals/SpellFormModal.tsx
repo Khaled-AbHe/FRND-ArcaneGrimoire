@@ -297,7 +297,7 @@ export function SpellFormModal({ open, onClose, editing }: SpellFormModalProps) 
             ))}
             <input
               className="input"
-              placeholder="Material (leave blank if none)"
+              placeholder="Material (Blank if none)"
               value={form.components.material ?? ""}
               onChange={(e) => setComp("material", e.target.value || undefined)}
             />
