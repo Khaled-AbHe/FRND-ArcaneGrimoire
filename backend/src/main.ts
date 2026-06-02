@@ -7,10 +7,10 @@ import cookieParser from 'cookie-parser';
 
 const server = express();
 
-async function bootstrap() {
+let isReady = false;
+const readyPromise: Promise<void> = (async () => {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
-  // Required to parse cookies so JwtStrategy can read the token
   app.use(cookieParser());
 
   app.enableCors({
@@ -28,8 +28,23 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
   await app.init();
+  isReady = true;
+})();
+
+// Vercel serverless handler — waits for bootstrap before handling requests
+export default async function handler(req: any, res: any) {
+  if (!isReady) await readyPromise;
+  server(req, res);
 }
 
-bootstrap();
-
-export default server;
+// Local dev
+if (require.main === module) {
+  readyPromise.then(() => {
+    const port = process.env.PORT ?? 3001;
+    server.listen(port, () => {
+      console.log(
+        `Spell Slot Manager API running on http://localhost:${port}/api`,
+      );
+    });
+  });
+}

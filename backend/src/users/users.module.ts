@@ -12,9 +12,11 @@ import { JwtStrategy } from '../currentUser/strategies/jwt.strategy';
   imports: [
     forwardRef(() => SpellsModule),
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET ?? 'fallback-secret',
-      signOptions: { expiresIn: '7d' },
+    JwtModule.registerAsync({
+      useFactory: () => ({
+        secret: process.env.JWT_SECRET ?? 'fallback-secret',
+        signOptions: { expiresIn: '7d' },
+      }),
     }),
   ],
   controllers: [UsersController, AuthentificationController],
