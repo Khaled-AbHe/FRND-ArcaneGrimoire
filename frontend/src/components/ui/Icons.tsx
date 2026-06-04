@@ -83,7 +83,15 @@ export function DuplicateIcon({ size = 14, className, style }: IconProps) {
       style={style}
       aria-hidden="true"
     >
-      <rect x="5" y="5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <rect
+        x="5"
+        y="5"
+        width="8"
+        height="8"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
       <path
         d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H11"
         stroke="currentColor"
@@ -203,7 +211,12 @@ export function BookIcon({ size = 16, className, style }: IconProps) {
         stroke="currentColor"
         strokeWidth="1.5"
       />
-      <path d="M6 5h4M6 7.5h3" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+      <path
+        d="M6 5h4M6 7.5h3"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -368,7 +381,12 @@ export function PlusIcon({ size = 14, className, style }: IconProps) {
       style={style}
       aria-hidden="true"
     >
-      <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+      <path
+        d="M8 3v10M3 8h10"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -384,8 +402,21 @@ export function TemplateIcon({ size = 14, className, style }: IconProps) {
       style={style}
       aria-hidden="true"
     >
-      <rect x="1.5" y="1.5" width="13" height="13" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M1.5 6h13M6 6v8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <rect
+        x="1.5"
+        y="1.5"
+        width="13"
+        height="13"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M1.5 6h13M6 6v8"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -423,7 +454,12 @@ export function ClockIcon() {
       aria-hidden="true"
     >
       <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M8 5v3l2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M8 5v3l2 2"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

@@ -25,19 +25,22 @@ export function SpellToolbar({
 }: SpellToolbarProps) {
   return (
     <div
-      className="w-full p-4 border-b space-y-2"
-      style={{ borderColor: "var(--border)", background: "var(--bg-secondary)" }}
+      className="w-full space-y-2 border-b p-4"
+      style={{
+        borderColor: "var(--border)",
+        background: "var(--bg-secondary)",
+      }}
     >
       <div className="flex justify-center gap-2">
         <input
-          className="input flex-1 max-w-[40%]"
+          className="input max-w-[40%] flex-1"
           placeholder="Search spells…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           aria-label="Search spells by name"
         />
         <select
-          className="select text-xs py-1"
+          className="select py-1 text-xs"
           style={{ width: "auto" }}
           value={filterLevel}
           onChange={(e) => setFilterLevel(e.target.value as SpellLevel | "")}
@@ -51,7 +54,7 @@ export function SpellToolbar({
           ))}
         </select>
         <select
-          className="select text-xs py-1"
+          className="select py-1 text-xs"
           style={{ width: "auto" }}
           value={filterSchool}
           onChange={(e) => setFilterSchool(e.target.value)}
@@ -64,7 +67,7 @@ export function SpellToolbar({
         </select>
         {setEditSpell && setFormOpen && (
           <button
-            className="btn-primary text-sm px-3 flex items-center gap-1.5 shrink-0"
+            className="btn-primary flex shrink-0 items-center gap-1.5 px-3 text-sm"
             onClick={() => {
               setEditSpell(null);
               setFormOpen(true);

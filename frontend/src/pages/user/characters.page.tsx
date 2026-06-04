@@ -11,10 +11,10 @@ export function CharactersPage() {
 
   return (
     <PageShell>
-      <div className="mx-auto my-12 space-y-6 min-w-[40%] max-w-[80%] overflow-y-auto">
+      <div className="mx-auto my-12 min-w-[40%] max-w-[80%] space-y-6 overflow-y-auto">
         {/* Title */}
         <div className="flex flex-row justify-between">
-          <p className="font-display text-2xl text-accent tracking-widest uppercase mb-1">
+          <p className="text-accent mb-1 font-display text-2xl uppercase tracking-widest">
             My Characters
           </p>
           <button
@@ -27,10 +27,13 @@ export function CharactersPage() {
           </button>
         </div>
 
-        <CharacterFormModal open={formOpen} onClose={() => setFormOpen(false)} />
+        <CharacterFormModal
+          open={formOpen}
+          onClose={() => setFormOpen(false)}
+        />
 
         {/* Body */}
-        <div className="w-full flex flex-col gap-4">
+        <div className="flex w-full flex-col gap-4">
           <div className="space-y-2">
             {/* Character list */}
             {isLoading ? (
@@ -38,13 +41,13 @@ export function CharactersPage() {
                 {[1, 2].map((i) => (
                   <div
                     key={i}
-                    className="card p-4 animate-shimmer"
+                    className="card animate-shimmer p-4"
                     style={{ height: 64, opacity: 0.4 }}
                   />
                 ))}
               </>
             ) : characters.length === 0 ? (
-              <div className="text-center py-8 text-muted">
+              <div className="text-muted py-8 text-center">
                 No characters yet — create one above.
               </div>
             ) : (

@@ -9,7 +9,13 @@ interface ModalProps {
   width?: string;
 }
 
-export function Modal({ open, onClose, title, children, width = "max-w-lg" }: ModalProps) {
+export function Modal({
+  open,
+  onClose,
+  title,
+  children,
+  width = "max-w-lg",
+}: ModalProps) {
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => {
@@ -33,23 +39,26 @@ export function Modal({ open, onClose, title, children, width = "max-w-lg" }: Mo
       aria-labelledby="modal-title"
     >
       <div
-        className={`card w-full ${width} max-h-[90vh] flex flex-col animate-fade-in`}
-        style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(251,191,36,0.1)" }}
+        className={`card w-full ${width} animate-fade-in flex max-h-[90vh] flex-col`}
+        style={{
+          boxShadow:
+            "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(251,191,36,0.1)",
+        }}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between px-5 py-4 border-b"
+          className="flex items-center justify-between border-b px-5 py-4"
           style={{ borderColor: "var(--border)" }}
         >
           <h2
             id="modal-title"
-            className="font-display text-base tracking-widest text-accent uppercase"
+            className="text-accent font-display text-base uppercase tracking-widest"
           >
             {title}
           </h2>
           <button
             onClick={onClose}
-            className="w-7 h-7 flex items-center justify-center rounded text-dim hover:text-primary transition-colors"
+            className="text-dim hover:text-primary flex h-7 w-7 items-center justify-center rounded transition-colors"
             style={{ color: "var(--text-muted)" }}
             aria-label="Close dialog"
           >
@@ -57,7 +66,7 @@ export function Modal({ open, onClose, title, children, width = "max-w-lg" }: Mo
           </button>
         </div>
         {/* Body */}
-        <div className="overflow-y-auto p-5 flex-1">{children}</div>
+        <div className="flex-1 overflow-y-auto p-5">{children}</div>
       </div>
     </div>
   );

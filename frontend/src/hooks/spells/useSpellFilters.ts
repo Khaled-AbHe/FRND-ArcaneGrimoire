@@ -13,7 +13,10 @@ interface UseSpellFiltersOptions {
  * Pass `preparedSet` to enable the showUnprepared toggle — the hook owns
  * that state internally so there's no circular reference at the call site.
  */
-export function useSpellFilters(spells: Spell[], options: UseSpellFiltersOptions = {}) {
+export function useSpellFilters(
+  spells: Spell[],
+  options: UseSpellFiltersOptions = {},
+) {
   const [search, setSearch] = useState("");
   const [filterLevel, setFilterLevel] = useState<SpellLevel | "">("");
   const [filterSchool, setFilterSchool] = useState("");
@@ -22,14 +25,26 @@ export function useSpellFilters(spells: Spell[], options: UseSpellFiltersOptions
   const filtered = useMemo(
     () =>
       spells.filter((spell) => {
-        if (!showUnprepared && options.preparedSet && !options.preparedSet.has(spell.id))
+        if (
+          !showUnprepared &&
+          options.preparedSet &&
+          !options.preparedSet.has(spell.id)
+        )
           return false;
-        if (search && !spell.name.toLowerCase().includes(search.toLowerCase())) return false;
+        if (search && !spell.name.toLowerCase().includes(search.toLowerCase()))
+          return false;
         if (filterLevel && spell.level !== filterLevel) return false;
         if (filterSchool && spell.school !== filterSchool) return false;
         return true;
       }),
-    [spells, options.preparedSet, showUnprepared, search, filterLevel, filterSchool],
+    [
+      spells,
+      options.preparedSet,
+      showUnprepared,
+      search,
+      filterLevel,
+      filterSchool,
+    ],
   );
 
   const hasFilters = Boolean(search || filterLevel || filterSchool);

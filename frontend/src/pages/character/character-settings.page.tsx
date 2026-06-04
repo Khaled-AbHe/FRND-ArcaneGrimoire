@@ -30,9 +30,17 @@ export function CharacterSettingsPage({
     setNameInput(character.name);
   }, [character.name]);
 
-  const globals = character.globals ?? { mod: 0, prof: 2, charLevel: 1, highMagic: false };
+  const globals = character.globals ?? {
+    mod: 0,
+    prof: 2,
+    charLevel: 1,
+    highMagic: false,
+  };
 
-  function setGlobal<K extends keyof CharacterGlobals>(key: K, value: CharacterGlobals[K]) {
+  function setGlobal<K extends keyof CharacterGlobals>(
+    key: K,
+    value: CharacterGlobals[K],
+  ) {
     onUpdateCharacter({ globals: { ...globals, [key]: value } });
   }
 
@@ -68,12 +76,12 @@ export function CharacterSettingsPage({
 
   return (
     <PageShell>
-      <div className="mx-auto my-10 space-y-6 min-w-[40%] max-w-[90%] overflow-y-auto">
+      <div className="mx-auto my-10 min-w-[40%] max-w-[90%] space-y-6 overflow-y-auto">
         {/* Character name */}
         <section aria-labelledby="section-name">
           <h2
             id="section-name"
-            className="font-display text-xs uppercase tracking-widest text-accent mb-3 m-auto"
+            className="text-accent m-auto mb-3 font-display text-xs uppercase tracking-widest"
           >
             Character
           </h2>
@@ -100,11 +108,14 @@ export function CharacterSettingsPage({
                 </button>
               </div>
             ) : (
-              <div className="flex items-center justify-between gap-5 ">
-                <span className="font-display text-base text-accent tracking-wide">
+              <div className="flex items-center justify-between gap-5">
+                <span className="text-accent font-display text-base tracking-wide">
                   {character.name}
                 </span>
-                <button className="btn-ghost text-xs px-3" onClick={() => setRenaming(true)}>
+                <button
+                  className="btn-ghost px-3 text-xs"
+                  onClick={() => setRenaming(true)}
+                >
                   Rename
                 </button>
               </div>
@@ -116,49 +127,49 @@ export function CharacterSettingsPage({
         <section aria-labelledby="section-spellcasting">
           <h2
             id="section-spellcasting"
-            className="font-display text-xs uppercase tracking-widest text-accent mb-3 m-auto"
+            className="text-accent m-auto mb-3 font-display text-xs uppercase tracking-widest"
           >
             Statistics
           </h2>
-          <div className="card p-4 space-y-4">
+          <div className="card space-y-4 p-4">
             <div className="grid grid-cols-2 gap-5">
-              <div className="flex flex-col h-fit gap-5">
-                <div className="flex flex-col items-center w-full">
+              <div className="flex h-fit flex-col gap-5">
+                <div className="flex w-full flex-col items-center">
                   <label htmlFor="spell-mod" className="label">
                     Spellcasting Modifier
                   </label>
                   <input
                     id="spell-mod"
                     type="number"
-                    className="text-2xl text-center font-display card w-full text-accent rounded"
+                    className="card text-accent w-full rounded text-center font-display text-2xl"
                     min={-5}
                     max={10}
                     value={globals.mod}
                     onChange={(e) => setGlobal("mod", +e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col items-center w-full">
+                <div className="flex w-full flex-col items-center">
                   <label htmlFor="prof-bonus" className="label">
                     Proficiency Bonus
                   </label>
                   <input
                     id="prof-bonus"
                     type="number"
-                    className="text-2xl text-center font-display card w-full text-accent rounded"
+                    className="card text-accent w-full rounded text-center font-display text-2xl"
                     min={2}
                     max={9}
                     value={globals.prof}
                     onChange={(e) => setGlobal("prof", +e.target.value)}
                   />
                 </div>
-                <div className="flex flex-col items-center w-full">
+                <div className="flex w-full flex-col items-center">
                   <label htmlFor="char-level" className="label">
                     Character Level (1-20)
                   </label>
                   <input
                     id="char-level"
                     type="number"
-                    className="text-2xl text-center font-display card w-full text-accent rounded"
+                    className="card text-accent w-full rounded text-center font-display text-2xl"
                     min={1}
                     max={20}
                     value={globals.charLevel}
@@ -167,22 +178,22 @@ export function CharacterSettingsPage({
                 </div>
               </div>
 
-              <div className="flex flex-col h-[100%] gap-5 justify-end">
-                <div className="flex flex-col items-center w-full justify-center">
+              <div className="flex h-[100%] flex-col justify-end gap-5">
+                <div className="flex w-full flex-col items-center justify-center">
                   <div className="label">Spell Save DC</div>
-                  <div className="text-2xl flex justify-center font-display card w-full text-accent rounded">
+                  <div className="card text-accent flex w-full justify-center rounded font-display text-2xl">
                     {stats.spellSaveDC}
                   </div>
                 </div>
-                <div className="flex flex-col items-center w-full">
+                <div className="flex w-full flex-col items-center">
                   <div className="label">Spell Attack Bonus</div>
-                  <div className="text-2xl flex justify-center font-display card w-full text-accent rounded">
+                  <div className="card text-accent flex w-full justify-center rounded font-display text-2xl">
                     {fmtBonus(stats.attackBonus).replace(" ", "")}
                   </div>
                 </div>
-                <div className="flex flex-col items-center w-full">
+                <div className="flex w-full flex-col items-center">
                   <div className="label">Cantrip Tier (Dice/Projectiles)</div>
-                  <div className="text-2xl flex justify-center font-display card w-full text-accent rounded">
+                  <div className="card text-accent flex w-full justify-center rounded font-display text-2xl">
                     {stats.cantripTier}
                   </div>
                 </div>
@@ -195,36 +206,52 @@ export function CharacterSettingsPage({
         <section aria-labelledby="section-danger">
           <h2
             id="section-danger"
-            className="font-display text-xs uppercase tracking-widest mb-3 m-auto"
+            className="m-auto mb-3 font-display text-xs uppercase tracking-widest"
             style={{ color: "#ef4444" }}
           >
             Danger Zone
           </h2>
-          <div className="card p-4 space-y-3" style={{ borderColor: "rgba(239,68,68,0.2)" }}>
+          <div
+            className="card space-y-3 p-4"
+            style={{ borderColor: "rgba(239,68,68,0.2)" }}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+                <div
+                  className="text-sm"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   Clear Character Data
                 </div>
-                <div className="text-xs text-muted">Reset all slots, pact, and prepared spells</div>
+                <div className="text-muted text-xs">
+                  Reset all slots, pact, and prepared spells
+                </div>
               </div>
               <button
-                className="flex btn-danger text-xs w-[20%] justify-center"
+                className="btn-danger flex w-[20%] justify-center text-xs"
                 onClick={() => setClearConfirmOpen(true)}
               >
                 Clear
               </button>
             </div>
-            <div className="border-t" style={{ borderColor: "rgba(239,68,68,0.15)" }} />
+            <div
+              className="border-t"
+              style={{ borderColor: "rgba(239,68,68,0.15)" }}
+            />
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+                <div
+                  className="text-sm"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   Delete Character
                 </div>
-                <div className="text-xs text-muted">Permanently removes this character</div>
+                <div className="text-muted text-xs">
+                  Permanently removes this character
+                </div>
               </div>
               <button
-                className="flex btn-danger text-xs w-[20%] justify-center"
+                className="btn-danger flex w-[20%] justify-center text-xs"
                 onClick={() => setDeleteConfirmOpen(true)}
               >
                 Delete
@@ -241,16 +268,25 @@ export function CharacterSettingsPage({
         title="Confirm Clear"
         width="max-w-sm"
       >
-        <p className="text-sm mb-5" style={{ color: "var(--text-secondary)" }}>
+        <p className="mb-5 text-sm" style={{ color: "var(--text-secondary)" }}>
           Reset all slots, pact, and prepared spells for{" "}
-          <strong style={{ color: "var(--text-primary)" }}>{character.name}</strong>? This cannot be
-          undone.
+          <strong style={{ color: "var(--text-primary)" }}>
+            {character.name}
+          </strong>
+          ? This cannot be undone.
         </p>
-        <div className="flex gap-2 justify-end">
-          <button className="btn-ghost text-sm px-4" onClick={() => setClearConfirmOpen(false)}>
+        <div className="flex justify-end gap-2">
+          <button
+            className="btn-ghost px-4 text-sm"
+            onClick={() => setClearConfirmOpen(false)}
+          >
             Cancel
           </button>
-          <button className="btn-danger text-sm px-4" onClick={clearCharacterData} autoFocus>
+          <button
+            className="btn-danger px-4 text-sm"
+            onClick={clearCharacterData}
+            autoFocus
+          >
             Clear Data
           </button>
         </div>
@@ -262,16 +298,25 @@ export function CharacterSettingsPage({
         title="Delete Character"
         width="max-w-sm"
       >
-        <p className="text-sm mb-5" style={{ color: "var(--text-secondary)" }}>
+        <p className="mb-5 text-sm" style={{ color: "var(--text-secondary)" }}>
           Permanently delete{" "}
-          <strong style={{ color: "var(--text-primary)" }}>{character.name}</strong>? This cannot be
-          undone.
+          <strong style={{ color: "var(--text-primary)" }}>
+            {character.name}
+          </strong>
+          ? This cannot be undone.
         </p>
-        <div className="flex gap-2 justify-end">
-          <button className="btn-ghost text-sm px-4" onClick={() => setDeleteConfirmOpen(false)}>
+        <div className="flex justify-end gap-2">
+          <button
+            className="btn-ghost px-4 text-sm"
+            onClick={() => setDeleteConfirmOpen(false)}
+          >
             Cancel
           </button>
-          <button className="btn-danger text-sm px-4" onClick={handleDelete} autoFocus>
+          <button
+            className="btn-danger px-4 text-sm"
+            onClick={handleDelete}
+            autoFocus
+          >
             Delete
           </button>
         </div>

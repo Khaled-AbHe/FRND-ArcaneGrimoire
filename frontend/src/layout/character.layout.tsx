@@ -1,7 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Header } from "../components/layout/Header";
-import type { DamageRollResult, HitRollResult, RollResult } from "../components/ui/RollOverlay";
+import type {
+  DamageRollResult,
+  HitRollResult,
+  RollResult,
+} from "../components/ui/RollOverlay";
 import { RollOverlay } from "../components/ui/RollOverlay";
 import { useAutoSave } from "../hooks/characters/useAutoSave";
 import type { Character, TabId } from "../types";
@@ -15,11 +24,12 @@ import { CharacterSettingsPage } from "../pages/character/character-settings.pag
 import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 import { Tabs } from "../components/ui/Tabs";
 
-const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] = [
-  { id: "slots", label: "Spell Slots", Icon: SlotsIcon },
-  { id: "preparer", label: "Spell List", Icon: BookIcon },
-  { id: "settings", label: "Settings", Icon: SettingsIcon },
-];
+const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] =
+  [
+    { id: "slots", label: "Spell Slots", Icon: SlotsIcon },
+    { id: "preparer", label: "Spell List", Icon: BookIcon },
+    { id: "settings", label: "Settings", Icon: SettingsIcon },
+  ];
 
 const VALID_TABS: TabId[] = ["slots", "preparer", "settings"];
 
@@ -34,7 +44,11 @@ export function CharacterLayout() {
   const rollIdCounter = useRef(0);
 
   const [localChar, setLocalChar] = useState<Character | undefined>(undefined);
-  const { data: serverChar, isError, isLoading: charLoading } = useCharacter(activeId);
+  const {
+    data: serverChar,
+    isError,
+    isLoading: charLoading,
+  } = useCharacter(activeId);
   const save = useAutoSave(activeId);
 
   useEffect(() => {
@@ -43,13 +57,20 @@ export function CharacterLayout() {
 
   const rawTab = searchParams.get("tab") as TabId | null;
   const tab: TabId = rawTab && VALID_TABS.includes(rawTab) ? rawTab : "slots";
-  const setTab = (next: TabId) => setSearchParams({ tab: next }, { replace: true });
+  const setTab = (next: TabId) =>
+    setSearchParams({ tab: next }, { replace: true });
 
   const nextRollId = () => ++rollIdCounter.current;
 
   const stats = localChar
     ? computeStats(localChar)
-    : { spellSaveDC: 13, charLevel: 1, attackBonus: 5, cantripTier: 1, spellMod: 1 };
+    : {
+        spellSaveDC: 13,
+        charLevel: 1,
+        attackBonus: 5,
+        cantripTier: 1,
+        spellMod: 1,
+      };
 
   const handleUpdateCharacter = useCallback(
     (patch: Partial<Character>) => {
@@ -82,7 +103,7 @@ export function CharacterLayout() {
       <Header character={localChar} onBack={() => navigate("/grimoire")} />
       <Tabs active={tab} tabs={TABS} onChange={setTab} />
 
-      <main className="flex flex-col flex-1 min-h-0 overflow-y-auto">
+      <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
         {tab === "slots" && (
           <SpellSlotsPage
             character={localChar}

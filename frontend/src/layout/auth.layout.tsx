@@ -5,7 +5,7 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
     <div className="auth-bg">
       <div className="auth-panel animate-fade-in">
         <h1 className="auth-title">Butterz's Arcane Grimoire</h1>
-        <img className="size-20 mt-5" src={myLogo} />
+        <img className="mt-5 size-20" src={myLogo} />
 
         <div className="auth-divider" />
         {children}

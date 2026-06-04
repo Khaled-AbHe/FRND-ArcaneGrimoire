@@ -33,7 +33,7 @@ export default function CharacterCard({ char }: CharacterCardProps) {
   }
 
   return (
-    <div className="card p-4 animate-fade-in">
+    <div className="card animate-fade-in p-4">
       {dupTarget?.id === char.id ? (
         <form onSubmit={handleDuplicate} className="flex gap-2">
           <input
@@ -46,7 +46,7 @@ export default function CharacterCard({ char }: CharacterCardProps) {
           />
           <button
             type="submit"
-            className="btn-primary text-xs px-3"
+            className="btn-primary px-3 text-xs"
             disabled={!dupName.trim()}
             aria-label="Confirm duplicate"
           >
@@ -54,7 +54,7 @@ export default function CharacterCard({ char }: CharacterCardProps) {
           </button>
           <button
             type="button"
-            className="btn-ghost text-xs px-3"
+            className="btn-ghost px-3 text-xs"
             onClick={() => setDupTarget(null)}
             aria-label="Cancel duplicate"
           >
@@ -63,11 +63,14 @@ export default function CharacterCard({ char }: CharacterCardProps) {
         </form>
       ) : confirmDelete === char.id ? (
         <div className="flex items-center gap-3">
-          <span className="text-sm flex-1" style={{ color: "var(--text-secondary)" }}>
+          <span
+            className="flex-1 text-sm"
+            style={{ color: "var(--text-secondary)" }}
+          >
             Delete <strong>{char.name}</strong>?
           </span>
           <button
-            className="btn-danger text-xs px-3 flex items-center gap-1.5"
+            className="btn-danger flex items-center gap-1.5 px-3 text-xs"
             onClick={() => {
               deleteChar.mutate(char.id);
               setConfirmDelete(null);
@@ -78,7 +81,7 @@ export default function CharacterCard({ char }: CharacterCardProps) {
             Delete
           </button>
           <button
-            className="btn-ghost text-xs px-3"
+            className="btn-ghost px-3 text-xs"
             onClick={() => setConfirmDelete(null)}
             aria-label="Cancel delete"
           >
@@ -87,10 +90,19 @@ export default function CharacterCard({ char }: CharacterCardProps) {
         </div>
       ) : (
         <div className="flex items-center gap-3">
-          <button className="flex-1 text-left" onClick={() => goToCharacter(char.id)}>
-            <div className="font-display text-base text-accent tracking-wide">{char.name}</div>
-            <div className="text-xs mt-0.5 w-[110%]" style={{ color: "var(--text-muted)" }}>
-              Level {char.globals?.charLevel ?? "—"} · {char.levels?.length ?? 0} spell level
+          <button
+            className="flex-1 text-left"
+            onClick={() => goToCharacter(char.id)}
+          >
+            <div className="text-accent font-display text-base tracking-wide">
+              {char.name}
+            </div>
+            <div
+              className="mt-0.5 w-[110%] text-xs"
+              style={{ color: "var(--text-muted)" }}
+            >
+              Level {char.globals?.charLevel ?? "—"} ·{" "}
+              {char.levels?.length ?? 0} spell level
               {char.levels?.length !== 1 ? "s" : ""}
             </div>
           </button>
@@ -99,7 +111,7 @@ export default function CharacterCard({ char }: CharacterCardProps) {
               setDupTarget(char);
               setDupName(char.name + " (Copy)");
             }}
-            className="w-8 h-8 flex items-center justify-center rounded text-muted hover:text-dim transition-colors"
+            className="text-muted hover:text-dim flex h-8 w-8 items-center justify-center rounded transition-colors"
             aria-label={`Duplicate ${char.name}`}
             title="Duplicate character"
           >
@@ -107,7 +119,7 @@ export default function CharacterCard({ char }: CharacterCardProps) {
           </button>
           <button
             onClick={() => setConfirmDelete(char.id)}
-            className="w-8 h-8 flex items-center justify-center rounded text-muted hover:text-red-400 transition-colors"
+            className="text-muted flex h-8 w-8 items-center justify-center rounded transition-colors hover:text-red-400"
             aria-label={`Delete ${char.name}`}
             title="Delete character"
           >

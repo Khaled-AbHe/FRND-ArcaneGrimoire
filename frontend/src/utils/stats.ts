@@ -22,7 +22,11 @@ export function computeStats(char: Character): ComputedStats {
   return { spellSaveDC, attackBonus, cantripTier, charLevel, spellMod: g.mod };
 }
 
-export function buildGrid(spell: Spell, stats: ComputedStats, isPreparer: boolean) {
+export function buildGrid(
+  spell: Spell,
+  stats: ComputedStats,
+  isPreparer: boolean,
+) {
   const st = spell.spellType;
   let statGrid = [
     { label: "Casting Time", value: spell.castTime },
@@ -40,13 +44,20 @@ export function buildGrid(spell: Spell, stats: ComputedStats, isPreparer: boolea
   }
 
   if (spell.outputType.kind != "utility") {
-    statGrid.push({ label: "Damage", value: buildDamage(spell, stats, isPreparer) });
+    statGrid.push({
+      label: "Damage",
+      value: buildDamage(spell, stats, isPreparer),
+    });
   }
 
   return statGrid;
 }
 
-export function buildDamage(spell: Spell, stats: ComputedStats, isPreparer: boolean) {
+export function buildDamage(
+  spell: Spell,
+  stats: ComputedStats,
+  isPreparer: boolean,
+) {
   const out = spell.outputType;
   let text = "";
 

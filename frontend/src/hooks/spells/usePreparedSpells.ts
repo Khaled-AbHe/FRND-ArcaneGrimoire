@@ -10,7 +10,10 @@ export function usePreparedSpells(
   character: Character,
   onUpdatePrepared: (prepared: number[]) => void,
 ) {
-  const preparedSet = useMemo(() => new Set(character.prepared), [character.prepared]);
+  const preparedSet = useMemo(
+    () => new Set(character.prepared),
+    [character.prepared],
+  );
 
   const preparedSpells = useMemo(
     () => spells.filter((s) => preparedSet.has(s.id)),

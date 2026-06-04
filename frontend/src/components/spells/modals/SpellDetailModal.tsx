@@ -1,5 +1,9 @@
 import { Modal } from "../../ui/Modal";
-import { ConcentrationBadge, RitualBadge, SchoolBadge } from "../../ui/SchoolBadge";
+import {
+  ConcentrationBadge,
+  RitualBadge,
+  SchoolBadge,
+} from "../../ui/SchoolBadge";
 import type { Spell, ComputedStats } from "../../../types";
 import { levelLabel } from "../../../utils/dice";
 import { buildGrid } from "../../../utils/stats";
@@ -44,8 +48,8 @@ export function SpellDetailModal({
     <Modal open={open} onClose={onClose} title={spell.name} width="max-w-2xl">
       <div className="space-y-4">
         {/* School + Level + flags */}
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-sm text-dim">{levelLabel(spell.level)}</span>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="text-dim text-sm">{levelLabel(spell.level)}</span>
           <SchoolBadge school={spell.school} />
           {spell.concentration && <ConcentrationBadge />}
           {spell.ritual && <RitualBadge />}
@@ -55,7 +59,7 @@ export function SpellDetailModal({
           {spellGrid.map(({ label, value }) => (
             <div
               key={label}
-              className="rounded p-2 flex-1"
+              className="flex-1 rounded p-2"
               style={{
                 flexBasis: "200px",
                 background: "var(--bg-ternary)",
@@ -69,7 +73,10 @@ export function SpellDetailModal({
 
         {/* Notes */}
         {spell.notes && (
-          <div className="rounded p-2" style={{ background: "var(--bg-ternary)" }}>
+          <div
+            className="rounded p-2"
+            style={{ background: "var(--bg-ternary)" }}
+          >
             <div className="label">Desc</div>
             <div style={{ color: "var(--text-primary)" }}>
               <div
@@ -95,10 +102,12 @@ export function SpellDetailModal({
           <button
             className={
               isPrepared
-                ? "btn-ghost w-full justify-center text-amber-400 border-amber-800"
+                ? "btn-ghost w-full justify-center border-amber-800 text-amber-400"
                 : "btn-ghost w-full justify-center"
             }
-            onClick={() => (onTogglePrepare ? onTogglePrepare(spell.id) : undefined)}
+            onClick={() =>
+              onTogglePrepare ? onTogglePrepare(spell.id) : undefined
+            }
           >
             {isPrepared ? "★ Prepared" : "☆ Prepare Spell"}
           </button>

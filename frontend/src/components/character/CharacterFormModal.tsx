@@ -24,7 +24,13 @@ const EMPTY: CreateCharacterDetails = {
   highMagic: false,
 };
 
-const DEFAULT_PACT = { enabled: false, slots: 0, slotLevel: 1, used: 0, arcana: [] };
+const DEFAULT_PACT = {
+  enabled: false,
+  slots: 0,
+  slotLevel: 1,
+  used: 0,
+  arcana: [],
+};
 
 export function CharacterFormModal({ open, onClose }: CharacterFormModalProps) {
   const navigate = useNavigate();
@@ -35,7 +41,10 @@ export function CharacterFormModal({ open, onClose }: CharacterFormModalProps) {
     setForm(EMPTY);
   }, [open]);
 
-  function set<K extends keyof CreateCharacterDetails>(key: K, value: CreateCharacterDetails[K]) {
+  function set<K extends keyof CreateCharacterDetails>(
+    key: K,
+    value: CreateCharacterDetails[K],
+  ) {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
@@ -67,7 +76,12 @@ export function CharacterFormModal({ open, onClose }: CharacterFormModalProps) {
   }
 
   return (
-    <Modal open={open} onClose={onClose} title={"Create Character"} width="max-w-xl">
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={"Create Character"}
+      width="max-w-xl"
+    >
       <form onSubmit={handleCreate} className="space-y-5">
         {/* Name */}
         <div>
@@ -125,7 +139,11 @@ export function CharacterFormModal({ open, onClose }: CharacterFormModalProps) {
 
         {/* Actions */}
         <div className="flex gap-3 pt-1">
-          <button type="submit" className="btn-primary flex-1 justify-center" disabled={isPending}>
+          <button
+            type="submit"
+            className="btn-primary flex-1 justify-center"
+            disabled={isPending}
+          >
             {isPending ? "Creating..." : "Create"}
           </button>
           <button type="button" className="btn-ghost" onClick={onClose}>

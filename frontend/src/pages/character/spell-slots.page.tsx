@@ -12,7 +12,10 @@ import {
   SunRestIcon,
   TemplateIcon,
 } from "../../components/ui/Icons";
-import type { DamageRollResult, HitRollResult } from "../../components/ui/RollOverlay";
+import type {
+  DamageRollResult,
+  HitRollResult,
+} from "../../components/ui/RollOverlay";
 import { usePreparedSpells } from "../../hooks/spells/usePreparedSpells";
 import { useSpells } from "../../hooks/spells/useSpells";
 import { useSpellTemplate } from "../../hooks/spells/useSpellTemplate";
@@ -77,7 +80,10 @@ export function SpellSlotsPage({
 
   async function applyTemplate(casterType: "full" | "half" | "warlock") {
     const charLevel = character.globals?.charLevel ?? 1;
-    const result: TemplateResult = await templateMut.mutateAsync({ casterType, charLevel });
+    const result: TemplateResult = await templateMut.mutateAsync({
+      casterType,
+      charLevel,
+    });
     const patch: Partial<Character> = { levels: result.levels };
     if (result.pact) patch.pact = result.pact;
     onUpdateCharacter(patch);
@@ -94,13 +100,19 @@ export function SpellSlotsPage({
   }
 
   function toggleArcanum(idx: number) {
-    const arcana = character.pact.arcana.map((a, i) => (i === idx ? { ...a, used: !a.used } : a));
+    const arcana = character.pact.arcana.map((a, i) =>
+      i === idx ? { ...a, used: !a.used } : a,
+    );
     onUpdateCharacter({ pact: { ...character.pact, arcana } });
   }
 
   // ── Prepared spells ────────────────────────────────────────────────────────
 
-  const { preparedSet } = usePreparedSpells(spells, character, () => onUpdateCharacter);
+  const { preparedSet } = usePreparedSpells(
+    spells,
+    character,
+    () => onUpdateCharacter,
+  );
 
   function getPreparedSpells(row: LevelRow) {
     const rowLevel = parseInt(row.label.replace(/\D/g, ""), 10) || 0;
@@ -127,7 +139,9 @@ export function SpellSlotsPage({
   function castFromPact(spell: Spell) {
     if (spell.level === "cantrip") return;
     const pact = character.pact;
-    onUpdateCharacter({ pact: { ...pact, used: Math.min(pact.used + 1, pact.slots) } });
+    onUpdateCharacter({
+      pact: { ...pact, used: Math.min(pact.used + 1, pact.slots) },
+    });
     setCastingSpellId(null);
   }
 
@@ -156,7 +170,7 @@ export function SpellSlotsPage({
       {/* ── Toolbar ── */}
       <div className="slots-toolbar">
         <button
-          className="btn-ghost text-xs px-3 py-1.5 shrink-0 flex items-center gap-1.5"
+          className="btn-ghost flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-xs"
           onClick={() => setSlotSettingsOpen(true)}
           aria-label="Edit spell slot levels"
         >
@@ -164,7 +178,7 @@ export function SpellSlotsPage({
           Edit Slots
         </button>
         <button
-          className="btn-ghost text-xs px-3 py-1.5 shrink-0 flex items-center gap-1.5"
+          className="btn-ghost flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-xs"
           onClick={() => setTemplateOpen(true)}
           aria-label="Load a caster template"
         >
@@ -172,7 +186,7 @@ export function SpellSlotsPage({
           Load Template
         </button>
         <button
-          className="btn-ghost text-xs px-3 py-1.5 shrink-0 flex items-center gap-1.5"
+          className="btn-ghost flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-xs"
           onClick={() => setPactOpen(true)}
           aria-label="Configure Pact Magic"
         >
@@ -181,7 +195,7 @@ export function SpellSlotsPage({
         </button>
         <div className="flex-1" />
         <button
-          className="btn-ghost text-xs px-3 py-1.5 shrink-0 flex items-center gap-1.5"
+          className="btn-ghost flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-xs"
           onClick={doShortRest}
           aria-label="Take a short rest (restores pact slots)"
         >
@@ -189,7 +203,7 @@ export function SpellSlotsPage({
           Short Rest
         </button>
         <button
-          className="btn-primary text-xs px-3 py-1.5 shrink-0 flex items-center gap-1.5"
+          className="btn-primary flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-xs"
           onClick={doLongRest}
           aria-label="Take a long rest (restores all slots)"
         >
@@ -204,7 +218,13 @@ export function SpellSlotsPage({
         {isEmpty && (
           <div className="slots-empty-state">
             <div className="slots-empty-icon">
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 64 64"
+                fill="none"
+                aria-hidden="true"
+              >
                 <circle
                   cx="32"
                   cy="32"
@@ -213,28 +233,38 @@ export function SpellSlotsPage({
                   strokeWidth="2"
                   strokeDasharray="4 3"
                 />
-                <circle cx="32" cy="32" r="10" stroke="var(--accent)" strokeWidth="2" />
+                <circle
+                  cx="32"
+                  cy="32"
+                  r="10"
+                  stroke="var(--accent)"
+                  strokeWidth="2"
+                />
                 <circle cx="32" cy="32" r="3" fill="var(--accent)" />
               </svg>
             </div>
             <div>
-              <p className="font-display text-sm tracking-widest text-accent uppercase mb-1">
+              <p className="text-accent mb-1 font-display text-sm uppercase tracking-widest">
                 No Spell Slots Yet
               </p>
-              <p className="text-xs text-muted max-w-xs">
-                Add individual levels with <strong className="text-dim">Edit Slots</strong>, or
-                quickly load a full caster layout with{" "}
+              <p className="text-muted max-w-xs text-xs">
+                Add individual levels with{" "}
+                <strong className="text-dim">Edit Slots</strong>, or quickly
+                load a full caster layout with{" "}
                 <strong className="text-dim">Load Template</strong>.
               </p>
             </div>
             <div className="flex gap-2">
               <button
-                className="btn-primary text-xs px-4 py-2"
+                className="btn-primary px-4 py-2 text-xs"
                 onClick={() => setSlotSettingsOpen(true)}
               >
                 Edit Slots
               </button>
-              <button className="btn-ghost text-xs px-4 py-2" onClick={() => setTemplateOpen(true)}>
+              <button
+                className="btn-ghost px-4 py-2 text-xs"
+                onClick={() => setTemplateOpen(true)}
+              >
                 Load Template
               </button>
             </div>
@@ -245,7 +275,9 @@ export function SpellSlotsPage({
         {!isEmpty &&
           (() => {
             const levelNums = new Set<number>(
-              character.levels.map((r) => parseInt(r.label.replace(/\D/g, ""), 10) || 0),
+              character.levels.map(
+                (r) => parseInt(r.label.replace(/\D/g, ""), 10) || 0,
+              ),
             );
             if (showPact) levelNums.add(pact.slotLevel);
             (pact?.arcana ?? []).forEach((a) => levelNums.add(a.level));
@@ -254,7 +286,9 @@ export function SpellSlotsPage({
             return allLevels.map((levelNum) => {
               const row =
                 character.levels.find(
-                  (r) => (parseInt(r.label.replace(/\D/g, ""), 10) || 0) === levelNum,
+                  (r) =>
+                    (parseInt(r.label.replace(/\D/g, ""), 10) || 0) ===
+                    levelNum,
                 ) ?? null;
               const isPactLevel = showPact && pact.slotLevel === levelNum;
               const isCantrip = levelNum === 0;
@@ -271,12 +305,18 @@ export function SpellSlotsPage({
 
               const hasSlots = row !== null || pactSlotsLeft > 0;
               const preparedHere =
-                pact.slotLevel === levelNum || hasSlots ? getPreparedSpells(syntheticRow) : [];
-              const arcanumHere = pact?.arcana?.filter((a) => a.level === levelNum) ?? [];
+                pact.slotLevel === levelNum || hasSlots
+                  ? getPreparedSpells(syntheticRow)
+                  : [];
+              const arcanumHere =
+                pact?.arcana?.filter((a) => a.level === levelNum) ?? [];
               const canCast = isCantrip || slotsLeft > 0 || pactSlotsLeft > 0;
 
               return (
-                <div key={`level-${levelNum}`} className="level-section overflow-y-hidden">
+                <div
+                  key={`level-${levelNum}`}
+                  className="level-section overflow-y-visible"
+                >
                   {/* Section heading */}
                   <div className="level-heading">
                     <span className="level-heading__title">
@@ -295,19 +335,21 @@ export function SpellSlotsPage({
                               role="group"
                               aria-label={`Pact slots: ${pact.slots - pact.used} of ${pact.slots} remaining`}
                             >
-                              {Array.from({ length: pact.slots }).map((_, i) => (
-                                <button
-                                  key={i}
-                                  onClick={() => togglePactSlot(i)}
-                                  aria-label={
-                                    i < pact.used
-                                      ? `Pact slot ${i + 1} expended`
-                                      : `Pact slot ${i + 1} available`
-                                  }
-                                  aria-pressed={i >= pact.used}
-                                  className={`pact-pip${i < pact.used ? " pact-pip--used" : ""}`}
-                                />
-                              ))}
+                              {Array.from({ length: pact.slots }).map(
+                                (_, i) => (
+                                  <button
+                                    key={i}
+                                    onClick={() => togglePactSlot(i)}
+                                    aria-label={
+                                      i < pact.used
+                                        ? `Pact slot ${i + 1} expended`
+                                        : `Pact slot ${i + 1} available`
+                                    }
+                                    aria-pressed={i >= pact.used}
+                                    className={`pact-pip${i < pact.used ? "pact-pip--used" : ""}`}
+                                  />
+                                ),
+                              )}
                             </div>
                             <span className="slots-label">PACT</span>
                           </div>
@@ -331,7 +373,7 @@ export function SpellSlotsPage({
                                       : `Slot ${i + 1} available — click to expend`
                                   }
                                   aria-pressed={i >= row.used}
-                                  className={`slot-pip${i < row.used ? " slot-pip--used" : ""}${isHigh ? " slot-pip--high" : ""}`}
+                                  className={`slot-pip${i < row.used ? "slot-pip--used" : ""}${isHigh ? "slot-pip--high" : ""}`}
                                 />
                               ))}
                             </div>
@@ -351,7 +393,10 @@ export function SpellSlotsPage({
                       key={spell.id}
                       spell={spell}
                       stats={stats}
-                      isLast={si === preparedHere.length - 1 && arcanumHere.length === 0}
+                      isLast={
+                        si === preparedHere.length - 1 &&
+                        arcanumHere.length === 0
+                      }
                       variant={{
                         kind: "cast",
                         row,
@@ -376,15 +421,18 @@ export function SpellSlotsPage({
                   {preparedHere.length === 0 &&
                     arcanumHere.filter((a) => a.spellId).length === 0 && (
                       <div className="slots-empty-row">
-                        No prepared {isCantrip ? "cantrips" : "spells or mystic arcanum"} at this
-                        level.
+                        No prepared{" "}
+                        {isCantrip ? "cantrips" : "spells or mystic arcanum"} at
+                        this level.
                       </div>
                     )}
 
                   {/* Arcanum rows — reuse SpellRow with arcanum variant */}
                   {arcanumHere.map((arc) => {
                     const globalIdx = pact.arcana.indexOf(arc);
-                    const arcSpell = arc.spellId ? spells.find((s) => s.id === arc.spellId) : null;
+                    const arcSpell = arc.spellId
+                      ? spells.find((s) => s.id === arc.spellId)
+                      : null;
                     if (!arcSpell) return null;
 
                     return (
@@ -398,7 +446,8 @@ export function SpellSlotsPage({
                             kind: "arcanum",
                             arcUsed: arc.used,
                             levelNum,
-                            onCastArcanum: () => !arc.used && toggleArcanum(globalIdx),
+                            onCastArcanum: () =>
+                              !arc.used && toggleArcanum(globalIdx),
                           }}
                           onViewDetail={setDetailSpell}
                           onRollHit={onRollHit}

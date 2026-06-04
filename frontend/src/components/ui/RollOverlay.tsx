@@ -54,19 +54,37 @@ function hitTheme(isCrit: boolean, isMiss: boolean) {
 /** Returns badge styles for advantage/disadvantage mode labels. */
 function modeTheme(mode: HitRollResult["mode"]) {
   if (mode === "advantage")
-    return { label: "ADVANTAGE", bg: "rgba(52, 211, 153, 0.15)", fg: "#34d399" };
+    return {
+      label: "ADVANTAGE",
+      bg: "rgba(52, 211, 153, 0.15)",
+      fg: "#34d399",
+    };
   if (mode === "disadvantage")
-    return { label: "DISADVANTAGE", bg: "rgba(248, 113, 113, 0.15)", fg: "#f87171" };
+    return {
+      label: "DISADVANTAGE",
+      bg: "rgba(248, 113, 113, 0.15)",
+      fg: "#f87171",
+    };
   return null;
 }
 
 // ── Sub-components ─────────────────────────────────────────────────────────
 
-function HitCard({ result, onDismiss }: { result: HitRollResult; onDismiss: () => void }) {
+function HitCard({
+  result,
+  onDismiss,
+}: {
+  result: HitRollResult;
+  onDismiss: () => void;
+}) {
   const { isCrit, isMiss } = result;
   const theme = hitTheme(isCrit, isMiss);
   const mode = modeTheme(result.mode);
-  const rollLabel = isCrit ? "CRITICAL HIT" : isMiss ? "CRITICAL MISS" : "ATTACK ROLL";
+  const rollLabel = isCrit
+    ? "CRITICAL HIT"
+    : isMiss
+      ? "CRITICAL MISS"
+      : "ATTACK ROLL";
 
   // When both dice show the same value, keep the discarded die styled like the kept one.
   const discardedIsEqual = result.discarded === result.d20;
@@ -80,7 +98,7 @@ function HitCard({ result, onDismiss }: { result: HitRollResult; onDismiss: () =
       {/* Radial glow pulse for crits / misses */}
       {(isCrit || isMiss) && (
         <div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
+          className="pointer-events-none absolute inset-0 rounded-2xl"
           style={{
             background: `radial-gradient(ellipse at center, ${isCrit ? "rgba(255,208,0,0.08)" : "rgba(239,68,68,0.08)"} 0%, transparent 70%)`,
             animation: "critPulse 1.5s ease-in-out infinite",
@@ -92,7 +110,7 @@ function HitCard({ result, onDismiss }: { result: HitRollResult; onDismiss: () =
         {/* Roll label + mode badge */}
         {mode && (
           <span
-            className="font-display text-[10px] tracking-widest px-1.5 py-0.5 rounded"
+            className="rounded px-1.5 py-0.5 font-display text-[10px] tracking-widest"
             style={{
               background: mode.bg,
               color: mode.fg,
@@ -104,7 +122,7 @@ function HitCard({ result, onDismiss }: { result: HitRollResult; onDismiss: () =
         )}
         <div className="flex items-center gap-2">
           <span
-            className="font-display text-xs tracking-[0.2em] uppercase"
+            className="font-display text-xs uppercase tracking-[0.2em]"
             style={{ color: theme.label }}
           >
             {rollLabel}
@@ -113,13 +131,21 @@ function HitCard({ result, onDismiss }: { result: HitRollResult; onDismiss: () =
 
         {/* d20 face(s) */}
         <div className="flex">
-          <D20Face value={result.d20} accentColor={theme.accent} glowColor={theme.glow} />
+          <D20Face
+            value={result.d20}
+            accentColor={theme.accent}
+            glowColor={theme.glow}
+          />
 
           {result.discarded !== undefined && (
             <D20Face
               value={result.discarded}
-              accentColor={discardedIsEqual ? theme.accent : "rgb(145, 145, 145)"}
-              glowColor={discardedIsEqual ? theme.glow : "rgba(145, 145, 145, 0.2)"}
+              accentColor={
+                discardedIsEqual ? theme.accent : "rgb(145, 145, 145)"
+              }
+              glowColor={
+                discardedIsEqual ? theme.glow : "rgba(145, 145, 145, 0.2)"
+              }
             />
           )}
         </div>
@@ -129,12 +155,16 @@ function HitCard({ result, onDismiss }: { result: HitRollResult; onDismiss: () =
           className="flex items-center gap-2 font-mono text-sm"
           style={{ color: "var(--text-secondary)" }}
         >
-          <span style={{ color: theme.accent, fontWeight: 700 }}>{result.d20}</span>
+          <span style={{ color: theme.accent, fontWeight: 700 }}>
+            {result.d20}
+          </span>
           <span style={{ color: "var(--text-muted)" }}>
             {result.bonus >= 0 ? `+ ${result.bonus}` : result.bonus}
           </span>
           <span style={{ color: "var(--text-muted)" }}>=</span>
-          <span style={{ color: theme.accent, fontWeight: 700, fontSize: "1.1em" }}>
+          <span
+            style={{ color: theme.accent, fontWeight: 700, fontSize: "1.1em" }}
+          >
             {result.total}
           </span>
         </div>
@@ -143,19 +173,28 @@ function HitCard({ result, onDismiss }: { result: HitRollResult; onDismiss: () =
   );
 }
 
-function DamageCard({ result, onDismiss }: { result: DamageRollResult; onDismiss: () => void }) {
+function DamageCard({
+  result,
+  onDismiss,
+}: {
+  result: DamageRollResult;
+  onDismiss: () => void;
+}) {
   // Group rolls by damage type
-  const byType = result.rolls.reduce<Record<string, typeof result.rolls>>((acc, r) => {
-    (acc[r.type] ??= []).push(r);
-    return acc;
-  }, {});
+  const byType = result.rolls.reduce<Record<string, typeof result.rolls>>(
+    (acc, r) => {
+      (acc[r.type] ??= []).push(r);
+      return acc;
+    },
+    {},
+  );
 
   const diceSubtotal = result.grandTotal - result.modifier;
 
   return (
     <div
       onClick={onDismiss}
-      className="roll-overlay-card min-h-[200px] mr-2"
+      className="roll-overlay-card mr-2 min-h-[200px]"
       style={{
         border: result.isCrit
           ? "1px solid rgba(255, 208, 0, 0.7)"
@@ -164,7 +203,7 @@ function DamageCard({ result, onDismiss }: { result: DamageRollResult; onDismiss
     >
       {result.isCrit && (
         <div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
+          className="pointer-events-none absolute inset-0 rounded-2xl"
           style={{
             background:
               "radial-gradient(ellipse at center, rgba(255,208,0,0.08) 0%, transparent 70%)",
@@ -172,10 +211,12 @@ function DamageCard({ result, onDismiss }: { result: DamageRollResult; onDismiss
           }}
         />
       )}
-      <div className="relative z-10 flex flex-col items-center gap-3 w-full">
+      <div className="relative z-10 flex w-full flex-col items-center gap-3">
         <span
-          className="font-display text-xs tracking-[0.2em] uppercase"
-          style={{ color: result.isCrit ? "var(--crit-color)" : "var(--text-muted)" }}
+          className="font-display text-xs uppercase tracking-[0.2em]"
+          style={{
+            color: result.isCrit ? "var(--crit-color)" : "var(--text-muted)",
+          }}
         >
           {result.isCrit ? "Critical Hit — Damage" : "Damage"}
         </span>
@@ -185,12 +226,12 @@ function DamageCard({ result, onDismiss }: { result: DamageRollResult; onDismiss
           {Object.entries(byType).map(([type, rolls]) => (
             <div key={type}>
               <div
-                className="font-display text-center uppercase tracking-widest mb-1.5"
+                className="mb-1.5 text-center font-display uppercase tracking-widest"
                 style={{ color: "var(--text-muted)", fontSize: "0.6rem" }}
               >
                 {type}
               </div>
-              <div className="flex flex-wrap gap-1.5 justify-center">
+              <div className="flex flex-wrap justify-center gap-1.5">
                 {rolls.map((r, i) => (
                   <DiceFace key={i} value={r.result} die={r.die} />
                 ))}
@@ -202,21 +243,23 @@ function DamageCard({ result, onDismiss }: { result: DamageRollResult; onDismiss
         {/* Total breakdown */}
         {result.rolls.length > 0 && (
           <div
-            className="w-full flex items-center justify-between px-3 py-2 rounded-lg mt-1"
+            className="mt-1 flex w-full items-center justify-between rounded-lg px-3 py-2"
             style={{
               background: "rgba(0,0,0,0.3)",
               border: "1px solid rgba(0, 229, 255, 0.15)",
             }}
           >
             <div
-              className="font-mono text-sm flex items-center gap-1.5"
+              className="flex items-center gap-1.5 font-mono text-sm"
               style={{ color: "var(--text-secondary)" }}
             >
               <span>{diceSubtotal}</span>
               {result.modifier !== 0 && (
                 <>
                   <span style={{ color: "var(--text-muted)" }}>
-                    {result.modifier >= 0 ? `+ ${result.modifier}` : result.modifier}
+                    {result.modifier >= 0
+                      ? `+ ${result.modifier}`
+                      : result.modifier}
                   </span>
                   <span style={{ color: "var(--text-muted)" }}>=</span>
                 </>
@@ -257,12 +300,22 @@ function DiceFace({ value, die }: { value: number; die: string }) {
     : isMin
       ? "rgba(239,68,68,0.4)"
       : "rgba(0, 229, 255, 0.2)";
-  const color = isMax ? "var(--hit-color)" : isMin ? "var(--miss-color)" : "var(--text-primary)";
+  const color = isMax
+    ? "var(--hit-color)"
+    : isMin
+      ? "var(--miss-color)"
+      : "var(--text-primary)";
 
   return (
     <div
-      className="flex items-center justify-center rounded font-mono font-bold text-sm"
-      style={{ width: 32, height: 32, background: bg, border: `1px solid ${border}`, color }}
+      className="flex items-center justify-center rounded font-mono text-sm font-bold"
+      style={{
+        width: 32,
+        height: 32,
+        background: bg,
+        border: `1px solid ${border}`,
+        color,
+      }}
     >
       {value}
     </div>
@@ -280,7 +333,10 @@ function D20Face({
   glowColor: string;
 }) {
   return (
-    <div className="relative flex items-center justify-center" style={{ width: 100, height: 100 }}>
+    <div
+      className="relative flex items-center justify-center"
+      style={{ width: 100, height: 100 }}
+    >
       <D20Svg color={accentColor} glow={glowColor} />
       <span
         className="absolute font-display font-bold"

@@ -2,7 +2,11 @@ import PactSettingsProps from "./PactSettingsProps";
 
 const ARCANUM_LEVELS = [6, 7, 8, 9] as const;
 
-export default function MysticArcanumSettings({ pactMagic, spells, onUpdate }: PactSettingsProps) {
+export default function MysticArcanumSettings({
+  pactMagic,
+  spells,
+  onUpdate,
+}: PactSettingsProps) {
   function getArcanum(level: number) {
     return pactMagic.arcana?.find((a) => a.level === level) ?? null;
   }
@@ -15,12 +19,17 @@ export default function MysticArcanumSettings({ pactMagic, spells, onUpdate }: P
         arcana: [...arcana, { level, spellId: null, used: false }],
       });
     } else {
-      onUpdate({ ...pactMagic, arcana: arcana.filter((a) => a.level !== level) });
+      onUpdate({
+        ...pactMagic,
+        arcana: arcana.filter((a) => a.level !== level),
+      });
     }
   }
 
   function setArcanumSpell(level: number, spellId: number | null) {
-    const arcana = (pactMagic.arcana ?? []).map((a) => (a.level === level ? { ...a, spellId } : a));
+    const arcana = (pactMagic.arcana ?? []).map((a) =>
+      a.level === level ? { ...a, spellId } : a,
+    );
     onUpdate({ ...pactMagic, arcana });
   }
 
@@ -31,12 +40,14 @@ export default function MysticArcanumSettings({ pactMagic, spells, onUpdate }: P
         {ARCANUM_LEVELS.map((level) => {
           const arc = getArcanum(level);
           const enabled = arc !== null;
-          const levelSpells = spells ? spells.filter((s) => parseInt(s.level, 10) === level) : [];
+          const levelSpells = spells
+            ? spells.filter((s) => parseInt(s.level, 10) === level)
+            : [];
 
           return (
             <div
               key={level}
-              className="flex items-center gap-3 px-3 py-2 rounded"
+              className="flex items-center gap-3 rounded px-3 py-2"
               style={{
                 background: "var(--bg-primary)",
                 border: `1px solid ${enabled ? "#a855f7" : "var(--border)"}`,
@@ -53,7 +64,7 @@ export default function MysticArcanumSettings({ pactMagic, spells, onUpdate }: P
 
               {/* Level label */}
               <span
-                className="text-xs font-display tracking-wider w-16 shrink-0"
+                className="w-16 shrink-0 font-display text-xs tracking-wider"
                 style={{ color: enabled ? "#a855f7" : "var(--text-muted)" }}
               >
                 Level {level}
@@ -61,11 +72,14 @@ export default function MysticArcanumSettings({ pactMagic, spells, onUpdate }: P
 
               {/* Spell picker */}
               <select
-                className="select text-xs flex-1"
+                className="select flex-1 text-xs"
                 disabled={!enabled}
                 value={arc?.spellId ?? ""}
                 onChange={(e) =>
-                  setArcanumSpell(level, e.target.value ? Number(e.target.value) : null)
+                  setArcanumSpell(
+                    level,
+                    e.target.value ? Number(e.target.value) : null,
+                  )
                 }
               >
                 <option value="">— Link spell —</option>

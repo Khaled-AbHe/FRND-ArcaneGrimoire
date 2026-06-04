@@ -76,7 +76,9 @@ export function SlotSettingsModal({
         total,
         used: 0,
       };
-      const next = [...levels, newRow].sort((a, b) => levelNumFromRow(a) - levelNumFromRow(b));
+      const next = [...levels, newRow].sort(
+        (a, b) => levelNumFromRow(a) - levelNumFromRow(b),
+      );
       onUpdate(next);
     } else {
       // Preserve used count in totals so re-enabling restores the value
@@ -107,13 +109,13 @@ export function SlotSettingsModal({
           return (
             <div
               key={levelNum}
-              className="flex items-center justify-between gap-3 px-3 py-2 rounded card"
+              className="card flex items-center justify-between gap-3 rounded px-3 py-2"
               style={{
                 opacity: enabled ? 1 : 0.5,
                 transition: "all 0.15s",
               }}
             >
-              <div className="flex h-[30px] w-[40%] gap-5 items-center">
+              <div className="flex h-[30px] w-[40%] items-center gap-5">
                 <input
                   type="checkbox"
                   checked={enabled}
@@ -122,8 +124,10 @@ export function SlotSettingsModal({
                 />
 
                 <span
-                  className="text-sm font-display tracking-wider w-20 shrink-0"
-                  style={{ color: enabled ? "var(--accent)" : "var(--text-muted)" }}
+                  className="w-20 shrink-0 font-display text-sm tracking-wider"
+                  style={{
+                    color: enabled ? "var(--accent)" : "var(--text-muted)",
+                  }}
                 >
                   {levelLabel(levelNum)}
                 </span>
@@ -132,7 +136,7 @@ export function SlotSettingsModal({
               <div>
                 {isCantrip ? (
                   <span
-                    className="text-sm flex h-[30px] w-[80px] items-center justify-start"
+                    className="flex h-[30px] w-[80px] items-center justify-start text-sm"
                     style={{ color: "var(--text-muted)" }}
                   >
                     At Will
@@ -141,7 +145,7 @@ export function SlotSettingsModal({
                   <div className="flex h-[30px] w-[80px] items-center justify-between">
                     <input
                       type="number"
-                      className="text-sm text-right w-[30px] bg-[var(--bg-secondary)]"
+                      className="w-[30px] bg-[var(--bg-secondary)] text-right text-sm"
                       min={1}
                       max={4}
                       disabled={!enabled}
@@ -167,7 +171,10 @@ export function SlotSettingsModal({
         })}
       </div>
 
-      <button className="btn-primary w-full justify-center mt-4" onClick={onClose}>
+      <button
+        className="btn-primary mt-4 w-full justify-center"
+        onClick={onClose}
+      >
         Done
       </button>
     </Modal>

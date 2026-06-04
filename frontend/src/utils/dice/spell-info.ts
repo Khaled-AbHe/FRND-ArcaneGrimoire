@@ -10,7 +10,8 @@ import { upcastSteps } from "./core";
  */
 export function spellHitDC(spell: Spell, stats: ComputedStats): string {
   const st = spell.spellType;
-  if (st.kind === "save") return `${st.saveAbility.slice(0, 3).toUpperCase()} ${stats.spellSaveDC}`;
+  if (st.kind === "save")
+    return `${st.saveAbility.slice(0, 3).toUpperCase()} ${stats.spellSaveDC}`;
   if (st.kind === "attack") return `+${stats.attackBonus}`;
   return "—";
 }
@@ -23,7 +24,11 @@ export function spellHitDC(spell: Spell, stats: ComputedStats): string {
  * @example spellEffect(firebolt, stats, 0) // → "2d10" (at char level 5)
  * @example spellEffect(magicMissile, stats, 2) // → "4 darts"
  */
-export function spellEffect(spell: Spell, stats: ComputedStats, slotLevel: number): string {
+export function spellEffect(
+  spell: Spell,
+  stats: ComputedStats,
+  slotLevel: number,
+): string {
   const out = spell.outputType;
   const isCantrip = spell.level === "cantrip";
 
@@ -39,7 +44,10 @@ export function spellEffect(spell: Spell, stats: ComputedStats, slotLevel: numbe
 
   if (out.dice.length === 0 && !out.projectiles) return "—";
 
-  const totals: Record<string, { count: number; flatBonus: number; addMod: boolean }> = {};
+  const totals: Record<
+    string,
+    { count: number; flatBonus: number; addMod: boolean }
+  > = {};
 
   for (const d of out.dice) {
     const key = `${d.die}:${d.type}`;
@@ -104,7 +112,9 @@ export function spellNotes(spell: Spell): string {
     parts.push(short);
   }
 
-  const compStr = [c.verbal && "V", c.somatic && "S", c.material && "M"].filter(Boolean).join("/");
+  const compStr = [c.verbal && "V", c.somatic && "S", c.material && "M"]
+    .filter(Boolean)
+    .join("/");
   if (compStr) parts.push(compStr);
 
   return parts.join(", ");
@@ -136,7 +146,8 @@ export function getTotalDiceCount(
 
   if (out.kind === "cantrip") {
     return out.dice.reduce(
-      (sum, d) => sum + cantripDiceCount(spell, charLevel) * (d.count > 0 ? 1 : 0),
+      (sum, d) =>
+        sum + cantripDiceCount(spell, charLevel) * (d.count > 0 ? 1 : 0),
       0,
     );
   }
@@ -158,7 +169,11 @@ export function getTotalDiceCount(
   return 0;
 }
 
-export function getTotalProjCount(spell: Spell, spellLevel: string, charLevel = 1): number {
+export function getTotalProjCount(
+  spell: Spell,
+  spellLevel: string,
+  charLevel = 1,
+): number {
   const out = spell.outputType;
   const slotLevel = spellLevel === "cantrip" ? 0 : Number(spellLevel);
 

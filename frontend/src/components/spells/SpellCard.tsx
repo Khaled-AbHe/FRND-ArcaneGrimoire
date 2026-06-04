@@ -2,7 +2,14 @@ import { Spell } from "../../types";
 import { levelLabel, schoolColor } from "../../utils/dice";
 import { useState } from "react";
 import { useDeleteSpell } from "../../hooks/spells/useDeleteSpell";
-import { PencilIcon, TrashIcon, CheckIcon, CloseIcon, ClockIcon, RadiusIcon } from "../ui/Icons";
+import {
+  PencilIcon,
+  TrashIcon,
+  CheckIcon,
+  CloseIcon,
+  ClockIcon,
+  RadiusIcon,
+} from "../ui/Icons";
 
 interface SpellCardProps {
   spell: Spell;
@@ -34,12 +41,12 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
       role="article"
       aria-label={`${spell.name}, ${levelLabel(spell.level)} spell`}
     >
-      <div className="p-3 flex flex-col gap-0">
+      <div className="flex flex-col gap-0 p-3">
         {/* Header */}
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <div className="flex-1 min-w-0">
+        <div className="mb-2 flex items-start justify-between gap-2">
+          <div className="min-w-0 flex-1">
             <div
-              className="font-display text-sm truncate"
+              className="truncate font-display text-sm"
               style={{ color, letterSpacing: "0.06em" }}
             >
               {spell.name}
@@ -47,13 +54,13 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center gap-0.5 shrink-0">
+          <div className="flex shrink-0 items-center gap-0.5">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onEdit(spell);
               }}
-              className="w-[26px] h-[26px] flex items-center justify-center rounded-md text-xs text-muted hover:bg-white/5 hover:text-dim transition-all"
+              className="text-muted hover:text-dim flex h-[26px] w-[26px] items-center justify-center rounded-md text-xs transition-all hover:bg-white/5"
               aria-label={`Edit ${spell.name}`}
               title="Edit spell"
             >
@@ -68,7 +75,7 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
                     deleteSpell.mutate(spell.id);
                     setConfirmDelete(null);
                   }}
-                  className="w-[26px] h-[26px] flex items-center justify-center rounded-md text-xs text-red-400 hover:bg-red-400/10 hover:text-red-300 transition-all"
+                  className="flex h-[26px] w-[26px] items-center justify-center rounded-md text-xs text-red-400 transition-all hover:bg-red-400/10 hover:text-red-300"
                   aria-label={`Confirm delete ${spell.name}`}
                   title="Confirm delete"
                 >
@@ -79,7 +86,7 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
                     e.stopPropagation();
                     setConfirmDelete(null);
                   }}
-                  className="w-[26px] h-[26px] flex items-center justify-center rounded-md text-xs text-muted hover:bg-white/5 hover:text-dim transition-all"
+                  className="text-muted hover:text-dim flex h-[26px] w-[26px] items-center justify-center rounded-md text-xs transition-all hover:bg-white/5"
                   aria-label="Cancel delete"
                   title="Cancel"
                 >
@@ -92,7 +99,7 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
                   e.stopPropagation();
                   setConfirmDelete(spell.id);
                 }}
-                className="w-[26px] h-[26px] flex items-center justify-center rounded-md text-xs text-muted hover:bg-red-400/10 hover:text-red-400 transition-all"
+                className="text-muted flex h-[26px] w-[26px] items-center justify-center rounded-md text-xs transition-all hover:bg-red-400/10 hover:text-red-400"
                 aria-label={`Delete ${spell.name}`}
                 title="Delete spell"
               >
@@ -106,18 +113,18 @@ export function SpellCard({ spell, onViewDetail, onEdit }: SpellCardProps) {
 
         {/* Type */}
         <div className="flex flex-wrap items-start gap-2">
-          <div className="text-sm text-muted">{spellTags(spell)}</div>
+          <div className="text-muted text-sm">{spellTags(spell)}</div>
         </div>
 
         <div className="my-0 mb-2" />
 
         {/* Cast time + range */}
-        <div className="flex items-center justify-between text-xs text-muted h-5 ">
+        <div className="text-muted flex h-5 items-center justify-between text-xs">
           <span className="flex items-center gap-1">
             <ClockIcon />
             {spell.castTime}
           </span>
-          <span className="flex justify-end items-center gap-1 w-[50%]">
+          <span className="flex w-[50%] items-center justify-end gap-1">
             <RadiusIcon />
             {spell.range}
           </span>

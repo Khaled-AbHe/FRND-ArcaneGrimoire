@@ -12,25 +12,25 @@ export function Header({ character, onBack }: HeaderProps) {
 
   return (
     <header
-      className="flex items-center gap-4 px-5 py-3 border-b"
+      className="flex items-center gap-4 border-b px-5 py-3"
       style={{ background: "var(--bg-secondary)", border: "none" }}
     >
       <div className="flex flex-1">
         <button
           onClick={onBack}
-          className="w-8 flex items-center justify-center rounded transition-colors text-muted hover:text-accent"
+          className="text-muted hover:text-accent flex w-8 items-center justify-center rounded transition-colors"
           aria-label="Back to character select"
           title="Back to character select"
         >
           <ArrowLeftIcon size={18} />
         </button>
 
-        <h1 className="font-display text-lg text-accent tracking-widest uppercase flex-1">
+        <h1 className="text-accent flex-1 font-display text-lg uppercase tracking-widest">
           {character.name}
         </h1>
       </div>
 
-      <div className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
+      <div className="font-mono text-xs" style={{ color: "var(--text-muted)" }}>
         LvL {character.globals?.charLevel ?? 1}
       </div>
 
@@ -40,7 +40,7 @@ export function Header({ character, onBack }: HeaderProps) {
       >
         {currentUser && (
           <span
-            className="flex items-center gap-1.5 text-xs font-display tracking-wider"
+            className="flex items-center gap-1.5 font-display text-xs tracking-wider"
             style={{ color: "var(--text-muted)" }}
           >
             <UserIcon size={12} />

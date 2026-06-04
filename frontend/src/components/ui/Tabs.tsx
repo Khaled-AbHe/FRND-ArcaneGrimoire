@@ -16,7 +16,8 @@ interface TabsProps {
 }
 
 export function Tabs({ active, tabs, onChange }: TabsProps) {
-  const hasBorder = active !== "spells" && active !== "slots" && active !== "preparer";
+  const hasBorder =
+    active !== "spells" && active !== "slots" && active !== "preparer";
 
   return (
     <nav

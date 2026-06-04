@@ -31,8 +31,12 @@ export function SignUpPage() {
       await signUp.mutateAsync({ username, email, password });
       navigate("/grimoire", { replace: true });
     } catch (err: unknown) {
-      const msg = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
-      setError(Array.isArray(msg) ? msg.join(" · ") : (msg ?? "Sign up failed."));
+      const msg = axios.isAxiosError(err)
+        ? err.response?.data?.message
+        : undefined;
+      setError(
+        Array.isArray(msg) ? msg.join(" · ") : (msg ?? "Sign up failed."),
+      );
     }
   }
 
@@ -96,7 +100,7 @@ export function SignUpPage() {
 
         <button
           type="submit"
-          className="btn-primary w-full justify-center mt-2"
+          className="btn-primary mt-2 w-full justify-center"
           disabled={signUp.isPending}
         >
           {signUp.isPending ? "Fetching your Grimoire…" : "Create Account"}

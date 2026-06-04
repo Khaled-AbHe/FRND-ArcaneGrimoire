@@ -9,7 +9,9 @@ import type { Spell } from "../../types";
 export function cantripDiceCount(spell: Spell, charLevel: number): number {
   const out = spell.outputType;
   if (out.kind !== "cantrip" || !out.scaling) return 0;
-  const sorted = [...out.scaling].sort((a, b) => b.characterLevel - a.characterLevel);
+  const sorted = [...out.scaling].sort(
+    (a, b) => b.characterLevel - a.characterLevel,
+  );
   const match = sorted.find((s) => charLevel >= s.characterLevel);
   return match?.diceCount ?? 1;
 }
@@ -23,7 +25,9 @@ export function cantripDiceCount(spell: Spell, charLevel: number): number {
 export function cantripProjCount(spell: Spell, charLevel: number): number {
   const out = spell.outputType;
   if (out.kind !== "cantrip") return 1;
-  const sorted = [...out.scaling].sort((a, b) => b.characterLevel - a.characterLevel);
+  const sorted = [...out.scaling].sort(
+    (a, b) => b.characterLevel - a.characterLevel,
+  );
   const match = sorted.find((s) => charLevel >= s.characterLevel);
   return match?.projCount ?? 1;
 }

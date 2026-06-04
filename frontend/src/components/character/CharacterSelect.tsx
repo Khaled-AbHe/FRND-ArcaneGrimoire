@@ -8,7 +8,13 @@ import CharacterCard from "./CharacterCard";
 import { UserIcon, PlusIcon } from "../ui/Icons";
 
 const DEFAULT_GLOBALS = { mod: 3, prof: 2, charLevel: 1, highMagic: false };
-const DEFAULT_PACT = { enabled: false, slots: 0, slotLevel: 1, used: 0, arcana: [] };
+const DEFAULT_PACT = {
+  enabled: false,
+  slots: 0,
+  slotLevel: 1,
+  used: 0,
+  arcana: [],
+};
 
 export function CharacterSelect() {
   const navigate = useNavigate();
@@ -39,12 +45,12 @@ export function CharacterSelect() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6">
+    <div className="flex min-h-screen flex-col items-center justify-center p-6">
       {/* Top-right user bar */}
-      <div className="fixed top-4 right-5 flex items-center gap-3">
+      <div className="fixed right-5 top-4 flex items-center gap-3">
         {currentUser && (
           <span
-            className="flex items-center gap-1.5 text-xs font-display tracking-wider"
+            className="flex items-center gap-1.5 font-display text-xs tracking-wider"
             style={{ color: "var(--text-muted)" }}
           >
             <UserIcon size={12} />
@@ -54,7 +60,7 @@ export function CharacterSelect() {
         <button
           onClick={handleSignOut}
           disabled={signOut.isPending}
-          className="btn-ghost text-xs px-3 py-1"
+          className="btn-ghost px-3 py-1 text-xs"
           aria-label="Sign out of your account"
         >
           {signOut.isPending ? "…" : "Sign Out"}
@@ -62,8 +68,8 @@ export function CharacterSelect() {
       </div>
 
       {/* Title */}
-      <div className="text-center mb-12">
-        <h1 className="font-display text-4xl text-accent tracking-widest uppercase mb-2">
+      <div className="mb-12 text-center">
+        <h1 className="text-accent mb-2 font-display text-4xl uppercase tracking-widest">
           Spell Slot Manager
         </h1>
         <p className="text-dim text-lg">D&D Spell Tracker</p>
@@ -97,20 +103,26 @@ export function CharacterSelect() {
         {/* Character list */}
         {isLoading ? (
           /* Skeleton cards */
-          <div className="space-y-2" aria-busy="true" aria-label="Loading characters">
+          <div
+            className="space-y-2"
+            aria-busy="true"
+            aria-label="Loading characters"
+          >
             {[1, 2].map((i) => (
               <div
                 key={i}
-                className="card p-4 animate-shimmer"
+                className="card animate-shimmer p-4"
                 style={{ height: 64, opacity: 0.4 }}
               />
             ))}
           </div>
         ) : characters.length === 0 ? (
-          <div className="text-center py-8 text-muted">No characters yet — create one above.</div>
+          <div className="text-muted py-8 text-center">
+            No characters yet — create one above.
+          </div>
         ) : (
           <div className="space-y-2">
-            <div className="label px-1 w-[81%] m-auto">Characters</div>
+            <div className="label m-auto w-[81%] px-1">Characters</div>
             {characters.map((char) => (
               <CharacterCard key={char.id} char={char} />
             ))}

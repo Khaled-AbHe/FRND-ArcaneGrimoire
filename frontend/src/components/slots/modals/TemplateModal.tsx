@@ -23,9 +23,10 @@ export function TemplateModal({
   return (
     <Modal open={open} onClose={onClose} title="Load Class Template">
       <div className="space-y-3">
-        <p className="text-sm text-dim">
-          Load slots for character level <strong className="text-accent">{charLevel}</strong>. This
-          will replace your current level rows.
+        <p className="text-dim text-sm">
+          Load slots for character level{" "}
+          <strong className="text-accent">{charLevel}</strong>. This will
+          replace your current level rows.
         </p>
         {(["full", "half", "warlock"] as const).map((type) => (
           <button
@@ -41,7 +42,7 @@ export function TemplateModal({
                   ? "Half Caster"
                   : "Warlock (Pact Magic)"}
             </span>
-            <span className="text-xs text-muted">
+            <span className="text-muted text-xs">
               {type === "full"
                 ? "Wizard, Sorcerer, Cleric…"
                 : type === "half"

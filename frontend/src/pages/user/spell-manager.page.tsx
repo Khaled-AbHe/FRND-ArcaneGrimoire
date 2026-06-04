@@ -22,7 +22,7 @@ export function SpellManagerPage() {
   const [detailSpell, setDetailSpell] = useState<Spell | null>(null);
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 overflow-y-hidden">
+    <div className="flex min-h-0 flex-1 flex-col overflow-y-hidden">
       {/* Toolbar */}
       <SpellToolbar
         search={filters.search}
@@ -42,7 +42,7 @@ export function SpellManagerPage() {
         filteredCount={filters.filtered.length}
       >
         <div
-          className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-[85%] justify-self-center"
+          className="grid w-[85%] grid-cols-1 gap-3 justify-self-center sm:grid-cols-2 lg:grid-cols-4"
           role="list"
         >
           {filters.filtered.map((spell) => (
@@ -60,7 +60,11 @@ export function SpellManagerPage() {
         </div>
       </SpellPresenter>
 
-      <SpellFormModal open={formOpen} onClose={() => setFormOpen(false)} editing={editSpell} />
+      <SpellFormModal
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        editing={editSpell}
+      />
       <SpellDetailModal
         open={detailSpell !== null}
         onClose={() => setDetailSpell(null)}

@@ -7,9 +7,15 @@ import { characterKeys } from "./characterKeys";
  * Replaces the separate useShortRest and useLongRest hooks.
  */
 export function useRest(id: number) {
-  const shortRest = useCachingMutation(() => charactersApi.shortRest(id), characterKeys.detail(id));
+  const shortRest = useCachingMutation(
+    () => charactersApi.shortRest(id),
+    characterKeys.detail(id),
+  );
 
-  const longRest = useCachingMutation(() => charactersApi.longRest(id), characterKeys.detail(id));
+  const longRest = useCachingMutation(
+    () => charactersApi.longRest(id),
+    characterKeys.detail(id),
+  );
 
   return { shortRest, longRest };
 }

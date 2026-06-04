@@ -8,7 +8,9 @@ export function SignInPage() {
   const signIn = useSignIn();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? "/grimoire";
+  const from =
+    (location.state as { from?: { pathname: string } })?.from?.pathname ??
+    "/grimoire";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,8 +23,12 @@ export function SignInPage() {
       await signIn.mutateAsync({ email, password });
       navigate(from, { replace: true });
     } catch (err: unknown) {
-      const msg = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
-      setError(Array.isArray(msg) ? msg.join(" · ") : (msg ?? "Sign in failed."));
+      const msg = axios.isAxiosError(err)
+        ? err.response?.data?.message
+        : undefined;
+      setError(
+        Array.isArray(msg) ? msg.join(" · ") : (msg ?? "Sign in failed."),
+      );
     }
   }
 
@@ -59,7 +65,7 @@ export function SignInPage() {
 
         <button
           type="submit"
-          className="btn-primary w-full justify-center mt-2"
+          className="btn-primary mt-2 w-full justify-center"
           disabled={signIn.isPending}
         >
           {signIn.isPending ? "Opening the Grimoire…" : "Enter"}

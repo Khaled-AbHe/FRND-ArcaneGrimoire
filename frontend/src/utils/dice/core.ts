@@ -40,7 +40,11 @@ export function parseSpellLevel(spell: Spell, rowLevel: unknown): Spell {
  * // Hex Warrior: +1d6 for every level above 1st
  * upcastSteps(1, 1, 3) // → 2 (levels 2 and 3 above base)
  */
-export function upcastSteps(everyNLevels: number, aboveLevel: number, slotLevel: number): number {
+export function upcastSteps(
+  everyNLevels: number,
+  aboveLevel: number,
+  slotLevel: number,
+): number {
   const levelsAbove = Math.max(0, slotLevel - aboveLevel);
   return Math.floor(levelsAbove / everyNLevels);
 }

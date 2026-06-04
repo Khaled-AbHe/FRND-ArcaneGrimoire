@@ -17,7 +17,10 @@ export function slotLevelFromLabel(label: string): number {
  * @example slotSummary([{ total: 4, used: 2 }, { total: 2, used: 1 }])
  * // → { total: 6, used: 3 }
  */
-export function slotSummary(levels: LevelRow[]): { total: number; used: number } {
+export function slotSummary(levels: LevelRow[]): {
+  total: number;
+  used: number;
+} {
   return levels.reduce(
     (acc, l) => ({ total: acc.total + l.total, used: acc.used + l.used }),
     { total: 0, used: 0 },

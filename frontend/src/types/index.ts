@@ -58,7 +58,17 @@ export type MagicSchool =
   | "Illusion"
   | "Necromancy"
   | "Transmutation";
-export type DiceType = "Target" | "d0" | "d1" | "d4" | "d6" | "d8" | "d10" | "d12" | "d20" | "100";
+export type DiceType =
+  | "Target"
+  | "d0"
+  | "d1"
+  | "d4"
+  | "d6"
+  | "d8"
+  | "d10"
+  | "d12"
+  | "d20"
+  | "100";
 export type OutputType =
   | "Piercing"
   | "Bludgeoning"
@@ -291,13 +301,35 @@ export const ABILITIES = [
 
 export type Ability = (typeof ABILITIES)[number];
 
-export const SPELL_LEVELS: SpellLevel[] = ["cantrip", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+export const SPELL_LEVELS: SpellLevel[] = [
+  "cantrip",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+];
 
 export const HIGH_SPELL_LEVELS: SpellLevel[] = ["10", "11", "12"];
 
-export const DIE_TYPES: DiceType[] = ["d4", "d6", "d8", "d10", "d12", "d20", "100"];
+export const DIE_TYPES: DiceType[] = [
+  "d4",
+  "d6",
+  "d8",
+  "d10",
+  "d12",
+  "d20",
+  "100",
+];
 
-export const ATTACK_TYPES: AttackType[] = ["Melee Spell Attack", "Ranged Spell Attack"];
+export const ATTACK_TYPES: AttackType[] = [
+  "Melee Spell Attack",
+  "Ranged Spell Attack",
+];
 
 export const OUTPUT_TYPES: OutputType[] = [
   "Piercing",

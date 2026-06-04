@@ -1,5 +1,14 @@
-import type { CastResult, ComputedStats, DiceEntry, ProjectileResult, Spell } from "../../types";
-import type { DamageRollResult, HitRollResult } from "../../components/ui/RollOverlay";
+import type {
+  CastResult,
+  ComputedStats,
+  DiceEntry,
+  ProjectileResult,
+  Spell,
+} from "../../types";
+import type {
+  DamageRollResult,
+  HitRollResult,
+} from "../../components/ui/RollOverlay";
 import { cantripDiceCount, cantripProjCount } from "./cantrip";
 import { parseDie, rollDie, upcastSteps } from "./core";
 
@@ -17,7 +26,11 @@ export type RollMode = "normal" | "advantage" | "disadvantage";
  * @param stats     - Computed character stats (attack bonus, spell mod, etc.)
  * @param slotLevel - Slot level used; pass charLevel for cantrip scaling
  */
-export function rollSpell(spell: Spell, stats: ComputedStats, slotLevel: number): CastResult {
+export function rollSpell(
+  spell: Spell,
+  stats: ComputedStats,
+  slotLevel: number,
+): CastResult {
   const isCantrip = spell.level === "cantrip";
   const out = spell.outputType;
   const st = spell.spellType;
@@ -68,7 +81,9 @@ export function rollSpell(spell: Spell, stats: ComputedStats, slotLevel: number)
         const usesProjScaling = out.scaling.some((s) => s.projCount != null);
         return out.dice.map((d) => ({
           ...d,
-          count: usesProjScaling ? d.count : cantripDiceCount(spell, stats.charLevel),
+          count: usesProjScaling
+            ? d.count
+            : cantripDiceCount(spell, stats.charLevel),
         }));
       }
       return out.dice;
@@ -93,7 +108,12 @@ export function rollSpell(spell: Spell, stats: ComputedStats, slotLevel: number)
     }
 
     // ── Upcast dice ──────────────────────────────────────────────────────────
-    if (!isCantrip && out.kind === "leveled" && out.upcast?.dice && slotLevel > 0) {
+    if (
+      !isCantrip &&
+      out.kind === "leveled" &&
+      out.upcast?.dice &&
+      slotLevel > 0
+    ) {
       for (const u of out.upcast.dice) {
         const steps = upcastSteps(u.everyNLevels, u.aboveLevel, slotLevel);
         if (steps <= 0) continue;
@@ -117,7 +137,9 @@ export function rollSpell(spell: Spell, stats: ComputedStats, slotLevel: number)
 
     projectiles.push({
       attackRoll:
-        st.kind === "attack" && d20Val !== null ? { sides: 20, result: d20Val } : null,
+        st.kind === "attack" && d20Val !== null
+          ? { sides: 20, result: d20Val }
+          : null,
       d20: d20Val,
       bonus,
       total,
@@ -181,7 +203,8 @@ export function buildHitRoll(
 
   const roll1 = rollDie(20);
   const roll2 = rollDie(20);
-  const d20 = mode === "advantage" ? Math.max(roll1, roll2) : Math.min(roll1, roll2);
+  const d20 =
+    mode === "advantage" ? Math.max(roll1, roll2) : Math.min(roll1, roll2);
   const discarded =
     mode === "advantage" ? Math.min(roll1, roll2) : Math.max(roll1, roll2);
 
@@ -222,7 +245,14 @@ export function buildDamageRoll(
   const multiplier = isCrit ? 2 : 1;
 
   if (out.kind === "utility") {
-    return { kind: "damage", rolls: [], modifier: 0, grandTotal: 0, id, isCrit };
+    return {
+      kind: "damage",
+      rolls: [],
+      modifier: 0,
+      grandTotal: 0,
+      id,
+      isCrit,
+    };
   }
 
   if (out.kind === "cantrip") {
@@ -230,7 +260,8 @@ export function buildDamageRoll(
     for (const d of out.dice) {
       const sides = parseDie(d.die);
       const count =
-        (usesProjScaling ? d.count : cantripDiceCount(spell, stats.charLevel)) * multiplier;
+        (usesProjScaling ? d.count : cantripDiceCount(spell, stats.charLevel)) *
+        multiplier;
       for (let i = 0; i < count; i++)
         rolls.push({ die: d.die, result: rollDie(sides), type: d.type });
       if (d.addCastingMod) modifier += stats.spellMod;
@@ -261,5 +292,12 @@ export function buildDamageRoll(
   }
 
   const diceTotal = rolls.reduce((s, r) => s + r.result, 0);
-  return { kind: "damage", rolls, modifier, grandTotal: diceTotal + modifier, id, isCrit };
+  return {
+    kind: "damage",
+    rolls,
+    modifier,
+    grandTotal: diceTotal + modifier,
+    id,
+    isCrit,
+  };
 }

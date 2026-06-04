@@ -5,7 +5,12 @@ import { CasterTemplate } from "../../types";
 export function useSpellTemplate() {
   // const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ casterType, charLevel }: { casterType: CasterTemplate; charLevel: number }) =>
-      spellsApi.template(casterType, charLevel),
+    mutationFn: ({
+      casterType,
+      charLevel,
+    }: {
+      casterType: CasterTemplate;
+      charLevel: number;
+    }) => spellsApi.template(casterType, charLevel),
   });
 }

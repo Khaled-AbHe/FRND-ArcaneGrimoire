@@ -18,9 +18,14 @@ interface SchoolBadgeProps {
 }
 
 export function SchoolBadge({ school, className, mini }: SchoolBadgeProps) {
-  const colors = SCHOOL_COLORS[school] ?? "bg-slate-800 text-slate-300 border-slate-700";
+  const colors =
+    SCHOOL_COLORS[school] ?? "bg-slate-800 text-slate-300 border-slate-700";
   const text = mini ? school.slice(0, 3) : school;
-  return <span className={clsx("school-badge border", colors, className)}>{text}</span>;
+  return (
+    <span className={clsx("school-badge border", colors, className)}>
+      {text}
+    </span>
+  );
 }
 
 export function ConcentrationBadge() {

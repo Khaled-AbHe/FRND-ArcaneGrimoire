@@ -1,6 +1,9 @@
 import PactSettingsProps from "./PactSettingsProps";
 
-export default function PactSlotCount({ pactMagic, onUpdate }: PactSettingsProps) {
+export default function PactSlotCount({
+  pactMagic,
+  onUpdate,
+}: PactSettingsProps) {
   return (
     <div className="grid grid-cols-2 gap-3">
       <div>
@@ -22,7 +25,9 @@ export default function PactSlotCount({ pactMagic, onUpdate }: PactSettingsProps
           min={1}
           max={5}
           value={pactMagic.slotLevel}
-          onChange={(e) => onUpdate({ ...pactMagic, slotLevel: +e.target.value })}
+          onChange={(e) =>
+            onUpdate({ ...pactMagic, slotLevel: +e.target.value })
+          }
         />
       </div>
     </div>

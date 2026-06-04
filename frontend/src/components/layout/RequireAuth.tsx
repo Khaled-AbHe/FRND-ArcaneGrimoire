@@ -16,7 +16,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
         className="flex items-center justify-center"
         style={{ height: "100dvh", background: "var(--bg-primary)" }}
       >
-        <div className="text-muted animate-shimmer font-display tracking-widest text-sm uppercase">
+        <div className="text-muted animate-shimmer font-display text-sm uppercase tracking-widest">
           Consulting the library…
         </div>
       </div>

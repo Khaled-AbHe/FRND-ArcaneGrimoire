@@ -5,7 +5,8 @@ import { spellKeys } from "./spellKeys";
 
 export function useUpdateSpell() {
   return useInvalidatingMutation(
-    ({ id, dto }: { id: number; dto: UpdateSpellDto }) => spellsApi.update(id, dto),
+    ({ id, dto }: { id: number; dto: UpdateSpellDto }) =>
+      spellsApi.update(id, dto),
     spellKeys.all(),
   );
 }

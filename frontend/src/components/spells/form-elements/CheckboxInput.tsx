@@ -6,7 +6,10 @@ type CheckboxInputProps =
       children: ReactNode;
       element: keyof CreateSpellDto;
       isChecked: boolean;
-      set<K extends keyof CreateSpellDto>(key: K, value: CreateSpellDto[K]): void;
+      set<K extends keyof CreateSpellDto>(
+        key: K,
+        value: CreateSpellDto[K],
+      ): void;
       setComp?: never;
       setSpellTypeKind?: never;
       setOutputKind?: never;
@@ -16,7 +19,10 @@ type CheckboxInputProps =
       element: keyof SpellComponents;
       isChecked: boolean;
       set?: never;
-      setComp<K extends keyof SpellComponents>(key: K, value: SpellComponents[K]): void;
+      setComp<K extends keyof SpellComponents>(
+        key: K,
+        value: SpellComponents[K],
+      ): void;
       setSpellTypeKind?: never;
       setOutputKind?: never;
     }
@@ -49,13 +55,13 @@ export function CheckboxInput({
   setOutputKind,
 }: CheckboxInputProps) {
   return (
-    <label className="flex items-center gap-2 cursor-pointer select-none">
+    <label className="flex cursor-pointer select-none items-center gap-2">
       <button
         type="button"
         className={
           !isChecked
-            ? "btn-primary text-xs px-3 py-2 h-[100%] w-full justify-center"
-            : "btn-ghost text-xs px-3 py-2 h-[100%] w-full justify-center"
+            ? "btn-primary h-[100%] w-full justify-center px-3 py-2 text-xs"
+            : "btn-ghost h-[100%] w-full justify-center px-3 py-2 text-xs"
         }
         onClick={() => {
           if (set) {

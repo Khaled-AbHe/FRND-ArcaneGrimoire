@@ -21,7 +21,7 @@ export function PactSettingsModal({
   return (
     <Modal open={open} onClose={onClose} title="Pact Magic Settings">
       <div className="space-y-4">
-        <label className="flex items-center gap-2 cursor-pointer">
+        <label className="flex cursor-pointer items-center gap-2">
           <input
             type="checkbox"
             checked={!!pact.enabled}
@@ -35,7 +35,11 @@ export function PactSettingsModal({
         {pact.enabled && (
           <>
             <PactSlotCount pactMagic={pact} onUpdate={onUpdate} />
-            <MysticArcanumSettings pactMagic={pact} onUpdate={onUpdate} spells={spells} />
+            <MysticArcanumSettings
+              pactMagic={pact}
+              onUpdate={onUpdate}
+              spells={spells}
+            />
           </>
         )}
 

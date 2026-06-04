@@ -24,7 +24,10 @@ export function UserSettingsPage() {
   async function handleAccountSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!username.trim() || !email.trim()) return;
-    await updateUser.mutateAsync({ username: username.trim(), email: email.trim() });
+    await updateUser.mutateAsync({
+      username: username.trim(),
+      email: email.trim(),
+    });
   }
 
   async function handlePasswordSubmit(e: React.FormEvent) {
@@ -39,7 +42,10 @@ export function UserSettingsPage() {
       return;
     }
     if (!user) return;
-    await changePassword.mutateAsync({ userId: user.userId, password: newPassword });
+    await changePassword.mutateAsync({
+      userId: user.userId,
+      password: newPassword,
+    });
     setNewPassword("");
     setConfirmPassword("");
   }
@@ -51,16 +57,16 @@ export function UserSettingsPage() {
 
   return (
     <PageShell>
-      <div className="mx-auto my-10 space-y-6 min-w-[40%] max-w-[80%]">
+      <div className="mx-auto my-10 min-w-[40%] max-w-[80%] space-y-6">
         {/* Account info */}
         <section aria-labelledby="section-account">
           <h2
             id="section-account"
-            className="font-display text-xs uppercase tracking-widest text-accent mb-3"
+            className="text-accent mb-3 font-display text-xs uppercase tracking-widest"
           >
             Account
           </h2>
-          <form onSubmit={handleAccountSubmit} className="card p-4 space-y-4">
+          <form onSubmit={handleAccountSubmit} className="card space-y-4 p-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="username" className="label">
                 Username
@@ -97,7 +103,11 @@ export function UserSettingsPage() {
                 Failed to save.
               </p>
             )}
-            <button type="submit" className="btn-primary text-sm" disabled={updateUser.isPending}>
+            <button
+              type="submit"
+              className="btn-primary text-sm"
+              disabled={updateUser.isPending}
+            >
               {updateUser.isPending ? "Saving…" : "Save Changes"}
             </button>
           </form>
@@ -107,11 +117,11 @@ export function UserSettingsPage() {
         <section aria-labelledby="section-password">
           <h2
             id="section-password"
-            className="font-display text-xs uppercase tracking-widest text-accent mb-3"
+            className="text-accent mb-3 font-display text-xs uppercase tracking-widest"
           >
             Password
           </h2>
-          <form onSubmit={handlePasswordSubmit} className="card p-4 space-y-4">
+          <form onSubmit={handlePasswordSubmit} className="card space-y-4 p-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="new-password" className="label">
                 New Password
@@ -169,17 +179,26 @@ export function UserSettingsPage() {
         <section aria-labelledby="section-signout">
           <h2
             id="section-signout"
-            className="font-display text-xs uppercase tracking-widest mb-3"
+            className="mb-3 font-display text-xs uppercase tracking-widest"
             style={{ color: "#ef4444" }}
           >
             Session
           </h2>
-          <div className="card p-4" style={{ borderColor: "rgba(239,68,68,0.2)" }}>
+          <div
+            className="card p-4"
+            style={{ borderColor: "rgba(239,68,68,0.2)" }}
+          >
             <div className="flex items-center justify-between">
-              <div className="text-sm" style={{ color: "var(--text-secondary)" }}>
+              <div
+                className="text-sm"
+                style={{ color: "var(--text-secondary)" }}
+              >
                 Signed in as {user?.username}
               </div>
-              <button className="btn-danger text-xs" onClick={() => setSignOutConfirmOpen(true)}>
+              <button
+                className="btn-danger text-xs"
+                onClick={() => setSignOutConfirmOpen(true)}
+              >
                 Sign Out
               </button>
             </div>
@@ -193,15 +212,18 @@ export function UserSettingsPage() {
         title="Sign Out"
         width="max-w-sm"
       >
-        <p className="text-sm mb-5" style={{ color: "var(--text-secondary)" }}>
+        <p className="mb-5 text-sm" style={{ color: "var(--text-secondary)" }}>
           Are you sure you want to sign out?
         </p>
-        <div className="flex gap-2 justify-end">
-          <button className="btn-ghost text-sm px-4" onClick={() => setSignOutConfirmOpen(false)}>
+        <div className="flex justify-end gap-2">
+          <button
+            className="btn-ghost px-4 text-sm"
+            onClick={() => setSignOutConfirmOpen(false)}
+          >
             Cancel
           </button>
           <button
-            className="btn-danger text-sm px-4"
+            className="btn-danger px-4 text-sm"
             onClick={handleSignOut}
             disabled={signOut.isPending}
             autoFocus
