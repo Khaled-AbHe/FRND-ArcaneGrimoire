@@ -69,12 +69,12 @@ export function SpellRow({
     spell.outputType.kind !== "utility" && effect !== "—" && effect !== "";
   const rowSpell: Spell = parseSpellLevel(spell, levelNum);
 
-  function fireHitRoll(mode: RollMode) {
+  function fireHitRoll(mode: RollMode = "normal") {
     onRollHit(buildHitRoll(spell, stats, nextRollId(), mode));
     setHitContextMenu(false);
   }
 
-  function fireDamageRoll(isCrit: boolean) {
+  function fireDamageRoll(isCrit: boolean = false) {
     onRollDamage(buildDamageRoll(spell, stats, levelNum, nextRollId(), isCrit));
     setDamageContextMenu(false);
   }

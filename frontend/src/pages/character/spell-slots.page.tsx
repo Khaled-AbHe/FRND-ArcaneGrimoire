@@ -346,7 +346,7 @@ export function SpellSlotsPage({
                                         : `Pact slot ${i + 1} available`
                                     }
                                     aria-pressed={i >= pact.used}
-                                    className={`pact-pip${i < pact.used ? "pact-pip--used" : ""}`}
+                                    className={`pact-pip ${i < pact.used ? "pact-pip--used" : ""}`}
                                   />
                                 ),
                               )}
@@ -373,7 +373,7 @@ export function SpellSlotsPage({
                                       : `Slot ${i + 1} available — click to expend`
                                   }
                                   aria-pressed={i >= row.used}
-                                  className={`slot-pip${i < row.used ? "slot-pip--used" : ""}${isHigh ? "slot-pip--high" : ""}`}
+                                  className={`slot-pip ${i < row.used ? "slot-pip--used" : ""}${isHigh ? "slot-pip--high" : ""}`}
                                 />
                               ))}
                             </div>
