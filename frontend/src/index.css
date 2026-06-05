@@ -538,9 +538,8 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: 1.25rem;
-  padding: 4rem 2rem;
   text-align: center;
+  padding-bottom: 150px;
 }
 
 .slots-empty-icon {
