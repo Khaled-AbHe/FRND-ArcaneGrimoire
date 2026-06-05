@@ -303,162 +303,165 @@ export function SpellSlotsPage({
                 used: 0,
               };
 
-              const hasSlots = row !== null || pactSlotsLeft > 0;
+              const rowEnabled = row !== null || pactSlotsLeft > 0;
               const preparedHere =
-                pact.slotLevel === levelNum || hasSlots
+                pact.slotLevel === levelNum || rowEnabled
                   ? getPreparedSpells(syntheticRow)
                   : [];
               const arcanumHere =
                 pact?.arcana?.filter((a) => a.level === levelNum) ?? [];
               const canCast = isCantrip || slotsLeft > 0 || pactSlotsLeft > 0;
 
-              return (
-                <div
-                  key={`level-${levelNum}`}
-                  className="level-section overflow-y-visible"
-                >
-                  {/* Section heading */}
-                  <div className="level-heading">
-                    <span className="level-heading__title">
-                      {isCantrip ? "Cantrip" : `Level ${levelNum}`}
-                    </span>
+              if (rowEnabled)
+                return (
+                  <div
+                    key={`level-${levelNum}`}
+                    className="level-section overflow-y-visible"
+                  >
+                    {/* Section heading */}
+                    <div className="level-heading">
+                      <span className="level-heading__title">
+                        {isCantrip ? "Cantrip" : `Level ${levelNum}`}
+                      </span>
 
-                    <div className="flex-1" />
+                      <div className="flex-1" />
 
-                    {!isCantrip && (
-                      <div className="level-heading__slots">
-                        {/* PACT slots */}
-                        {isPactLevel && (
-                          <div className="slot-pip-group">
-                            <div
-                              className="slot-pip-row"
-                              role="group"
-                              aria-label={`Pact slots: ${pact.slots - pact.used} of ${pact.slots} remaining`}
-                            >
-                              {Array.from({ length: pact.slots }).map(
-                                (_, i) => (
-                                  <button
-                                    key={i}
-                                    onClick={() => togglePactSlot(i)}
-                                    aria-label={
-                                      i < pact.used
-                                        ? `Pact slot ${i + 1} expended`
-                                        : `Pact slot ${i + 1} available`
-                                    }
-                                    aria-pressed={i >= pact.used}
-                                    className={`pact-pip ${i < pact.used ? "pact-pip--used" : ""}`}
-                                  />
-                                ),
-                              )}
+                      {!isCantrip && (
+                        <div className="level-heading__slots">
+                          {/* PACT slots */}
+                          {isPactLevel && (
+                            <div className="slot-pip-group">
+                              <div
+                                className="slot-pip-row"
+                                role="group"
+                                aria-label={`Pact slots: ${pact.slots - pact.used} of ${pact.slots} remaining`}
+                              >
+                                {Array.from({ length: pact.slots }).map(
+                                  (_, i) => (
+                                    <button
+                                      key={i}
+                                      onClick={() => togglePactSlot(i)}
+                                      aria-label={
+                                        i < pact.used
+                                          ? `Pact slot ${i + 1} expended`
+                                          : `Pact slot ${i + 1} available`
+                                      }
+                                      aria-pressed={i >= pact.used}
+                                      className={`pact-pip ${i < pact.used ? "pact-pip--used" : ""}`}
+                                    />
+                                  ),
+                                )}
+                              </div>
+                              <span className="slots-label">PACT</span>
                             </div>
-                            <span className="slots-label">PACT</span>
-                          </div>
-                        )}
+                          )}
 
-                        {/* SLOTS */}
-                        {row && (
-                          <div className="slot-pip-group">
-                            <div
-                              className="slot-pip-row"
-                              role="group"
-                              aria-label={`Spell slots level ${levelNum}: ${row.total - row.used} of ${row.total} remaining`}
-                            >
-                              {Array.from({ length: row.total }).map((_, i) => (
-                                <button
-                                  key={i}
-                                  onClick={() => toggleSlot(row.id, i)}
-                                  aria-label={
-                                    i < row.used
-                                      ? `Slot ${i + 1} expended — click to restore`
-                                      : `Slot ${i + 1} available — click to expend`
-                                  }
-                                  aria-pressed={i >= row.used}
-                                  className={`slot-pip ${i < row.used ? "slot-pip--used" : ""}${isHigh ? "slot-pip--high" : ""}`}
-                                />
-                              ))}
+                          {/* SLOTS */}
+                          {row && (
+                            <div className="slot-pip-group">
+                              <div
+                                className="slot-pip-row"
+                                role="group"
+                                aria-label={`Spell slots level ${levelNum}: ${row.total - row.used} of ${row.total} remaining`}
+                              >
+                                {Array.from({ length: row.total }).map(
+                                  (_, i) => (
+                                    <button
+                                      key={i}
+                                      onClick={() => toggleSlot(row.id, i)}
+                                      aria-label={
+                                        i < row.used
+                                          ? `Slot ${i + 1} expended — click to restore`
+                                          : `Slot ${i + 1} available — click to expend`
+                                      }
+                                      aria-pressed={i >= row.used}
+                                      className={`slot-pip ${i < row.used ? "slot-pip--used" : ""}${isHigh ? "slot-pip--high" : ""}`}
+                                    />
+                                  ),
+                                )}
+                              </div>
+                              <span className="slots-label">SLOTS</span>
                             </div>
-                            <span className="slots-label">SLOTS</span>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Column headers */}
+                    {preparedHere.length > 0 && <SlotColumnHeaders />}
+
+                    {/* Spell rows — using shared SpellRow component */}
+                    {preparedHere.map((spell, si) => (
+                      <SpellRow
+                        key={spell.id}
+                        spell={spell}
+                        stats={stats}
+                        isLast={
+                          si === preparedHere.length - 1 &&
+                          arcanumHere.length === 0
+                        }
+                        variant={{
+                          kind: "cast",
+                          row,
+                          isPactLevel,
+                          pactSlotsLeft,
+                          slotsLeft,
+                          isCantrip,
+                          canCast,
+                          castingSpellId,
+                          levelNum,
+                          onCastFromRow: castFromRow,
+                          onCastFromPact: castFromPact,
+                          setCastingSpellId,
+                        }}
+                        onViewDetail={setDetailSpell}
+                        onRollHit={onRollHit}
+                        onRollDamage={onRollDamage}
+                        nextRollId={nextRollId}
+                      />
+                    ))}
+
+                    {preparedHere.length === 0 &&
+                      arcanumHere.filter((a) => a.spellId).length === 0 && (
+                        <div className="slots-empty-row">
+                          No prepared{" "}
+                          {isCantrip ? "cantrips" : "spells or mystic arcanum"}{" "}
+                          at this level.
+                        </div>
+                      )}
+
+                    {/* Arcanum rows — reuse SpellRow with arcanum variant */}
+                    {arcanumHere.map((arc) => {
+                      const globalIdx = pact.arcana.indexOf(arc);
+                      const arcSpell = arc.spellId
+                        ? spells.find((s) => s.id === arc.spellId)
+                        : null;
+                      if (!arcSpell) return null;
+
+                      return (
+                        <div key={`arc-${arc.level}-${arc.spellId}`}>
+                          {preparedHere.length === 0 && <SlotColumnHeaders />}
+                          <SpellRow
+                            spell={arcSpell}
+                            stats={stats}
+                            isLast={true}
+                            variant={{
+                              kind: "arcanum",
+                              arcUsed: arc.used,
+                              levelNum,
+                              onCastArcanum: () =>
+                                !arc.used && toggleArcanum(globalIdx),
+                            }}
+                            onViewDetail={setDetailSpell}
+                            onRollHit={onRollHit}
+                            onRollDamage={onRollDamage}
+                            nextRollId={nextRollId}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
-
-                  {/* Column headers */}
-                  {preparedHere.length > 0 && <SlotColumnHeaders />}
-
-                  {/* Spell rows — using shared SpellRow component */}
-                  {preparedHere.map((spell, si) => (
-                    <SpellRow
-                      key={spell.id}
-                      spell={spell}
-                      stats={stats}
-                      isLast={
-                        si === preparedHere.length - 1 &&
-                        arcanumHere.length === 0
-                      }
-                      variant={{
-                        kind: "cast",
-                        row,
-                        isPactLevel,
-                        pactSlotsLeft,
-                        slotsLeft,
-                        isCantrip,
-                        canCast,
-                        castingSpellId,
-                        levelNum,
-                        onCastFromRow: castFromRow,
-                        onCastFromPact: castFromPact,
-                        setCastingSpellId,
-                      }}
-                      onViewDetail={setDetailSpell}
-                      onRollHit={onRollHit}
-                      onRollDamage={onRollDamage}
-                      nextRollId={nextRollId}
-                    />
-                  ))}
-
-                  {preparedHere.length === 0 &&
-                    arcanumHere.filter((a) => a.spellId).length === 0 && (
-                      <div className="slots-empty-row">
-                        No prepared{" "}
-                        {isCantrip ? "cantrips" : "spells or mystic arcanum"} at
-                        this level.
-                      </div>
-                    )}
-
-                  {/* Arcanum rows — reuse SpellRow with arcanum variant */}
-                  {arcanumHere.map((arc) => {
-                    const globalIdx = pact.arcana.indexOf(arc);
-                    const arcSpell = arc.spellId
-                      ? spells.find((s) => s.id === arc.spellId)
-                      : null;
-                    if (!arcSpell) return null;
-
-                    return (
-                      <div key={`arc-${arc.level}-${arc.spellId}`}>
-                        {preparedHere.length === 0 && <SlotColumnHeaders />}
-                        <SpellRow
-                          spell={arcSpell}
-                          stats={stats}
-                          isLast={true}
-                          variant={{
-                            kind: "arcanum",
-                            arcUsed: arc.used,
-                            levelNum,
-                            onCastArcanum: () =>
-                              !arc.used && toggleArcanum(globalIdx),
-                          }}
-                          onViewDetail={setDetailSpell}
-                          onRollHit={onRollHit}
-                          onRollDamage={onRollDamage}
-                          nextRollId={nextRollId}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              );
+                );
             });
           })()}
       </div>

@@ -5,6 +5,7 @@ interface IconProps {
   size?: number;
   className?: string;
   style?: React.CSSProperties;
+  color?: string;
 }
 
 export function ArrowLeftIcon({ size = 16, className, style }: IconProps) {
@@ -21,6 +22,60 @@ export function ArrowLeftIcon({ size = 16, className, style }: IconProps) {
       <path
         d="M10 3L5 8l5 5"
         stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function ArrowUpIcon({
+  size = 16,
+  className,
+  style,
+  color = "currentColor",
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M3 11L8 6L13 11"
+        stroke={color}
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function ArrowDownIcon({
+  size = 16,
+  className,
+  style,
+  color = "currentColor",
+}: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      className={className}
+      style={style}
+      aria-hidden="true"
+    >
+      <path
+        d="M3 5L8 10L13 5"
+        stroke={color}
         strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -491,7 +546,6 @@ export function RadiusIcon() {
   );
 }
 
-/** Minimal d20 polygon SVG. */
 export function D20Svg({ color, number }: { color: string; number: number }) {
   return (
     <svg viewBox="0 0 100 100" width="200" height="200" xmlns="http://w3.org">
@@ -500,8 +554,8 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
         points="50,2.4 91.2,26.2 91.2,73.8 50,97.6 8.8,73.8 8.8,26.2"
         fill="#2d3748"
         stroke={color}
-        stroke-width="2"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinejoin="round"
       />
 
       {/* <!-- Central Face (The Main Triangle) --> */}
@@ -509,26 +563,19 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
         points="50,22.1 75,65.4 25,65.4"
         fill="#4a5568"
         stroke={color}
-        stroke-width="2"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinejoin="round"
       />
 
       {/* <!-- Top and Bottom Outer Cap Lines --> */}
-      <line
-        x1="50"
-        y1="2.4"
-        x2="50"
-        y2="22.1"
-        stroke={color}
-        stroke-width="2"
-      />
+      <line x1="50" y1="2.4" x2="50" y2="22.1" stroke={color} strokeWidth="2" />
       <line
         x1="8.8"
         y1="26.2"
         x2="50"
         y2="22.1"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         x1="91.2"
@@ -536,7 +583,7 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
         x2="50"
         y2="22.1"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
 
       <line
@@ -545,7 +592,7 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
         x2="25"
         y2="65.4"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         x1="8.8"
@@ -553,7 +600,7 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
         x2="25"
         y2="65.4"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         x1="50"
@@ -561,7 +608,7 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
         x2="25"
         y2="65.4"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
 
       <line
@@ -570,7 +617,7 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
         x2="75"
         y2="65.4"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         x1="91.2"
@@ -578,7 +625,7 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
         x2="75"
         y2="65.4"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
       <line
         x1="50"
@@ -586,18 +633,18 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
         x2="75"
         y2="65.4"
         stroke={color}
-        stroke-width="2"
+        strokeWidth="2"
       />
 
       {/* <!-- Central Number Placement --> */}
       <text
         x="50"
         y="55"
-        font-family="sans-serif"
-        font-size="18"
-        font-weight="bold"
+        fontFamily="sans-serif"
+        fontSize="18"
+        fontWeight="bold"
         fill={color}
-        text-anchor="middle"
+        textAnchor="middle"
       >
         {number}
       </text>

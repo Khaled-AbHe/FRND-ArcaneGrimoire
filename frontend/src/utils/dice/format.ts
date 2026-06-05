@@ -1,4 +1,4 @@
-import type { Spell } from "../../types";
+import type { LevelRow, Spell } from "../../types";
 
 /**
  * Formats a numeric bonus as a signed string.
@@ -14,9 +14,12 @@ export function fmtBonus(n: number): string {
  * @example levelLabel("cantrip") // → "Cantrip"
  * @example levelLabel("3")       // → "Level 3"
  */
-export function levelLabel(level: string): string {
-  if (level === "cantrip") return "Cantrip";
-  return `Level ${level}`;
+export function levelLabel(level: string): string;
+
+export function levelLabel(level: number): string;
+
+export function levelLabel(level: number | string): string {
+  return level === 0 || level === "cantrip" ? "Cantrip" : `Level ${level}`;
 }
 
 /**
@@ -61,4 +64,12 @@ export function fmtCastTime(spell: Spell) {
       .replace(" or Ritual", "")
       .replace("1 minute", "1m") ?? "—"
   );
+}
+
+export function levelId(levelNum: number) {
+  return `level_${levelNum}`;
+}
+
+export function levelNumFromRow(row: LevelRow): number {
+  return parseInt(row.label.replace(/\D/g, ""), 10) || 0;
 }

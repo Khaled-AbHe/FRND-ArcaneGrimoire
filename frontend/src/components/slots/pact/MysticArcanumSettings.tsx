@@ -1,3 +1,4 @@
+import { ToggleablePill } from "../../ui/ToggleablePill";
 import PactSettingsProps from "./PactSettingsProps";
 
 const ARCANUM_LEVELS = [6, 7, 8, 9] as const;
@@ -37,7 +38,7 @@ export default function MysticArcanumSettings({
     <div>
       <label className="label mb-3 block">Mystic Arcanum</label>
       <div className="space-y-2">
-        {ARCANUM_LEVELS.map((level) => {
+        {ARCANUM_LEVELS.map((level, i) => {
           const arc = getArcanum(level);
           const enabled = arc !== null;
           const levelSpells = spells
@@ -45,36 +46,18 @@ export default function MysticArcanumSettings({
             : [];
 
           return (
-            <div
-              key={level}
-              className="flex items-center gap-3 rounded px-3 py-2"
-              style={{
-                background: "var(--bg-primary)",
-                border: `1px solid ${enabled ? "#a855f7" : "var(--border)"}`,
-                opacity: enabled ? 1 : 0.5,
-                transition: "all 0.15s",
-              }}
+            <ToggleablePill
+              key={`Arcanum ${i}`}
+              title={`Level ${level}`}
+              enabled={enabled}
+              togglePill={() => toggleArcanum(level, !enabled)}
+              pillColor="#a855f7"
             >
-              {/* Enable toggle */}
-              <input
-                type="checkbox"
-                checked={enabled}
-                onChange={(e) => toggleArcanum(level, e.target.checked)}
-              />
-
-              {/* Level label */}
-              <span
-                className="w-16 shrink-0 font-display text-xs tracking-wider"
-                style={{ color: enabled ? "#a855f7" : "var(--text-muted)" }}
-              >
-                Level {level}
-              </span>
-
-              {/* Spell picker */}
               <select
-                className="select flex-1 text-xs"
+                className="select w-full flex-1 text-xs"
                 disabled={!enabled}
                 value={arc?.spellId ?? ""}
+                onClick={(e) => e.stopPropagation()}
                 onChange={(e) =>
                   setArcanumSpell(
                     level,
@@ -89,7 +72,7 @@ export default function MysticArcanumSettings({
                   </option>
                 ))}
               </select>
-            </div>
+            </ToggleablePill>
           );
         })}
       </div>

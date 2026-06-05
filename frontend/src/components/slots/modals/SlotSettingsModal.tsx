@@ -1,21 +1,12 @@
 import { useState, useEffect } from "react";
 import { Modal } from "../../ui/Modal";
 import type { LevelRow } from "../../../types";
+import { IncrementableValue } from "../../ui/IncrementableValue";
+import { levelId, levelLabel, levelNumFromRow } from "../../../utils/dice";
+import { ToggleablePill } from "../../ui/ToggleablePill";
 
 const NORMAL_LEVELS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 const HIGH_LEVELS = [10, 11, 12] as const;
-
-function levelId(levelNum: number) {
-  return `level_${levelNum}`;
-}
-
-function levelLabel(levelNum: number) {
-  return levelNum === 0 ? "Cantrip" : `Level ${levelNum}`;
-}
-
-function levelNumFromRow(row: LevelRow): number {
-  return parseInt(row.label.replace(/\D/g, ""), 10) || 0;
-}
 
 interface SlotSettingsModalProps {
   open: boolean;
@@ -32,8 +23,6 @@ export function SlotSettingsModal({
   highMagic,
   onUpdate,
 }: SlotSettingsModalProps) {
-  // Local draft — keyed by level number, stores the last-known total so
-  // toggling off then back on restores the previous count rather than resetting to 1.
   const [totals, setTotals] = useState<Record<number, number>>(() => {
     const map: Record<number, number> = {};
     levels.forEach((r) => {
@@ -62,7 +51,8 @@ export function SlotSettingsModal({
     return totals[levelNum] ?? 1;
   }
 
-  function setTotal(levelNum: number, value: number) {
+  function setTotal(value: number, levelNum?: number) {
+    if (!levelNum) return;
     const clamped = Math.min(12, Math.max(1, value));
     setTotals((prev) => ({ ...prev, [levelNum]: clamped }));
   }
@@ -90,83 +80,40 @@ export function SlotSettingsModal({
     }
   }
 
-  function updateTotal(levelNum: number, value: number) {
-    const clamped = Math.min(12, Math.max(1, value));
-    setTotals((prev) => ({ ...prev, [levelNum]: clamped }));
-    const next = levels.map((r) =>
-      levelNumFromRow(r) === levelNum ? { ...r, total: clamped } : r,
-    );
-    onUpdate(next);
-  }
-
   return (
     <Modal open={open} onClose={onClose} title="Spell Slot Settings">
       <div className="space-y-1.5">
         {allLevels.map((levelNum) => {
           const isCantrip = levelNum === 0;
           const enabled = enabledSet.has(levelNum);
+          const totalSlots = getTotal(levelNum);
 
           return (
-            <div
+            <ToggleablePill
               key={levelNum}
-              className="card flex items-center justify-between gap-3 rounded px-3 py-2"
-              style={{
-                opacity: enabled ? 1 : 0.5,
-                transition: "all 0.15s",
-              }}
+              title={levelLabel(levelNum)}
+              enabled={enabled}
+              togglePill={() => toggleLevel(levelNum, !enabled)}
             >
-              <div className="flex h-[30px] w-[40%] items-center gap-5">
-                <input
-                  type="checkbox"
-                  checked={enabled}
-                  onChange={(e) => toggleLevel(levelNum, e.target.checked)}
-                  aria-label={`Enable ${levelLabel(levelNum)}`}
-                />
-
-                <span
-                  className="w-20 shrink-0 font-display text-sm tracking-wider"
-                  style={{
-                    color: enabled ? "var(--accent)" : "var(--text-muted)",
-                  }}
-                >
-                  {levelLabel(levelNum)}
+              {isCantrip ? (
+                <span className="flex h-[30px] w-fit items-center justify-end text-sm text-[var(--text-secondary)]">
+                  At Will
                 </span>
-              </div>
-
-              <div>
-                {isCantrip ? (
-                  <span
-                    className="flex h-[30px] w-[80px] items-center justify-start text-sm"
-                    style={{ color: "var(--text-muted)" }}
-                  >
-                    At Will
-                  </span>
-                ) : (
-                  <div className="flex h-[30px] w-[80px] items-center justify-between">
-                    <input
-                      type="number"
-                      className="w-[30px] bg-[var(--bg-secondary)] text-right text-sm"
-                      min={1}
-                      max={4}
-                      disabled={!enabled}
-                      value={getTotal(levelNum)}
-                      onChange={(e) => {
-                        const v = parseInt(e.target.value, 10);
-                        if (!isNaN(v)) setTotal(levelNum, v);
-                      }}
-                      onBlur={(e) => {
-                        const v = parseInt(e.target.value, 10);
-                        updateTotal(levelNum, isNaN(v) ? 1 : v);
-                      }}
-                      aria-label={`Slot count for ${levelLabel(levelNum)}`}
-                    />
-                    <span className="w-[70px] text-sm text-[var(--text-muted)]">
-                      {getTotal(levelNum) > 1 ? "Slots" : "Slot"}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
+              ) : (
+                <div className="flex h-[30px] w-fit items-center gap-5">
+                  <IncrementableValue
+                    key={levelNum}
+                    label={totalSlots > 1 ? "Slots" : "Slot"}
+                    value={totalSlots}
+                    setValue={setTotal}
+                    max={4}
+                    min={1}
+                    disabled={!enabled}
+                    mapKey={levelNum}
+                  />
+                </div>
+              )}
+            </ToggleablePill>
           );
         })}
       </div>
