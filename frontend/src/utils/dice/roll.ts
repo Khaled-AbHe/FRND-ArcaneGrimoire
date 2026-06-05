@@ -15,6 +15,9 @@ import { parseDie, rollDie, upcastSteps } from "./core";
 /** Controls whether a hit roll uses straight, advantage, or disadvantage. */
 export type RollMode = "normal" | "advantage" | "disadvantage";
 
+/** Controls whether a hit roll uses straight, advantage, or disadvantage. */
+export type DamageMode = "normal" | "critical";
+
 /**
  * Fully rolls a spell cast — resolves projectile count, attack rolls,
  * base dice, upcast dice, and aggregates totals.

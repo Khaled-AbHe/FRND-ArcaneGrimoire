@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { D20Svg } from "./Icons";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -338,120 +339,6 @@ function D20Face({
     >
       <D20Svg color={accentColor} number={value} />
     </div>
-  );
-}
-
-/** Minimal d20 polygon SVG. */
-function D20Svg({ color, number }: { color: string; number: number }) {
-  return (
-    <svg viewBox="0 0 100 100" width="200" height="200" xmlns="http://w3.org">
-      {/* <!-- Outer Frame & Background Silhouette --> */}
-      <polygon
-        points="50,2.4 91.2,26.2 91.2,73.8 50,97.6 8.8,73.8 8.8,26.2"
-        fill="#2d3748"
-        stroke={color}
-        stroke-width="2"
-        stroke-linejoin="round"
-      />
-
-      {/* <!-- Central Face (The Main Triangle) --> */}
-      <polygon
-        points="50,22.1 75,65.4 25,65.4"
-        fill="#4a5568"
-        stroke={color}
-        stroke-width="2"
-        stroke-linejoin="round"
-      />
-
-      {/* <!-- Top and Bottom Outer Cap Lines --> */}
-      <line
-        x1="50"
-        y1="2.4"
-        x2="50"
-        y2="22.1"
-        stroke={color}
-        stroke-width="2"
-      />
-      <line
-        x1="8.8"
-        y1="26.2"
-        x2="50"
-        y2="22.1"
-        stroke={color}
-        stroke-width="2"
-      />
-      <line
-        x1="91.2"
-        y1="26.2"
-        x2="50"
-        y2="22.1"
-        stroke={color}
-        stroke-width="2"
-      />
-
-      <line
-        x1="8.8"
-        y1="26.2"
-        x2="25"
-        y2="65.4"
-        stroke={color}
-        stroke-width="2"
-      />
-      <line
-        x1="8.8"
-        y1="73.8"
-        x2="25"
-        y2="65.4"
-        stroke={color}
-        stroke-width="2"
-      />
-      <line
-        x1="50"
-        y1="97.6"
-        x2="25"
-        y2="65.4"
-        stroke={color}
-        stroke-width="2"
-      />
-
-      <line
-        x1="91.2"
-        y1="26.2"
-        x2="75"
-        y2="65.4"
-        stroke={color}
-        stroke-width="2"
-      />
-      <line
-        x1="91.2"
-        y1="73.8"
-        x2="75"
-        y2="65.4"
-        stroke={color}
-        stroke-width="2"
-      />
-      <line
-        x1="50"
-        y1="97.6"
-        x2="75"
-        y2="65.4"
-        stroke={color}
-        stroke-width="2"
-      />
-
-      {/* <!-- Central Number Placement --> */}
-      <text
-        x="50"
-        y="55"
-        font-family="sans-serif"
-        font-size="18"
-        font-weight="bold"
-        fill={color}
-        text-anchor="middle"
-      >
-        {number}
-      </text>
-    </svg>
   );
 }
 

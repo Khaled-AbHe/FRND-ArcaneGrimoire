@@ -3,6 +3,7 @@ import type { Spell, LevelRow, ComputedStats } from "../../../types";
 import {
   buildDamageRoll,
   buildHitRoll,
+  DamageMode,
   fmtCastTime,
   parseSpellLevel,
   type RollMode,
@@ -74,8 +75,16 @@ export function SpellRow({
     setHitContextMenu(false);
   }
 
-  function fireDamageRoll(isCrit: boolean = false) {
-    onRollDamage(buildDamageRoll(spell, stats, levelNum, nextRollId(), isCrit));
+  function fireDamageRoll(damage: DamageMode = "normal") {
+    onRollDamage(
+      buildDamageRoll(
+        spell,
+        stats,
+        levelNum,
+        nextRollId(),
+        damage === "critical",
+      ),
+    );
     setDamageContextMenu(false);
   }
 
@@ -135,17 +144,17 @@ export function SpellRow({
               setContextMenu={setHitContextMenu}
               contextOptions={[
                 {
-                  mode: "normal" as RollMode,
+                  effect: "normal" as RollMode,
                   label: "Normal Roll",
                   color: "var(--text-primary)",
                 },
                 {
-                  mode: "advantage" as RollMode,
+                  effect: "advantage" as RollMode,
                   label: "Advantage",
                   color: "#34d399",
                 },
                 {
-                  mode: "disadvantage" as RollMode,
+                  effect: "disadvantage" as RollMode,
                   label: "Disadvantage",
                   color: "#f87171",
                 },
@@ -170,12 +179,12 @@ export function SpellRow({
               setContextMenu={setDamageContextMenu}
               contextOptions={[
                 {
-                  isCrit: false,
+                  effect: "normal" as DamageMode,
                   label: "Normal Roll",
                   color: "var(--text-primary)",
                 },
                 {
-                  isCrit: true,
+                  effect: "critical" as DamageMode,
                   label: "Critical Hit",
                   color: "var(--crit-color, #ffd000)",
                 },

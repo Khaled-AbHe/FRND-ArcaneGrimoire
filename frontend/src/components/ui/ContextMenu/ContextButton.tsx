@@ -54,12 +54,12 @@ export function ContextButton({
 
       {contextMenu && (
         <ContextMenu onClose={() => setContextMenu(false)}>
-          {contextOptions.map(({ mode, label, color }) => (
+          {contextOptions.map(({ effect, label, color }) => (
             <ContextOption
               key={label}
               title={label}
               color={color}
-              onClick={() => onClick(mode)}
+              onClick={() => onClick(effect)}
             />
           ))}
         </ContextMenu>
