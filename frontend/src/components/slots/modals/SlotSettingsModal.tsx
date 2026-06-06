@@ -55,6 +55,10 @@ export function SlotSettingsModal({
     if (!levelNum) return;
     const clamped = Math.min(12, Math.max(1, value));
     setTotals((prev) => ({ ...prev, [levelNum]: clamped }));
+    const next = levels.map((r) =>
+      levelNumFromRow(r) === levelNum ? { ...r, total: clamped } : r,
+    );
+    onUpdate(next);
   }
 
   function toggleLevel(levelNum: number, enabled: boolean) {
