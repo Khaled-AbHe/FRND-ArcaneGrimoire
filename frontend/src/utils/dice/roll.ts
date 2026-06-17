@@ -8,7 +8,7 @@ import type {
 import type {
   DamageRollResult,
   HitRollResult,
-} from "../../components/ui/RollOverlay";
+} from "../../components/ui/RollTable/RollCards";
 import { cantripDiceCount, cantripProjCount } from "./cantrip";
 import { parseDie, rollDie, upcastSteps } from "./core";
 

@@ -1,3 +1,5 @@
+import { Character } from "../../types";
+import { useRest } from "../../hooks/characters/useRest";
 import {
   MoonRestIcon,
   PactIcon,
@@ -10,17 +12,17 @@ interface SlotsToolbarProps {
   setSlotSettingsOpen: (param: boolean) => void;
   setTemplateOpen: (param: boolean) => void;
   setPactOpen: (param: boolean) => void;
-  doShortRest: () => void;
-  doLongRest: () => void;
+  character: Character;
 }
 
 export function SlotsToolbar({
   setSlotSettingsOpen,
   setTemplateOpen,
   setPactOpen,
-  doShortRest,
-  doLongRest,
+  character,
 }: SlotsToolbarProps) {
+  const { shortRest, longRest } = useRest(character.id);
+
   return (
     <div className="slots-toolbar">
       <button
@@ -50,7 +52,7 @@ export function SlotsToolbar({
       <div className="flex-1" />
       <button
         className="btn-ghost flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-xs"
-        onClick={doShortRest}
+        onClick={shortRest.mutateAsync}
         aria-label="Take a short rest (restores pact slots)"
       >
         <MoonRestIcon size={12} />
@@ -58,7 +60,7 @@ export function SlotsToolbar({
       </button>
       <button
         className="btn-primary flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-xs"
-        onClick={doLongRest}
+        onClick={longRest.mutateAsync}
         aria-label="Take a long rest (restores all slots)"
       >
         <SunRestIcon size={12} />

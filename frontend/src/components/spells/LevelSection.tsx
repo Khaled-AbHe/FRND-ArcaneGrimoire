@@ -9,7 +9,7 @@ import {
 import { SlotColumnHeaders } from "../slots/rows/SlotColumnHeader";
 import { SpellRow } from "../slots/rows/SpellRow";
 import { SlotDisplay } from "../slots/SlotDisplay";
-import { DamageRollResult, HitRollResult } from "../ui/RollOverlay";
+import { DamageRollResult, HitRollResult } from "../../types";
 
 interface LevelSectionProps {
   character: Character;

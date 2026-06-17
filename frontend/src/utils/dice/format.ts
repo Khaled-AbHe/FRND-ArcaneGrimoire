@@ -1,4 +1,4 @@
-import type { LevelRow, Spell } from "../../types";
+import type { HitRollResult, LevelRow, Spell } from "../../types";
 
 /**
  * Formats a numeric bonus as a signed string.
@@ -72,4 +72,44 @@ export function levelId(levelNum: number) {
 
 export function levelNumFromRow(row: LevelRow): number {
   return parseInt(row.label.replace(/\D/g, ""), 10) || 0;
+}
+
+export function hitTheme(isCrit: boolean, isMiss: boolean) {
+  if (isCrit)
+    return {
+      accent: "var(--crit-color)",
+      border: "rgba(255, 208, 0, 0.7)",
+      glow: "rgba(255, 208, 0, 0.3)",
+      label: "var(--crit-color)",
+    };
+  if (isMiss)
+    return {
+      accent: "var(--miss-color)",
+      border: "rgba(239, 68, 68, 0.7)",
+      glow: "rgba(239, 68, 68, 0.2)",
+      label: "var(--miss-color)",
+    };
+  return {
+    accent: "var(--accent)",
+    border: "rgba(0, 229, 255, 0.5)",
+    glow: "rgba(0, 229, 255, 0.2)",
+    label: "var(--text-muted)",
+  };
+}
+
+/** Returns badge styles for advantage/disadvantage mode labels. */
+export function modeTheme(mode: HitRollResult["mode"]) {
+  if (mode === "advantage")
+    return {
+      label: "ADVANTAGE",
+      bg: "rgba(52, 211, 153, 0.15)",
+      fg: "#34d399",
+    };
+  if (mode === "disadvantage")
+    return {
+      label: "DISADVANTAGE",
+      bg: "rgba(248, 113, 113, 0.15)",
+      fg: "#f87171",
+    };
+  return null;
 }

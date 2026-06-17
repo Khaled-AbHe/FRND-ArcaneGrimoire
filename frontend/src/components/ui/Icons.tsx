@@ -651,3 +651,60 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
     </svg>
   );
 }
+
+/** A single die face tile, colour-coded for max/min rolls. */
+export function DiceFace({ value, die }: { value: number; die: string }) {
+  const sides = parseInt(die.replace("d", ""), 10);
+  const isMax = value === sides;
+  const isMin = value === 1;
+
+  const bg = isMax
+    ? "rgba(0, 240, 56, 0.12)"
+    : isMin
+      ? "rgba(239, 68, 68, 0.12)"
+      : "rgba(0,0,0,0.4)";
+  const border = isMax
+    ? "rgba(0,240,56,0.5)"
+    : isMin
+      ? "rgba(239,68,68,0.4)"
+      : "rgba(0, 229, 255, 0.2)";
+  const color = isMax
+    ? "var(--hit-color)"
+    : isMin
+      ? "var(--miss-color)"
+      : "var(--text-primary)";
+
+  return (
+    <div
+      className="flex items-center justify-center rounded font-mono text-sm font-bold"
+      style={{
+        width: 32,
+        height: 32,
+        background: bg,
+        border: `1px solid ${border}`,
+        color,
+      }}
+    >
+      {value}
+    </div>
+  );
+}
+
+/** A d20 icon with a centred value label. */
+export function D20Face({
+  value,
+  accentColor,
+}: {
+  value: number;
+  accentColor: string;
+  glowColor: string;
+}) {
+  return (
+    <div
+      className="relative flex items-center justify-center"
+      style={{ width: 100, height: 100 }}
+    >
+      <D20Svg color={accentColor} number={value} />
+    </div>
+  );
+}

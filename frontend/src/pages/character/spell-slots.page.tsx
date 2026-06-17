@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import { PageShell } from "../../components/shells/page-shell.component";
 import { SlotSettingsModal } from "../../components/slots/modals/SlotSettingsModal";
 import { TemplateModal } from "../../components/slots/modals/TemplateModal";
+import { NoSlotsTab } from "../../components/slots/NoSlotsTab";
 import { PactSettingsModal } from "../../components/slots/pact/PactSettingsModal";
+import { SlotsToolbar } from "../../components/slots/SlotsToolbar";
+import { LevelSection } from "../../components/spells/LevelSection";
 import { SpellDetailModal } from "../../components/spells/modals/SpellDetailModal";
-
-import type {
-  DamageRollResult,
-  HitRollResult,
-} from "../../components/ui/RollOverlay";
+import type { DamageRollResult, HitRollResult } from "../../types";
+import { RollPanel } from "../../components/ui/RollTable/RollPanel";
 import { usePreparedSpells } from "../../hooks/spells/usePreparedSpells";
 import { useSpells } from "../../hooks/spells/useSpells";
 import { useSpellTemplate } from "../../hooks/spells/useSpellTemplate";
@@ -18,10 +19,6 @@ import type {
   Spell,
   TemplateResult,
 } from "../../types";
-import { PageShell } from "../../components/shells/page-shell.component";
-import { NoSlotsTab } from "../../components/slots/NoSlotsTab";
-import { SlotsToolbar } from "../../components/slots/SlotsToolbar";
-import { LevelSection } from "../../components/spells/LevelSection";
 
 interface SpellSlotsPageProps {
   character: Character;
@@ -71,20 +68,6 @@ export function SpellSlotsPage({
     setTemplateOpen(false);
   }
 
-  function doShortRest() {
-    onUpdateCharacter({ pact: { ...character.pact, used: 0 } });
-  }
-
-  function doLongRest() {
-    const levels = character.levels.map((r) => ({ ...r, used: 0 }));
-    const pact = {
-      ...character.pact,
-      used: 0,
-      arcana: (character.pact.arcana ?? []).map((a) => ({ ...a, used: false })),
-    };
-    onUpdateCharacter({ levels, pact });
-  }
-
   const pact = character.pact;
   const showPact = pact?.enabled && pact.slots > 0;
   const isEmpty = character.levels.length === 0 && !showPact;
@@ -102,48 +85,49 @@ export function SpellSlotsPage({
         setSlotSettingsOpen={setSlotSettingsOpen}
         setTemplateOpen={setTemplateOpen}
         setPactOpen={setPactOpen}
-        doShortRest={doShortRest}
-        doLongRest={doLongRest}
+        character={character}
       />
 
       {/* ── Content ── */}
-      <div className="slots-content overflow-y-auto">
-        {isEmpty && <NoSlotsTab />}
+      <div className="flex min-h-0 flex-1">
+        <div className="slots-content overflow-y-auto">
+          {isEmpty && <NoSlotsTab />}
 
-        {/* ── Level sections ── */}
-        {!isEmpty &&
-          (() => {
-            const levelNums = new Set<number>(
-              character.levels.map(
-                (r) => parseInt(r.label.replace(/\D/g, ""), 10) || 0,
-              ),
-            );
-            if (showPact) levelNums.add(pact.slotLevel);
-            (pact?.arcana ?? []).forEach((a) => levelNums.add(a.level));
-            const allLevels = Array.from(levelNums).sort((a, b) => a - b);
+          {/* ── Level sections ── */}
+          {!isEmpty &&
+            (() => {
+              const levelNums = new Set<number>(
+                character.levels.map(
+                  (r) => parseInt(r.label.replace(/\D/g, ""), 10) || 0,
+                ),
+              );
+              if (showPact) levelNums.add(pact.slotLevel);
+              (pact?.arcana ?? []).forEach((a) => levelNums.add(a.level));
+              const allLevels = Array.from(levelNums).sort((a, b) => a - b);
 
-            return allLevels.map((levelNum) => (
-              <LevelSection
-                key={levelNum}
-                character={character}
-                showPact={showPact}
-                pact={pact}
-                spells={spells}
-                preparedSet={preparedSet}
-                stats={stats}
-                levelNum={levelNum}
-                onRollHit={onRollHit}
-                onRollDamage={onRollDamage}
-                nextRollId={nextRollId}
-                setDetailSpell={setDetailSpell}
-                onUpdateCharacter={onUpdateCharacter}
-                castingSpellId={castingSpellId}
-                setCastingSpellId={setCastingSpellId}
-              />
-            ));
-          })()}
+              return allLevels.map((levelNum) => (
+                <LevelSection
+                  key={levelNum}
+                  character={character}
+                  showPact={showPact}
+                  pact={pact}
+                  spells={spells}
+                  preparedSet={preparedSet}
+                  stats={stats}
+                  levelNum={levelNum}
+                  onRollHit={onRollHit}
+                  onRollDamage={onRollDamage}
+                  nextRollId={nextRollId}
+                  setDetailSpell={setDetailSpell}
+                  onUpdateCharacter={onUpdateCharacter}
+                  castingSpellId={castingSpellId}
+                  setCastingSpellId={setCastingSpellId}
+                />
+              ));
+            })()}
+        </div>
+        <RollPanel />
       </div>
-
       {/* ── Modals ── */}
       <SlotSettingsModal
         open={slotSettingsOpen}
