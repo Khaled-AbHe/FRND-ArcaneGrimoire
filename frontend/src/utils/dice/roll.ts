@@ -4,13 +4,12 @@ import type {
   DiceEntry,
   ProjectileResult,
   Spell,
-} from "../../types";
-import type {
   DamageRollResult,
   HitRollResult,
-} from "../../components/ui/RollTable/RollCards";
+} from "../../types";
 import { cantripDiceCount, cantripProjCount } from "./cantrip";
 import { parseDie, rollDie, upcastSteps } from "./core";
+import { shuffleImmutable } from "./format";
 
 /** Controls whether a hit roll uses straight, advantage, or disadvantage. */
 export type RollMode = "normal" | "advantage" | "disadvantage";
@@ -183,7 +182,6 @@ export function rollSpell(
 export function buildHitRoll(
   spell: Spell,
   stats: ComputedStats,
-  id: number,
   mode: RollMode = "normal",
 ): HitRollResult {
   const st = spell.spellType;
@@ -194,13 +192,12 @@ export function buildHitRoll(
     const d20 = rollDie(20);
     return {
       kind: "hit",
-      d20,
+      d20s: [d20],
       bonus,
       total: d20 + bonus,
       isCrit: d20 >= critRange,
       isMiss: d20 === 1,
       mode,
-      id,
     };
   }
 
@@ -208,19 +205,15 @@ export function buildHitRoll(
   const roll2 = rollDie(20);
   const d20 =
     mode === "advantage" ? Math.max(roll1, roll2) : Math.min(roll1, roll2);
-  const discarded =
-    mode === "advantage" ? Math.min(roll1, roll2) : Math.max(roll1, roll2);
 
   return {
     kind: "hit",
-    d20,
+    d20s: shuffleImmutable([roll1, roll2]),
     bonus,
     total: d20 + bonus,
     isCrit: d20 >= critRange,
     isMiss: d20 === 1,
     mode,
-    discarded,
-    id,
   };
 }
 
@@ -239,7 +232,6 @@ export function buildDamageRoll(
   spell: Spell,
   stats: ComputedStats,
   slotLevel: number,
-  id: number,
   isCrit = false,
 ): DamageRollResult {
   const out = spell.outputType;
@@ -253,7 +245,6 @@ export function buildDamageRoll(
       rolls: [],
       modifier: 0,
       grandTotal: 0,
-      id,
       isCrit,
     };
   }
@@ -300,7 +291,6 @@ export function buildDamageRoll(
     rolls,
     modifier,
     grandTotal: diceTotal + modifier,
-    id,
     isCrit,
   };
 }

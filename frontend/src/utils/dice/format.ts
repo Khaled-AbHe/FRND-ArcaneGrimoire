@@ -6,7 +6,7 @@ import type { HitRollResult, LevelRow, Spell } from "../../types";
  * @example fmtBonus(-1) // → "-1"
  */
 export function fmtBonus(n: number): string {
-  return n >= 0 ? `+ ${n}` : `${n}`;
+  return n >= 0 ? `+ ${n}` : `- ${Math.abs(n)}`;
 }
 
 /**
@@ -112,4 +112,15 @@ export function modeTheme(mode: HitRollResult["mode"]) {
       fg: "#f87171",
     };
   return null;
+}
+
+export function shuffleImmutable<T>(array: T[]): T[] {
+  // Create a shallow copy first
+  const result = [...array];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
 }

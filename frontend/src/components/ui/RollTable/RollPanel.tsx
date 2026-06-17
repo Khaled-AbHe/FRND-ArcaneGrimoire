@@ -4,9 +4,7 @@ import type { RollResult } from "../../../types";
 import { HitCard } from "./HitCard";
 import { DamageCard } from "./DamageCard";
 
-interface RollPanelProps {}
-
-export function RollPanel({}: RollPanelProps) {
+export function RollPanel() {
   const [value] = useSessionStorage<RollResult[]>("result-logs", []);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -15,7 +13,7 @@ export function RollPanel({}: RollPanelProps) {
   }, [value]);
 
   return (
-    <div className="flex w-[350px] flex-col items-center justify-start overflow-y-auto border border-[var(--border)]">
+    <div className="flex w-[360px] flex-col items-center justify-start overflow-y-auto border border-[var(--border)]">
       {value.map((r) =>
         r.kind === "hit" ? (
           <HitCard key={r.id} result={r} />

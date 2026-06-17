@@ -548,7 +548,7 @@ export function RadiusIcon() {
 
 export function D20Svg({ color, number }: { color: string; number: number }) {
   return (
-    <svg viewBox="0 0 100 100" width="200" height="200" xmlns="http://w3.org">
+    <svg viewBox="0 0 100 100" width="75" height="75" xmlns="http://w3.org">
       {/* <!-- Outer Frame & Background Silhouette --> */}
       <polygon
         points="50,2.4 91.2,26.2 91.2,73.8 50,97.6 8.8,73.8 8.8,26.2"
@@ -639,9 +639,9 @@ export function D20Svg({ color, number }: { color: string; number: number }) {
       {/* <!-- Central Number Placement --> */}
       <text
         x="50"
-        y="55"
+        y="58"
         fontFamily="sans-serif"
-        fontSize="18"
+        fontSize="21"
         fontWeight="bold"
         fill={color}
         textAnchor="middle"
@@ -700,10 +700,7 @@ export function D20Face({
   glowColor: string;
 }) {
   return (
-    <div
-      className="relative flex items-center justify-center"
-      style={{ width: 100, height: 100 }}
-    >
+    <div className="relative flex items-center justify-center">
       <D20Svg color={accentColor} number={value} />
     </div>
   );

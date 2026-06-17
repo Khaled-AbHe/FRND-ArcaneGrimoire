@@ -6,7 +6,7 @@ interface RollCardShellProps {
 
 export function RollCardShell({ children }: RollCardShellProps) {
   return (
-    <div className="roll-overlay-card m-5 h-[250px] min-h-[250px] w-full border border-[var(--border)]">
+    <div className="roll-overlay-card my-2 h-[250px] min-h-fit border border-[var(--border)]">
       {children}
     </div>
   );

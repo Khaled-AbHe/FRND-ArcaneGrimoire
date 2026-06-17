@@ -26,7 +26,6 @@ interface SpellSlotsPageProps {
   onUpdateCharacter: (patch: Partial<Character>) => void;
   onRollHit: (result: HitRollResult) => void;
   onRollDamage: (result: DamageRollResult) => void;
-  nextRollId: () => number;
 }
 
 export function SpellSlotsPage({
@@ -35,7 +34,6 @@ export function SpellSlotsPage({
   onUpdateCharacter,
   onRollHit,
   onRollDamage,
-  nextRollId,
 }: SpellSlotsPageProps) {
   const { data: spells = [] } = useSpells();
   const templateMut = useSpellTemplate();
@@ -117,7 +115,6 @@ export function SpellSlotsPage({
                   levelNum={levelNum}
                   onRollHit={onRollHit}
                   onRollDamage={onRollDamage}
-                  nextRollId={nextRollId}
                   setDetailSpell={setDetailSpell}
                   onUpdateCharacter={onUpdateCharacter}
                   castingSpellId={castingSpellId}

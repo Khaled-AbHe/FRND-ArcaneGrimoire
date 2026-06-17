@@ -1,24 +1,29 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Navigate,
   useNavigate,
   useParams,
   useSearchParams,
 } from "react-router-dom";
+import { useSessionStorage } from "usehooks-ts";
 import { Header } from "../components/layout/Header";
-import type { DamageRollResult, HitRollResult, RollResult } from "../types";
-import { useAutoSave } from "../hooks/characters/useAutoSave";
-import type { Character, TabId } from "../types";
-import { computeStats } from "../utils/stats";
-import { useCharacter } from "../hooks/characters/useCharacter";
 import { PageShell } from "../components/shells/page-shell.component";
-import { SlotsIcon, BookIcon, SettingsIcon } from "../components/ui/Icons";
-import { SpellSlotsPage } from "../pages/character/spell-slots.page";
-import { SpellPreparerPage } from "../pages/character/spell-preparer.page";
-import { CharacterSettingsPage } from "../pages/character/character-settings.page";
+import { BookIcon, SettingsIcon, SlotsIcon } from "../components/ui/Icons";
 import { LoadingSpinner } from "../components/ui/LoadingSpinner";
 import { Tabs } from "../components/ui/Tabs";
-import { useSessionStorage } from "usehooks-ts";
+import { useAutoSave } from "../hooks/characters/useAutoSave";
+import { useCharacter } from "../hooks/characters/useCharacter";
+import { CharacterSettingsPage } from "../pages/character/character-settings.page";
+import { SpellPreparerPage } from "../pages/character/spell-preparer.page";
+import { SpellSlotsPage } from "../pages/character/spell-slots.page";
+import type {
+  Character,
+  DamageRollResult,
+  HitRollResult,
+  RollResult,
+  TabId,
+} from "../types";
+import { computeStats } from "../utils/stats";
 
 const TABS: { id: TabId; label: string; Icon: React.FC<{ size?: number }> }[] =
   [
@@ -37,11 +42,19 @@ export function CharacterLayout() {
   const activeId = id && !isNaN(Number(id)) ? Number(id) : null;
 
   // @ts-expect-error
-  const [rolls, setRolls, removeRolls] = useSessionStorage<RollResult[]>(
-    "result-logs",
-    [],
-  );
-  const rollIdCounter = useRef(0);
+  const [rolls, setRolls] = useSessionStorage<RollResult[]>("result-logs", []);
+
+  function addRollResult(result: RollResult) {
+    setRolls((prevRolls) => {
+      // Generate the ID contextually based on what is actually in the session
+      const nextId =
+        prevRolls.length > 0
+          ? Math.max(...prevRolls.map((r) => r.id ?? 0)) + 1
+          : 1;
+
+      return [...prevRolls, { ...result, id: nextId }];
+    });
+  }
 
   const [localChar, setLocalChar] = useState<Character | undefined>(undefined);
   const {
@@ -59,8 +72,6 @@ export function CharacterLayout() {
   const tab: TabId = rawTab && VALID_TABS.includes(rawTab) ? rawTab : "slots";
   const setTab = (next: TabId) =>
     setSearchParams({ tab: next }, { replace: true });
-
-  const nextRollId = () => ++rollIdCounter.current;
 
   const stats = localChar
     ? computeStats(localChar)
@@ -90,10 +101,6 @@ export function CharacterLayout() {
   if (isError) return <Navigate to="/" replace />;
   if (charLoading || !localChar) return <LoadingSpinner />;
 
-  function addRollResult(result: RollResult) {
-    setRolls((prev) => [...prev, result]);
-  }
-
   return (
     <PageShell>
       <Header character={localChar} onBack={() => navigate("/grimoire")} />
@@ -107,7 +114,6 @@ export function CharacterLayout() {
             onUpdateCharacter={handleUpdateCharacter}
             onRollHit={(result: HitRollResult) => addRollResult(result)}
             onRollDamage={(result: DamageRollResult) => addRollResult(result)}
-            nextRollId={nextRollId}
           />
         )}
         {tab === "preparer" && (

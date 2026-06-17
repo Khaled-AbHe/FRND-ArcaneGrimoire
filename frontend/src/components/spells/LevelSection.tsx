@@ -21,7 +21,6 @@ interface LevelSectionProps {
   levelNum: number;
   onRollHit: (result: HitRollResult) => void;
   onRollDamage: (result: DamageRollResult) => void;
-  nextRollId: () => number;
   setDetailSpell: React.Dispatch<React.SetStateAction<Spell | null>>;
   onUpdateCharacter: (patch: Partial<Character>) => void;
   setCastingSpellId: (value: SetStateAction<string | null>) => void;
@@ -38,7 +37,6 @@ export function LevelSection({
   levelNum,
   onRollHit,
   onRollDamage,
-  nextRollId,
   setDetailSpell,
   onUpdateCharacter,
   setCastingSpellId,
@@ -188,7 +186,6 @@ export function LevelSection({
             onViewDetail={setDetailSpell}
             onRollHit={onRollHit}
             onRollDamage={onRollDamage}
-            nextRollId={nextRollId}
           />
         ))}
 
@@ -224,7 +221,6 @@ export function LevelSection({
                 onViewDetail={setDetailSpell}
                 onRollHit={onRollHit}
                 onRollDamage={onRollDamage}
-                nextRollId={nextRollId}
               />
             </div>
           );

@@ -27,26 +27,26 @@ export interface ChangePasswordDto {
 // ── Roll ───────────────────────────────────────────────────────────
 
 export type HitRollResult = {
+  id?: number;
   kind: "hit";
-  d20: number;
+  d20s: number[];
   bonus: number;
   total: number;
   isCrit: boolean;
   isMiss: boolean;
   mode: "normal" | "advantage" | "disadvantage";
-  discarded?: number;
-  id: number;
 };
 
 export type DamageRollResult = {
+  id?: number;
   kind: "damage";
   rolls: { die: string; result: number; type: string }[];
   modifier: number;
   grandTotal: number;
-  id: number;
   isCrit?: boolean;
 };
 
+// export type RollResult = HitRollResult | (DamageRollResult & { id: number });
 export type RollResult = HitRollResult | DamageRollResult;
 
 // ── Spell sub-types ───────────────────────────────────────────────────────────

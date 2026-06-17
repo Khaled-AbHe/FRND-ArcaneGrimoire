@@ -50,7 +50,6 @@ interface SpellRowProps {
   onViewDetail: (spell: Spell) => void;
   onRollHit: (result: HitRollResult) => void;
   onRollDamage: (result: DamageRollResult) => void;
-  nextRollId: () => number;
 }
 
 export function SpellRow({
@@ -61,7 +60,6 @@ export function SpellRow({
   onViewDetail,
   onRollHit,
   onRollDamage,
-  nextRollId,
 }: SpellRowProps) {
   const [hitContextMenu, setHitContextMenu] = useState<boolean>(false);
   const [damageContextMenu, setDamageContextMenu] = useState<boolean>(false);
@@ -76,19 +74,13 @@ export function SpellRow({
   const rowSpell: Spell = parseSpellLevel(spell, levelNum);
 
   function fireHitRoll(mode: RollMode = "normal") {
-    onRollHit(buildHitRoll(spell, stats, nextRollId(), mode));
+    onRollHit(buildHitRoll(spell, stats, mode));
     setHitContextMenu(false);
   }
 
   function fireDamageRoll(damage: DamageMode = "normal") {
     onRollDamage(
-      buildDamageRoll(
-        spell,
-        stats,
-        levelNum,
-        nextRollId(),
-        damage === "critical",
-      ),
+      buildDamageRoll(spell, stats, levelNum, damage === "critical"),
     );
     setDamageContextMenu(false);
   }
